@@ -1,6 +1,6 @@
 import React from "react";
 import { motion } from "framer-motion";
-import { FaGithub, FaLinkedin, FaEnvelope, FaPhone, FaDownload } from "react-icons/fa";
+import { FaGithub, FaLinkedin, FaEnvelope, FaPhone, FaDownload, FaExternalLinkAlt } from "react-icons/fa";
 import profile from "./assets/profile.jpeg";
 
 const fadeUp = {
@@ -43,11 +43,13 @@ const projects = [
     title: "AI Trip Planner",
     description: "Intelligent travel planner integrating 7 APIs with agentic reasoning via LangGraph.",
     tags: ["LangGraph", "FastAPI", "LangChain"],
+    link: "https://frontend-beryl-one-21.vercel.app/",
   },
   {
     title: "Crop Yield Prediction",
     description: "Hybrid CNN-RNN-LSTM model for agricultural yield forecasting.",
     tags: ["TensorFlow", "CNN", "LSTM", "Python"],
+    link: "https://colab.research.google.com/drive/1c5BOmHjO4dQDWb-YuZ5j42uGF-bvkQKS?usp=sharing",
   },
   {
     title: "Car Price Prediction",
@@ -336,6 +338,16 @@ function App() {
                   </span>
                 ))}
               </div>
+              {project.link && (
+                <a
+                  href={project.link}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="flex items-center gap-1.5 text-[11px] text-blue-400 hover:text-blue-300 transition-colors mt-1 w-fit"
+                >
+                  <FaExternalLinkAlt size={10} /> View Project
+                </a>
+              )}
             </motion.div>
           ))}
         </motion.div>

@@ -43,8 +43,7 @@ const projects = [
   {
     title: "AI Trip Planner",
     description: "Intelligent travel planner integrating 7 APIs with agentic reasoning via LangGraph.",
-    tags: ["LangGraph", "FastAPI", "LangChain"],
-    link: "https://frontend-beryl-one-21.vercel.app/",
+    tags: ["LangGraph", "FastAPI", "LangChain"]
   },
   {
     title: "Crop Yield Prediction",

@@ -33,6 +33,7 @@ const projects = [
     title: "PDF Chatbot & Medical Image Analysis",
     description: "AI-powered document chatbot with medical image analysis capabilities.",
     tags: ["Python", "LLM", "RAG", "FastAPI"],
+    link: "https://medimage.streamlit.app/",
   },
   {
     title: "Speech-to-Text System",

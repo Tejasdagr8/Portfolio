@@ -1,6 +1,6 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { motion } from "framer-motion";
-import { FaGithub, FaLinkedin, FaEnvelope, FaPhone, FaDownload, FaExternalLinkAlt } from "react-icons/fa";
+import { FaGithub, FaLinkedin, FaEnvelope, FaPhone, FaDownload, FaExternalLinkAlt, FaArrowUp } from "react-icons/fa";
 import profile from "./assets/profile.jpeg";
 
 const fadeUp = {
@@ -42,8 +42,9 @@ const projects = [
   },
   {
     title: "AI Trip Planner",
-    description: "Intelligent travel planner integrating 7 APIs with agentic reasoning via LangGraph.",
-    tags: ["LangGraph", "FastAPI", "LangChain"]
+    description: "Frontend: frontend-beryl-one-21.vercel.app | Backend: ai-trip-planner-production-a327.up.railway.app",
+    tags: ["LangGraph", "FastAPI", "LangChain"],
+    link: "https://frontend-beryl-one-21.vercel.app",
   },
   {
     title: "Crop Yield Prediction",
@@ -61,9 +62,111 @@ const projects = [
     description: "Retrieval-augmented generation pipelines with web scraping and PowerBI dashboards.",
     tags: ["RAG", "LangChain", "PowerBI", "Python"],
   },
+  {
+    title: "TatvaOps Verified Vendor Profile",
+    description: "Verified vendor profile with ratings and pricing insights.",
+    tags: ["Vendor Profile", "Portfolio", "Web App"],
+    link: "https://vendor-profilepage.vercel.app/",
+  },
+  {
+    title: "TatvaOps Blog",
+    description: "AI-first construction insights blog with admin CMS publishing.",
+    tags: ["Blog", "CMS", "SEO", "AI"],
+    link: "https://tatvaops-blog-page.vercel.app/",
+  },
 ];
 
 function App() {
+  const sectionIds = ["about", "experience", "education", "projects", "skills", "contact"];
+  const [activeSection, setActiveSection] = useState("about");
+  const [copiedField, setCopiedField] = useState("");
+  const [showBackToTop, setShowBackToTop] = useState(false);
+  const [messageForm, setMessageForm] = useState({ name: "", email: "", message: "" });
+  const [formError, setFormError] = useState("");
+  const [localTime, setLocalTime] = useState("");
+
+  useEffect(() => {
+    const observers = sectionIds
+      .map((id) => document.getElementById(id))
+      .filter(Boolean)
+      .map((element) => {
+        const observer = new IntersectionObserver(
+          ([entry]) => {
+            if (entry.isIntersecting) {
+              setActiveSection(entry.target.id);
+            }
+          },
+          { threshold: 0.35, rootMargin: "-80px 0px -40% 0px" }
+        );
+
+        observer.observe(element);
+        return observer;
+      });
+
+    return () => observers.forEach((observer) => observer.disconnect());
+  }, []);
+
+  useEffect(() => {
+    const onScroll = () => setShowBackToTop(window.scrollY > 420);
+    onScroll();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
+
+  useEffect(() => {
+    const updateTime = () => {
+      const now = new Date();
+      setLocalTime(
+        now.toLocaleTimeString("en-IN", {
+          hour: "2-digit",
+          minute: "2-digit",
+          second: "2-digit",
+          hour12: true,
+          timeZone: "Asia/Kolkata",
+        })
+      );
+    };
+    updateTime();
+    const interval = setInterval(updateTime, 1000);
+    return () => clearInterval(interval);
+  }, []);
+
+  const copyToClipboard = async (value, field) => {
+    try {
+      await navigator.clipboard.writeText(value);
+      setCopiedField(field);
+      setTimeout(() => setCopiedField(""), 1600);
+    } catch (error) {
+      setCopiedField(`error-${field}`);
+      setTimeout(() => setCopiedField(""), 1600);
+    }
+  };
+
+  const submitQuickMessage = (event) => {
+    event.preventDefault();
+    const name = messageForm.name.trim();
+    const email = messageForm.email.trim();
+    const message = messageForm.message.trim();
+
+    if (!name || !email || !message) {
+      setFormError("Please fill all fields.");
+      return;
+    }
+
+    const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailPattern.test(email)) {
+      setFormError("Please enter a valid email address.");
+      return;
+    }
+
+    setFormError("");
+    const subject = encodeURIComponent(`Portfolio message from ${name}`);
+    const body = encodeURIComponent(
+      `Hi Tejas,\n\n${message}\n\nFrom,\n${name}\n${email}`
+    );
+    window.location.href = `mailto:coooltejasdagr@gmail.com?subject=${subject}&body=${body}`;
+  };
+
   return (
     <div className="bg-[#07070f] text-white font-sans min-h-screen">
 
@@ -74,14 +177,20 @@ function App() {
         </span>
         <div className="flex items-center gap-6">
           <div className="hidden md:flex gap-5 text-gray-400 text-sm">
-            {["about", "experience", "education", "projects", "contact"].map((id) => (
+            {sectionIds.map((id) => (
               <a
                 key={id}
                 href={`#${id}`}
-                className="capitalize hover:text-white transition-colors relative group"
+                className={`capitalize transition-colors relative group ${
+                  activeSection === id ? "text-white" : "hover:text-white"
+                }`}
               >
                 {id}
-                <span className="absolute -bottom-0.5 left-0 w-0 h-px bg-blue-400 group-hover:w-full transition-all duration-300" />
+                <span
+                  className={`absolute -bottom-0.5 left-0 h-px bg-blue-400 transition-all duration-300 ${
+                    activeSection === id ? "w-full" : "w-0 group-hover:w-full"
+                  }`}
+                />
               </a>
             ))}
           </div>
@@ -323,17 +432,17 @@ function App() {
         >
           {projects.map((project, i) => (
             <motion.div
-              key={i}
+              key={`${project.title}-${i}`}
               variants={fadeUp}
               className="group p-5 rounded-2xl border border-white/[0.08] bg-white/[0.02] hover:bg-white/[0.04] hover:border-blue-500/20 transition-all duration-300 flex flex-col gap-3"
             >
-              <h3 className="font-semibold text-white text-sm leading-snug group-hover:text-blue-300 transition-colors duration-200">
+              <h3 className="font-semibold text-white text-base leading-snug group-hover:text-blue-300 transition-colors duration-200">
                 {project.title}
               </h3>
-              <p className="text-gray-600 text-xs leading-6 flex-1">{project.description}</p>
+              <p className="text-gray-400 text-sm leading-6 flex-1">{project.description}</p>
               <div className="flex flex-wrap gap-1.5">
                 {project.tags.map((tag) => (
-                  <span key={tag} className="px-2 py-0.5 rounded text-[11px] bg-white/5 text-gray-500 border border-white/[0.08]">
+                  <span key={tag} className="px-2 py-0.5 rounded text-[11px] bg-white/5 text-gray-400 border border-white/[0.08]">
                     {tag}
                   </span>
                 ))}
@@ -416,26 +525,79 @@ function App() {
             <p className="text-gray-600 text-sm mt-4">
               Open to opportunities, collaborations, and conversations.
             </p>
+            <p className="text-gray-500 text-xs mt-2">
+              Local time (IST): {localTime}
+            </p>
           </motion.div>
 
           <motion.div variants={fadeUp} className="flex flex-col sm:flex-row gap-3 mb-8 w-full max-w-xl">
-            <a
-              href="mailto:coooltejasdagr@gmail.com"
-              className="flex items-center gap-3 px-5 py-3.5 rounded-xl border border-white/[0.08] bg-white/[0.02] hover:bg-white/[0.05] hover:border-blue-500/25 transition-all duration-200 group flex-1"
-            >
+            <div className="flex items-center gap-3 px-5 py-3.5 rounded-xl border border-white/[0.08] bg-white/[0.02] hover:bg-white/[0.05] hover:border-blue-500/25 transition-all duration-200 group flex-1">
               <FaEnvelope className="text-blue-400 shrink-0" />
-              <span className="text-gray-400 text-sm group-hover:text-white transition-colors truncate">
+              <a href="mailto:coooltejasdagr@gmail.com" className="text-gray-400 text-sm group-hover:text-white transition-colors truncate flex-1">
                 coooltejasdagr@gmail.com
-              </span>
-            </a>
-            <a
-              href="tel:+917019280175"
-              className="flex items-center gap-3 px-5 py-3.5 rounded-xl border border-white/[0.08] bg-white/[0.02] hover:bg-white/[0.05] hover:border-blue-500/25 transition-all duration-200 group flex-1"
-            >
+              </a>
+              <button
+                type="button"
+                onClick={() => copyToClipboard("coooltejasdagr@gmail.com", "email")}
+                className="text-[11px] px-2 py-1 rounded border border-white/[0.12] text-gray-400 hover:text-white hover:border-white/[0.28] transition-colors"
+              >
+                {copiedField === "email" ? "Copied" : copiedField === "error-email" ? "Failed" : "Copy"}
+              </button>
+            </div>
+            <div className="flex items-center gap-3 px-5 py-3.5 rounded-xl border border-white/[0.08] bg-white/[0.02] hover:bg-white/[0.05] hover:border-blue-500/25 transition-all duration-200 group flex-1">
               <FaPhone className="text-blue-400 shrink-0" />
-              <span className="text-gray-400 text-sm group-hover:text-white transition-colors">+91 7019280175</span>
-            </a>
+              <a href="tel:+917019280175" className="text-gray-400 text-sm group-hover:text-white transition-colors flex-1">
+                +91 7019280175
+              </a>
+              <button
+                type="button"
+                onClick={() => copyToClipboard("+917019280175", "phone")}
+                className="text-[11px] px-2 py-1 rounded border border-white/[0.12] text-gray-400 hover:text-white hover:border-white/[0.28] transition-colors"
+              >
+                {copiedField === "phone" ? "Copied" : copiedField === "error-phone" ? "Failed" : "Copy"}
+              </button>
+            </div>
           </motion.div>
+
+          <motion.form
+            variants={fadeUp}
+            onSubmit={submitQuickMessage}
+            className="w-full max-w-xl rounded-2xl border border-white/[0.08] bg-white/[0.02] p-4 mb-8 text-left"
+          >
+            <p className="text-sm text-gray-300 mb-3">Quick message</p>
+            <div className="grid sm:grid-cols-2 gap-3 mb-3">
+              <input
+                type="text"
+                value={messageForm.name}
+                onChange={(e) => setMessageForm((prev) => ({ ...prev, name: e.target.value }))}
+                placeholder="Your name"
+                className="rounded-lg border border-white/[0.08] bg-white/[0.02] px-3 py-2 text-sm text-gray-200 placeholder:text-gray-600 outline-none focus:border-blue-500/40"
+              />
+              <input
+                type="email"
+                value={messageForm.email}
+                onChange={(e) => setMessageForm((prev) => ({ ...prev, email: e.target.value }))}
+                placeholder="Your email"
+                className="rounded-lg border border-white/[0.08] bg-white/[0.02] px-3 py-2 text-sm text-gray-200 placeholder:text-gray-600 outline-none focus:border-blue-500/40"
+              />
+            </div>
+            <textarea
+              value={messageForm.message}
+              onChange={(e) => setMessageForm((prev) => ({ ...prev, message: e.target.value }))}
+              placeholder="Write your message..."
+              rows={4}
+              className="w-full rounded-lg border border-white/[0.08] bg-white/[0.02] px-3 py-2 text-sm text-gray-200 placeholder:text-gray-600 outline-none focus:border-blue-500/40"
+            />
+            <div className="mt-3 flex items-center justify-between gap-3">
+              <p className="text-xs text-red-400 min-h-4">{formError}</p>
+              <button
+                type="submit"
+                className="px-4 py-2 rounded-lg bg-gradient-to-r from-blue-600 to-violet-600 text-white text-xs font-medium hover:opacity-90 transition-opacity"
+              >
+                Send via Email
+              </button>
+            </div>
+          </motion.form>
 
           <motion.div variants={fadeUp} className="flex gap-6">
             <a
@@ -462,6 +624,17 @@ function App() {
       <footer className="py-6 text-center text-gray-700 text-xs border-t border-white/[0.05]">
         © {new Date().getFullYear()} Tejas Melkote. All rights reserved.
       </footer>
+
+      {showBackToTop && (
+        <button
+          type="button"
+          onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
+          className="fixed bottom-6 right-6 z-50 p-3 rounded-full border border-blue-500/35 bg-[#0e1020]/90 text-blue-300 hover:text-white hover:border-blue-400/60 hover:bg-[#151933] transition-colors"
+          aria-label="Back to top"
+        >
+          <FaArrowUp size={12} />
+        </button>
+      )}
 
     </div>
   );

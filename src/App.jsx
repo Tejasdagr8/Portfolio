@@ -15,7 +15,7 @@ const stagger = {
 
 function SectionHeading({ children }) {
   return (
-    <div className="mb-10">
+    <div className="mb-8 md:mb-10">
       <h2 className="text-3xl md:text-4xl font-bold">{children}</h2>
       <div className="mt-2 h-1 w-14 rounded-full bg-gradient-to-r from-blue-500 to-violet-500" />
     </div>
@@ -77,10 +77,12 @@ const projects = [
 ];
 
 function App() {
+  const sectionContainer = "w-full max-w-6xl mx-auto px-4 sm:px-6 lg:px-8";
   const sectionIds = ["about", "experience", "education", "projects", "skills", "contact"];
   const [activeSection, setActiveSection] = useState("about");
   const [copiedField, setCopiedField] = useState("");
   const [showBackToTop, setShowBackToTop] = useState(false);
+  const [scrollProgress, setScrollProgress] = useState(0);
   const [messageForm, setMessageForm] = useState({ name: "", email: "", message: "" });
   const [formError, setFormError] = useState("");
   const [localTime, setLocalTime] = useState("");
@@ -112,6 +114,45 @@ function App() {
     window.addEventListener("scroll", onScroll, { passive: true });
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
+
+  useEffect(() => {
+    const updateProgress = () => {
+      const total = document.documentElement.scrollHeight - window.innerHeight;
+      if (total <= 0) {
+        setScrollProgress(0);
+        return;
+      }
+      setScrollProgress((window.scrollY / total) * 100);
+    };
+    updateProgress();
+    window.addEventListener("scroll", updateProgress, { passive: true });
+    window.addEventListener("resize", updateProgress);
+    return () => {
+      window.removeEventListener("scroll", updateProgress);
+      window.removeEventListener("resize", updateProgress);
+    };
+  }, []);
+
+  useEffect(() => {
+    const savedDraft = window.localStorage.getItem("portfolio-contact-draft");
+    if (!savedDraft) return;
+    try {
+      const parsed = JSON.parse(savedDraft);
+      if (
+        typeof parsed.name === "string" &&
+        typeof parsed.email === "string" &&
+        typeof parsed.message === "string"
+      ) {
+        setMessageForm(parsed);
+      }
+    } catch {
+      // Ignore corrupted saved drafts.
+    }
+  }, []);
+
+  useEffect(() => {
+    window.localStorage.setItem("portfolio-contact-draft", JSON.stringify(messageForm));
+  }, [messageForm]);
 
   useEffect(() => {
     const updateTime = () => {
@@ -160,6 +201,7 @@ function App() {
     }
 
     setFormError("");
+    window.localStorage.removeItem("portfolio-contact-draft");
     const subject = encodeURIComponent(`Portfolio message from ${name}`);
     const body = encodeURIComponent(
       `Hi Tejas,\n\n${message}\n\nFrom,\n${name}\n${email}`
@@ -169,43 +211,46 @@ function App() {
 
   return (
     <div className="bg-[#07070f] text-white font-sans min-h-screen">
+      <div className="fixed top-0 left-0 z-[60] h-[2px] bg-gradient-to-r from-blue-500 to-violet-500" style={{ width: `${scrollProgress}%` }} />
 
       {/* NAVBAR */}
-      <nav className="fixed w-full top-0 flex justify-between items-center px-8 py-4 bg-[#07070f]/80 backdrop-blur-md z-50 border-b border-white/[0.06]">
-        <span className="text-lg font-bold bg-gradient-to-r from-blue-400 to-violet-400 bg-clip-text text-transparent">
-          Tejas
-        </span>
-        <div className="flex items-center gap-6">
-          <div className="hidden md:flex gap-5 text-gray-400 text-sm">
-            {sectionIds.map((id) => (
-              <a
-                key={id}
-                href={`#${id}`}
-                className={`capitalize transition-colors relative group ${
-                  activeSection === id ? "text-white" : "hover:text-white"
-                }`}
-              >
-                {id}
-                <span
-                  className={`absolute -bottom-0.5 left-0 h-px bg-blue-400 transition-all duration-300 ${
-                    activeSection === id ? "w-full" : "w-0 group-hover:w-full"
+      <nav className="fixed w-full top-0 bg-[#07070f]/80 backdrop-blur-md z-50 border-b border-white/[0.06]">
+        <div className={`${sectionContainer} py-4 flex justify-between items-center`}>
+          <span className="text-lg font-bold bg-gradient-to-r from-blue-400 to-violet-400 bg-clip-text text-transparent">
+            Tejas
+          </span>
+          <div className="flex items-center gap-6">
+            <div className="hidden md:flex gap-5 text-gray-400 text-sm">
+              {sectionIds.map((id) => (
+                <a
+                  key={id}
+                  href={`#${id}`}
+                  className={`capitalize transition-colors relative group ${
+                    activeSection === id ? "text-white" : "hover:text-white"
                   }`}
-                />
-              </a>
-            ))}
+                >
+                  {id}
+                  <span
+                    className={`absolute -bottom-0.5 left-0 h-px bg-blue-400 transition-all duration-300 ${
+                      activeSection === id ? "w-full" : "w-0 group-hover:w-full"
+                    }`}
+                  />
+                </a>
+              ))}
+            </div>
+            <a
+              href="/resume.pdf"
+              download
+              className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-blue-500/40 text-blue-400 text-xs hover:bg-blue-500/10 transition-colors"
+            >
+              <FaDownload size={9} /> Resume
+            </a>
           </div>
-          <a
-            href="/resume.pdf"
-            download
-            className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-blue-500/40 text-blue-400 text-xs hover:bg-blue-500/10 transition-colors"
-          >
-            <FaDownload size={9} /> Resume
-          </a>
         </div>
       </nav>
 
       {/* HERO */}
-      <section className="min-h-screen flex flex-col justify-center items-center text-center px-4 relative overflow-hidden pt-20">
+      <section className="min-h-screen flex flex-col justify-center items-center text-center relative overflow-hidden pt-20">
         {/* Background glows */}
         <div className="absolute inset-0 pointer-events-none">
           <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[700px] h-[700px] bg-blue-600/[0.07] rounded-full blur-3xl" />
@@ -213,7 +258,7 @@ function App() {
         </div>
 
         <motion.div
-          className="relative z-10 flex flex-col items-center"
+          className={`relative z-10 flex flex-col items-center ${sectionContainer}`}
           initial="hidden"
           animate="visible"
           variants={stagger}
@@ -295,14 +340,14 @@ function App() {
       {/* ABOUT */}
       <motion.section
         id="about"
-        className="py-24 px-6 max-w-4xl mx-auto"
+        className={`py-24 ${sectionContainer}`}
         initial="hidden"
         whileInView="visible"
         viewport={{ once: true, margin: "-80px" }}
         variants={fadeUp}
       >
         <SectionHeading>About Me</SectionHeading>
-        <p className="text-gray-400 leading-8">
+        <p className="text-gray-400 leading-8 max-w-4xl">
           B.Tech Computer Science student specializing in Artificial Intelligence, with a strong foundation in Machine Learning and Data Science.
           Demonstrates adaptability and leadership across various roles, consistently enhancing technical skills through hands-on projects and internships.
           Aims to make a meaningful impact in the tech industry through innovation and collaboration.
@@ -310,7 +355,7 @@ function App() {
       </motion.section>
 
       {/* EXPERIENCE */}
-      <section id="experience" className="py-24 px-6 max-w-5xl mx-auto">
+      <section id="experience" className={`py-24 ${sectionContainer}`}>
         <motion.div initial="hidden" whileInView="visible" viewport={{ once: true, margin: "-80px" }} variants={fadeUp}>
           <SectionHeading>Experience</SectionHeading>
         </motion.div>
@@ -369,7 +414,7 @@ function App() {
       </section>
 
       {/* EDUCATION */}
-      <section id="education" className="py-24 px-6 max-w-5xl mx-auto">
+      <section id="education" className={`py-24 ${sectionContainer}`}>
         <motion.div initial="hidden" whileInView="visible" viewport={{ once: true, margin: "-80px" }} variants={fadeUp}>
           <SectionHeading>Education</SectionHeading>
         </motion.div>
@@ -419,12 +464,29 @@ function App() {
       </section>
 
       {/* PROJECTS */}
-      <section id="projects" className="py-24 px-6 max-w-6xl mx-auto">
-        <motion.div initial="hidden" whileInView="visible" viewport={{ once: true, margin: "-80px" }} variants={fadeUp}>
+      <section id="projects" className={`py-24 ${sectionContainer}`}>
+        <motion.div
+          className="flex flex-col md:flex-row md:items-end md:justify-between"
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, margin: "-80px" }}
+          variants={fadeUp}
+        >
           <SectionHeading>Projects</SectionHeading>
+          <button
+            type="button"
+            onClick={() => {
+              projects
+                .filter((project) => project.link)
+                .forEach((project) => window.open(project.link, "_blank", "noopener,noreferrer"));
+            }}
+            className="mb-10 w-fit px-4 py-2 rounded-lg border border-blue-500/35 text-blue-300 text-xs hover:bg-blue-500/10 transition-colors"
+          >
+            Open Live Projects
+          </button>
         </motion.div>
         <motion.div
-          className="grid md:grid-cols-2 lg:grid-cols-3 gap-4"
+          className="grid md:grid-cols-2 lg:grid-cols-3 gap-5"
           initial="hidden"
           whileInView="visible"
           viewport={{ once: true, margin: "-80px" }}
@@ -463,7 +525,7 @@ function App() {
       </section>
 
       {/* SKILLS */}
-      <section id="skills" className="py-24 px-6 max-w-5xl mx-auto">
+      <section id="skills" className={`py-24 ${sectionContainer}`}>
         <motion.div initial="hidden" whileInView="visible" viewport={{ once: true, margin: "-80px" }} variants={fadeUp}>
           <SectionHeading>Skills</SectionHeading>
         </motion.div>
@@ -487,7 +549,7 @@ function App() {
       </section>
 
       {/* LANGUAGES */}
-      <section className="py-16 px-6 max-w-5xl mx-auto">
+      <section className={`py-16 ${sectionContainer}`}>
         <motion.div
           initial="hidden"
           whileInView="visible"
@@ -511,7 +573,7 @@ function App() {
       </section>
 
       {/* CONTACT */}
-      <section id="contact" className="py-24 px-6 max-w-4xl mx-auto">
+      <section id="contact" className={`py-24 ${sectionContainer}`}>
         <motion.div
           className="flex flex-col items-center text-center"
           initial="hidden"
@@ -530,7 +592,7 @@ function App() {
             </p>
           </motion.div>
 
-          <motion.div variants={fadeUp} className="flex flex-col sm:flex-row gap-3 mb-8 w-full max-w-xl">
+          <motion.div variants={fadeUp} className="flex flex-col sm:flex-row gap-3 mb-8 w-full max-w-2xl">
             <div className="flex items-center gap-3 px-5 py-3.5 rounded-xl border border-white/[0.08] bg-white/[0.02] hover:bg-white/[0.05] hover:border-blue-500/25 transition-all duration-200 group flex-1">
               <FaEnvelope className="text-blue-400 shrink-0" />
               <a href="mailto:coooltejasdagr@gmail.com" className="text-gray-400 text-sm group-hover:text-white transition-colors truncate flex-1">
@@ -562,7 +624,7 @@ function App() {
           <motion.form
             variants={fadeUp}
             onSubmit={submitQuickMessage}
-            className="w-full max-w-xl rounded-2xl border border-white/[0.08] bg-white/[0.02] p-4 mb-8 text-left"
+            className="w-full max-w-2xl rounded-2xl border border-white/[0.08] bg-white/[0.02] p-4 mb-8 text-left"
           >
             <p className="text-sm text-gray-300 mb-3">Quick message</p>
             <div className="grid sm:grid-cols-2 gap-3 mb-3">
@@ -590,12 +652,26 @@ function App() {
             />
             <div className="mt-3 flex items-center justify-between gap-3">
               <p className="text-xs text-red-400 min-h-4">{formError}</p>
-              <button
-                type="submit"
-                className="px-4 py-2 rounded-lg bg-gradient-to-r from-blue-600 to-violet-600 text-white text-xs font-medium hover:opacity-90 transition-opacity"
-              >
-                Send via Email
-              </button>
+              <div className="flex items-center gap-2">
+                <button
+                  type="button"
+                  onClick={() => {
+                    const cleared = { name: "", email: "", message: "" };
+                    setMessageForm(cleared);
+                    setFormError("");
+                    window.localStorage.removeItem("portfolio-contact-draft");
+                  }}
+                  className="px-3 py-2 rounded-lg border border-white/[0.15] text-gray-300 text-xs hover:text-white hover:border-white/[0.28] transition-colors"
+                >
+                  Clear
+                </button>
+                <button
+                  type="submit"
+                  className="px-4 py-2 rounded-lg bg-gradient-to-r from-blue-600 to-violet-600 text-white text-xs font-medium hover:opacity-90 transition-opacity"
+                >
+                  Send via Email
+                </button>
+              </div>
             </div>
           </motion.form>
 

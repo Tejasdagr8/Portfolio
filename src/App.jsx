@@ -3,6 +3,12 @@ import { motion } from "framer-motion";
 import { FaGithub, FaLinkedin, FaEnvelope, FaPhone, FaDownload, FaExternalLinkAlt, FaArrowUp, FaBars, FaTimes } from "react-icons/fa";
 import profile from "./assets/profile.jpeg";
 import GradientField from "./components/GradientField";
+import SkillsMarquee from "./components/SkillsMarquee";
+
+const CONTACT_EMAILS = {
+  primary: "coooltejasdagr@gmail.com",
+  cc: "tejas2.mitblr2022@learner.manipal.edu",
+};
 
 const fadeUp = {
   hidden: { opacity: 0, y: 30 },
@@ -14,20 +20,39 @@ const stagger = {
   visible: { transition: { staggerChildren: 0.1 } },
 };
 
-function SectionHeading({ children }) {
+function SectionHeading({ eyebrow, children }) {
   return (
-    <div className="mb-8 md:mb-10">
-      <h2 className="text-3xl md:text-4xl font-bold">{children}</h2>
-      <div className="mt-2 h-1 w-14 rounded-full bg-gradient-to-r from-blue-500 to-violet-500" />
+    <div className="mb-8 md:mb-12">
+      {eyebrow && (
+        <p className="font-mono text-xs tracking-[0.2em] uppercase text-mint flex items-center gap-3 mb-4">
+          {eyebrow}
+          <span className="flex-1 h-px bg-white/[0.13]" />
+        </p>
+      )}
+      <h2 className="font-display text-3xl md:text-5xl font-bold tracking-tight leading-tight">{children}</h2>
     </div>
   );
 }
 
-const skills = [
-  "Python", "Go", "Java", "C/C++", "Ruby on Rails", "JavaScript", "TypeScript",
-  "Machine Learning", "Deep Learning", "NLP", "Computer Vision", "LLMs", "RAG", "AI Agents",
-  "LangChain", "FastAPI", "Streamlit", "React", "Vue.js", "PostgreSQL", "Redis", "Kafka",
-  "Docker", "Jenkins", "ArgoCD", "PowerBI", "Git",
+const skillCategories = [
+  {
+    title: "// machine learning",
+    items: ["PyTorch · scikit-learn", "Transformers · fine-tuning", "Computer Vision · NLP", "RAG & agentic systems", "LLM pipelines"],
+  },
+  {
+    title: "// full stack",
+    items: ["React · Vue.js · TypeScript", "Python · FastAPI · Go", "Ruby on Rails · Streamlit", "PostgreSQL · Redis · Kafka", "REST & streaming APIs"],
+  },
+  {
+    title: "// infrastructure",
+    items: ["Docker · CI/CD", "Jenkins · ArgoCD · Sidekiq", "Vercel · cloud deployment", "Git · Linux · the terminal", "PowerBI · analytics"],
+  },
+];
+
+const leadership = [
+  { role: "Class Representative", org: "AI-C, MIT Manipal" },
+  { role: "PR Head", org: "E-Cell" },
+  { role: "Operations Head", org: "College Fest" },
 ];
 
 const projects = [
@@ -86,6 +111,8 @@ function App() {
   const [scrollProgress, setScrollProgress] = useState(0);
   const [messageForm, setMessageForm] = useState({ name: "", email: "", message: "" });
   const [formError, setFormError] = useState("");
+  const [formSuccess, setFormSuccess] = useState("");
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const [localTime, setLocalTime] = useState("");
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
@@ -194,7 +221,7 @@ function App() {
     }
   };
 
-  const submitQuickMessage = (event) => {
+  const submitQuickMessage = async (event) => {
     event.preventDefault();
     const name = messageForm.name.trim();
     const email = messageForm.email.trim();
@@ -202,47 +229,80 @@ function App() {
 
     if (!name || !email || !message) {
       setFormError("Please fill all fields.");
+      setFormSuccess("");
       return;
     }
 
     const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailPattern.test(email)) {
       setFormError("Please enter a valid email address.");
+      setFormSuccess("");
       return;
     }
 
     setFormError("");
-    window.localStorage.removeItem("portfolio-contact-draft");
-    const subject = encodeURIComponent(`Portfolio message from ${name}`);
-    const body = encodeURIComponent(
-      `Hi Tejas,\n\n${message}\n\nFrom,\n${name}\n${email}`
-    );
-    window.location.href = `mailto:coooltejasdagr@gmail.com?subject=${subject}&body=${body}`;
+    setFormSuccess("");
+    setIsSubmitting(true);
+
+    const formData = new FormData();
+    formData.append("name", name);
+    formData.append("email", email);
+    formData.append("message", message);
+    formData.append("_subject", `Portfolio message from ${name}`);
+    formData.append("_replyto", email);
+    formData.append("_cc", CONTACT_EMAILS.cc);
+    formData.append("_template", "table");
+    formData.append("_captcha", "false");
+
+    try {
+      const response = await fetch(`https://formsubmit.co/ajax/${CONTACT_EMAILS.primary}`, {
+        method: "POST",
+        body: formData,
+        headers: { Accept: "application/json" },
+      });
+
+      const result = await response.json();
+
+      if (response.ok && result.success) {
+        setMessageForm({ name: "", email: "", message: "" });
+        window.localStorage.removeItem("portfolio-contact-draft");
+        setFormSuccess("Message sent! I'll get back to you soon.");
+        return;
+      }
+
+      throw new Error(result.message || "Form submission failed");
+    } catch {
+      setFormError(
+        "Could not send automatically. Please email coooltejasdagr@gmail.com directly."
+      );
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
-    <div className="bg-[#0B0E16] text-white font-sans min-h-screen">
+    <div className="bg-ink-0 text-paper font-body font-light min-h-screen">
       <div className="fixed top-0 left-0 z-[60] h-[2px] bg-gradient-to-r from-[#8C7BFF] to-[#5EE6D0]" style={{ width: `${scrollProgress}%` }} />
 
       {/* NAVBAR */}
       <nav className="fixed w-full top-0 z-[100] border-b border-transparent bg-gradient-to-b from-[#0B0E16]/85 to-transparent backdrop-blur-sm">
         <div className={`${sectionContainer} py-4 flex justify-between items-center`}>
-          <a href="#" className="text-lg font-bold bg-gradient-to-r from-[#8C7BFF] to-[#5EE6D0] bg-clip-text text-transparent">
-            Tejas
+          <a href="#" className="font-mono text-sm tracking-widest text-paper hover:text-mint transition-colors">
+            tejas<span className="text-mint">.</span>melkote
           </a>
           <div className="flex items-center gap-4">
-            <div className="hidden md:flex gap-5 text-gray-400 text-sm">
+            <div className="hidden md:flex gap-7 font-mono text-xs tracking-widest uppercase text-fog">
               {sectionIds.map((id) => (
                 <a
                   key={id}
                   href={`#${id}`}
-                  className={`capitalize transition-colors relative group ${
-                    activeSection === id ? "text-white" : "hover:text-white"
+                  className={`transition-colors relative group ${
+                    activeSection === id ? "text-paper" : "hover:text-paper"
                   }`}
                 >
                   {id}
                   <span
-                    className={`absolute -bottom-0.5 left-0 h-px bg-[#5EE6D0] transition-all duration-300 ${
+                    className={`absolute -bottom-1 left-0 h-px bg-mint transition-all duration-300 ${
                       activeSection === id ? "w-full" : "w-0 group-hover:w-full"
                     }`}
                   />
@@ -252,7 +312,7 @@ function App() {
             <a
               href="/resume.pdf"
               download
-              className="hidden sm:flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-[#8C7BFF]/40 text-[#8C7BFF] text-xs hover:bg-[#8C7BFF]/10 transition-colors"
+              className="hidden sm:flex items-center gap-1.5 px-4 py-2 rounded-full border border-white/[0.13] text-paper text-xs font-mono tracking-wider hover:border-mint/50 hover:bg-mint/[0.06] transition-colors"
             >
               <FaDownload size={9} /> Resume
             </a>
@@ -299,88 +359,92 @@ function App() {
       </nav>
 
       {/* HERO */}
-      <section className="min-h-screen flex flex-col justify-center items-center text-center relative overflow-hidden pt-20">
+      <section className="min-h-screen flex flex-col justify-center relative overflow-hidden pt-24 pb-16">
         <GradientField className="absolute inset-0 w-full h-full block pointer-events-none" />
 
         <motion.div
-          className={`relative z-[2] flex flex-col items-center ${sectionContainer}`}
+          className={`relative z-[2] ${sectionContainer}`}
           initial="hidden"
           animate="visible"
           variants={stagger}
         >
-          {/* Profile image with glow */}
-          <motion.div variants={fadeUp} className="relative mb-8">
-            <div className="absolute inset-0 rounded-full bg-gradient-to-r from-blue-500 to-violet-500 blur-xl opacity-40 scale-110" />
-            <img
-              src={profile}
-              alt="Tejas Melkote — AI/ML Engineer"
-              className="relative w-36 h-36 rounded-full object-cover border-2 border-white/10"
-            />
-          </motion.div>
+          <motion.div variants={fadeUp} className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-12">
+            <div className="flex-1 text-left">
+              <p className="font-mono text-xs md:text-sm text-mint tracking-[0.14em] uppercase mb-6 flex items-center gap-3">
+                <span className="w-8 h-px bg-mint inline-block" />
+                gradient descent — shipping since 2022
+              </p>
 
-          <motion.h1
-            variants={fadeUp}
-            className="text-5xl md:text-7xl font-bold mb-4 bg-gradient-to-br from-white via-blue-50 to-violet-200 bg-clip-text text-transparent leading-tight pb-1"
-          >
-            Tejas Melkote
-          </motion.h1>
+              <h1 className="font-display font-extrabold uppercase leading-[0.94] tracking-tight">
+                <span className="block text-5xl sm:text-7xl md:text-8xl text-paper">Tejas</span>
+                <span
+                  className="block text-5xl sm:text-7xl md:text-8xl text-transparent"
+                  style={{ WebkitTextStroke: "1.5px rgba(234,237,246,0.38)" }}
+                >
+                  Melkote
+                </span>
+                <span className="block text-4xl sm:text-6xl md:text-7xl mt-1">
+                  builds <span className="gradient-text">minds</span>
+                </span>
+              </h1>
 
-          <motion.p variants={fadeUp} className="text-[#5EE6D0] text-xs md:text-sm mb-2 tracking-widest uppercase font-medium">
-            Software · AI/ML · Data Engineering
-          </motion.p>
+              <p className="text-fog text-base md:text-lg max-w-xl mt-8 leading-relaxed">
+                <strong className="text-paper font-medium">AI/ML engineer & full-stack developer.</strong>{" "}
+                Final-year B.Tech CS (AI) at MIT Manipal — shipping production features at SuperAGI and building LLM agents, RAG pipelines, and the products around them.
+              </p>
 
-          <motion.p variants={fadeUp} className="text-gray-500 text-sm mb-2">
-            SDE Intern @ SuperAGI · Bengaluru, India
-          </motion.p>
+              <div className="font-mono text-xs text-fog tracking-wider flex flex-wrap gap-x-6 gap-y-2 mt-8">
+                <span><span className="text-mint">●</span> Bengaluru, IN</span>
+                <span><span className="text-mint">●</span> Open to opportunities</span>
+                <span className="hidden sm:inline"><span className="text-mint">●</span> Move cursor — field responds</span>
+              </div>
 
-          <motion.p variants={fadeUp} className="text-gray-400 max-w-lg text-sm leading-relaxed mt-2">
-            Final-year B.Tech CS (AI) student shipping full-stack production features and building LLM applications, AI agents, and ML pipelines.
-          </motion.p>
+              <div className="flex flex-wrap gap-4 mt-10">
+                <a
+                  href="#contact"
+                  className="px-7 py-3 rounded-full bg-gradient-to-r from-iris to-mint text-ink-0 text-sm font-medium hover:opacity-90 transition-opacity"
+                >
+                  Get in touch
+                </a>
+                <a
+                  href="/resume.pdf"
+                  download
+                  className="px-7 py-3 rounded-full border border-white/[0.15] text-fog text-sm hover:text-paper hover:border-mint/40 hover:bg-mint/[0.06] transition-all"
+                >
+                  Download CV
+                </a>
+              </div>
 
-          <motion.div variants={fadeUp} className="flex gap-4 mt-8">
-            <a
-              href="#contact"
-              className="px-6 py-2.5 rounded-lg bg-gradient-to-r from-blue-600 to-violet-600 text-white text-sm font-medium hover:opacity-90 transition-opacity"
-            >
-              Get in touch
-            </a>
-            <a
-              href="/resume.pdf"
-              download
-              className="px-6 py-2.5 rounded-lg border border-white/15 text-gray-300 text-sm font-medium hover:bg-white/5 hover:border-white/25 transition-all"
-            >
-              Download CV
-            </a>
-          </motion.div>
+              <div className="flex gap-5 mt-8 text-fog">
+                <a href="https://github.com/Tejasdagr8" target="_blank" rel="noreferrer" className="hover:text-paper transition-colors text-xl" aria-label="GitHub">
+                  <FaGithub />
+                </a>
+                <a href="https://www.linkedin.com/in/tejas-melkote-390545309/" target="_blank" rel="noreferrer" className="hover:text-mint transition-colors text-xl" aria-label="LinkedIn">
+                  <FaLinkedin />
+                </a>
+                <a href="mailto:coooltejasdagr@gmail.com" className="hover:text-mint transition-colors text-xl" aria-label="Email">
+                  <FaEnvelope />
+                </a>
+              </div>
+            </div>
 
-          <motion.div variants={fadeUp} className="flex gap-5 mt-8 text-gray-600">
-            <a href="https://github.com/Tejasdagr8" target="_blank" rel="noreferrer" className="hover:text-white transition-colors text-xl">
-              <FaGithub />
-            </a>
-            <a href="https://www.linkedin.com/in/tejas-melkote-390545309/" target="_blank" rel="noreferrer" className="hover:text-blue-400 transition-colors text-xl">
-              <FaLinkedin />
-            </a>
-            <a href="mailto:coooltejasdagr@gmail.com" className="hover:text-blue-400 transition-colors text-xl">
-              <FaEnvelope />
-            </a>
+            <motion.div variants={fadeUp} className="relative shrink-0 mx-auto lg:mx-0">
+              <div className="absolute inset-0 rounded-full bg-gradient-to-r from-iris to-mint blur-2xl opacity-30 scale-110" />
+              <img
+                src={profile}
+                alt="Tejas Melkote — AI/ML Engineer"
+                className="relative w-44 h-44 md:w-52 md:h-52 rounded-full object-cover border border-white/10"
+              />
+            </motion.div>
           </motion.div>
         </motion.div>
 
-        {/* Scroll indicator */}
-        <motion.div
-          className="absolute bottom-10 left-1/2 -translate-x-1/2 flex flex-col items-center gap-1.5 text-gray-700"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 1.4, duration: 0.8 }}
-        >
-          <span className="tracking-widest uppercase text-[10px]">Scroll</span>
-          <motion.div
-            className="w-px h-10 bg-gradient-to-b from-gray-700 to-transparent"
-            animate={{ scaleY: [0.4, 1, 0.4], opacity: [0.4, 1, 0.4] }}
-            transition={{ repeat: Infinity, duration: 2.5, ease: "easeInOut" }}
-          />
-        </motion.div>
+        <div className="scroll-hint absolute bottom-8 left-1/2 font-mono text-[11px] tracking-[0.3em] uppercase text-fog z-[2]">
+          scroll
+        </div>
       </section>
+
+      <SkillsMarquee />
 
       {/* ABOUT */}
       <motion.section
@@ -391,19 +455,36 @@ function App() {
         viewport={{ once: true, margin: "-80px" }}
         variants={fadeUp}
       >
-        <SectionHeading>About Me</SectionHeading>
-        <p className="text-gray-400 leading-8 max-w-4xl">
-          Final-year B.Tech Computer Science (AI) student with hands-on experience deploying full-stack features in{" "}
-          <span className="text-gray-200">Go, Ruby on Rails, and Vue.js</span>, and building LLM applications, AI agents, and ML pipelines.
-          I work at the intersection of models and production — from training loops and agent orchestration to the APIs and interfaces users actually touch.
-          Currently seeking roles in software engineering, AI/ML, or data engineering.
-        </p>
+        <SectionHeading eyebrow="about">
+          Full-stack curiosity, <span className="gradient-text">model-first</span> thinking.
+        </SectionHeading>
+        <div className="grid lg:grid-cols-[1.4fr_1fr] gap-12 items-start">
+          <p className="text-fog text-base md:text-lg leading-8">
+            Most engineers pick a layer of the stack and stay there. I work at the seam — where trained models meet real users, latency budgets, and edge cases.
+            Equally at home writing a training loop in PyTorch and architecting the API, frontend, and infrastructure that serve it.{" "}
+            <strong className="text-paper font-medium">A model that never ships is just a very expensive CSV.</strong>
+          </p>
+          <div className="space-y-3">
+            {[
+              { label: "focus", value: "ML systems, end to end" },
+              { label: "currently", value: "LLM agents & RAG" },
+              { label: "internship", value: "SDE @ SuperAGI" },
+            ].map(({ label, value }) => (
+              <div key={label} className="card-glass p-6">
+                <p className="font-mono text-[11px] tracking-[0.16em] uppercase text-mint mb-2">{label}</p>
+                <p className="font-display font-bold text-xl text-paper">{value}</p>
+              </div>
+            ))}
+          </div>
+        </div>
       </motion.section>
 
       {/* EXPERIENCE */}
       <section id="experience" className={`py-24 ${sectionContainer}`}>
         <motion.div initial="hidden" whileInView="visible" viewport={{ once: true, margin: "-80px" }} variants={fadeUp}>
-          <SectionHeading>Experience</SectionHeading>
+          <SectionHeading eyebrow="experience">
+            Where I&apos;ve <span className="gradient-text">trained</span>.
+          </SectionHeading>
         </motion.div>
         <motion.div
           className="space-y-5"
@@ -434,25 +515,23 @@ function App() {
             <motion.div
               key={i}
               variants={fadeUp}
-              className="p-6 rounded-2xl border border-white/[0.08] bg-white/[0.02] hover:bg-white/[0.04] hover:border-blue-500/25 transition-all duration-300"
+              className="grid md:grid-cols-[200px_1fr] gap-6 md:gap-14 py-8 border-t border-white/[0.13] first:border-t-0 md:first:border-t"
             >
-              <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-1 mb-3">
-                <div>
-                  <h3 className="font-semibold text-white">{exp.company}</h3>
-                  <p className="text-blue-400 text-sm">{exp.role}</p>
-                </div>
-                <div className="text-gray-600 text-sm sm:text-right shrink-0">
-                  <p>{exp.period}</p>
-                  <p>{exp.location}</p>
-                </div>
+              <div className="font-mono text-sm text-mint tracking-wide pt-1">
+                <p>{exp.period}</p>
+                <p className="text-fog text-xs mt-1">{exp.location}</p>
               </div>
-              <p className="text-gray-500 text-sm leading-7 mb-4">{exp.description}</p>
-              <div className="flex flex-wrap gap-2">
-                {exp.tags.map((tag) => (
-                  <span key={tag} className="px-2.5 py-0.5 rounded-md text-xs bg-blue-500/10 text-blue-300 border border-blue-500/20">
-                    {tag}
-                  </span>
-                ))}
+              <div>
+                <h3 className="font-display font-bold text-xl md:text-2xl text-paper">{exp.role}</h3>
+                <p className="font-mono text-sm text-fog mt-1">{exp.company}</p>
+                <p className="text-fog text-sm leading-7 mt-4 max-w-2xl">{exp.description}</p>
+                <div className="flex flex-wrap gap-2 mt-5">
+                  {exp.tags.map((tag) => (
+                    <span key={tag} className="font-mono text-[11px] tracking-wide px-3 py-1 rounded-full border border-white/[0.13] text-fog">
+                      {tag}
+                    </span>
+                  ))}
+                </div>
               </div>
             </motion.div>
           ))}
@@ -462,7 +541,7 @@ function App() {
       {/* EDUCATION */}
       <section id="education" className={`py-24 ${sectionContainer}`}>
         <motion.div initial="hidden" whileInView="visible" viewport={{ once: true, margin: "-80px" }} variants={fadeUp}>
-          <SectionHeading>Education</SectionHeading>
+          <SectionHeading eyebrow="education">Education</SectionHeading>
         </motion.div>
         <motion.div
           className="space-y-4"
@@ -494,16 +573,16 @@ function App() {
             <motion.div
               key={i}
               variants={fadeUp}
-              className="flex items-center justify-between p-5 rounded-2xl border border-white/[0.08] bg-white/[0.02] hover:bg-white/[0.04] hover:border-violet-500/25 transition-all duration-300"
+              className="flex items-center justify-between card-glass card-glass-hover p-6"
             >
               <div>
-                <h3 className="font-semibold text-white text-sm">{edu.degree}</h3>
-                <p className="text-gray-600 text-xs mt-0.5">
+                <h3 className="font-display font-bold text-paper text-base">{edu.degree}</h3>
+                <p className="text-fog text-xs mt-1 font-mono">
                   {edu.institution}
-                  {edu.detail && ` • ${edu.detail}`}
+                  {edu.detail && ` · ${edu.detail}`}
                 </p>
               </div>
-              <span className="text-violet-400 font-semibold text-sm shrink-0 ml-4">{edu.grade}</span>
+              <span className="gradient-text font-display font-bold text-sm shrink-0 ml-4">{edu.grade}</span>
             </motion.div>
           ))}
         </motion.div>
@@ -517,10 +596,12 @@ function App() {
           viewport={{ once: true, margin: "-80px" }}
           variants={fadeUp}
         >
-          <SectionHeading>Projects</SectionHeading>
+          <SectionHeading eyebrow="selected work">
+            Things I&apos;ve <span className="gradient-text">shipped</span>.
+          </SectionHeading>
         </motion.div>
         <motion.div
-          className="grid md:grid-cols-2 lg:grid-cols-3 gap-5"
+          className="space-y-0"
           initial="hidden"
           whileInView="visible"
           viewport={{ once: true, margin: "-80px" }}
@@ -530,78 +611,100 @@ function App() {
             <motion.div
               key={`${project.title}-${i}`}
               variants={fadeUp}
-              className="group p-5 rounded-2xl border border-white/[0.08] bg-white/[0.02] hover:bg-white/[0.04] hover:border-blue-500/20 transition-all duration-300 flex flex-col gap-3"
+              className="group relative grid md:grid-cols-[80px_1fr_auto] gap-4 md:gap-10 items-baseline py-8 md:py-10 border-t border-white/[0.13] hover:pl-3 transition-all duration-300"
             >
-              <h3 className="font-semibold text-white text-base leading-snug group-hover:text-blue-300 transition-colors duration-200">
-                {project.title}
-              </h3>
-              <p className="text-gray-400 text-sm leading-6 flex-1">{project.description}</p>
-              <div className="flex flex-wrap gap-1.5">
-                {project.tags.map((tag) => (
-                  <span key={tag} className="px-2 py-0.5 rounded text-[11px] bg-white/5 text-gray-400 border border-white/[0.08]">
-                    {tag}
-                  </span>
-                ))}
+              <span className="font-mono text-sm text-fog">P—{String(i + 1).padStart(2, "0")}</span>
+              <div>
+                <h3 className="font-display font-bold text-xl md:text-3xl text-paper group-hover:text-mint transition-colors leading-tight">
+                  {project.title}
+                </h3>
+                <p className="text-fog text-sm md:text-base leading-7 mt-3 max-w-2xl">{project.description}</p>
+                <div className="flex flex-wrap gap-2 mt-4">
+                  {project.tags.map((tag) => (
+                    <span key={tag} className="font-mono text-[11px] px-3 py-1 rounded-full border border-white/[0.13] text-fog">
+                      {tag}
+                    </span>
+                  ))}
+                </div>
+                {project.link && (
+                  <a
+                    href={project.link}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="inline-flex items-center gap-1.5 text-xs font-mono text-mint hover:text-paper transition-colors mt-4"
+                  >
+                    <FaExternalLinkAlt size={10} /> View live
+                  </a>
+                )}
               </div>
-              {project.link && (
-                <a
-                  href={project.link}
-                  target="_blank"
-                  rel="noreferrer"
-                  className="flex items-center gap-1.5 text-[11px] text-blue-400 hover:text-blue-300 transition-colors mt-1 w-fit"
-                >
-                  <FaExternalLinkAlt size={10} /> View Project
-                </a>
-              )}
+              <span className="hidden md:block font-display text-2xl text-fog group-hover:text-mint group-hover:translate-x-1 group-hover:-translate-y-1 transition-all">
+                ↗
+              </span>
             </motion.div>
           ))}
+          <div className="border-t border-white/[0.13]" />
         </motion.div>
       </section>
 
       {/* SKILLS */}
       <section id="skills" className={`py-24 ${sectionContainer}`}>
         <motion.div initial="hidden" whileInView="visible" viewport={{ once: true, margin: "-80px" }} variants={fadeUp}>
-          <SectionHeading>Skills</SectionHeading>
+          <SectionHeading eyebrow="stack">
+            Tools of the <span className="gradient-text">trade</span>.
+          </SectionHeading>
         </motion.div>
         <motion.div
-          className="flex flex-wrap gap-2.5"
+          className="grid md:grid-cols-3 gap-4"
           initial="hidden"
           whileInView="visible"
           viewport={{ once: true, margin: "-80px" }}
           variants={stagger}
         >
-          {skills.map((skill) => (
-            <motion.span
-              key={skill}
-              variants={fadeUp}
-              className="px-4 py-2 rounded-full text-sm border border-white/[0.08] bg-white/[0.02] text-gray-400 hover:border-blue-500/40 hover:text-white hover:bg-blue-500/10 transition-all duration-200 cursor-default"
-            >
-              {skill}
-            </motion.span>
+          {skillCategories.map((col) => (
+            <motion.div key={col.title} variants={fadeUp} className="card-glass card-glass-hover p-7">
+              <h3 className="font-mono text-xs tracking-[0.18em] uppercase text-ember mb-5">{col.title}</h3>
+              <ul className="space-y-0">
+                {col.items.map((item) => (
+                  <li key={item} className="text-fog text-sm py-2.5 border-b border-dashed border-white/[0.1] last:border-0">
+                    {item}
+                  </li>
+                ))}
+              </ul>
+            </motion.div>
           ))}
         </motion.div>
       </section>
 
-      {/* LANGUAGES */}
-      <section className={`py-16 ${sectionContainer}`}>
+      {/* LEADERSHIP & LANGUAGES */}
+      <section className={`py-20 ${sectionContainer}`}>
         <motion.div
           initial="hidden"
           whileInView="visible"
           viewport={{ once: true, margin: "-80px" }}
           variants={fadeUp}
         >
-          <SectionHeading>Languages</SectionHeading>
-          <div className="flex flex-wrap gap-4">
-            {[
-              { lang: "English", level: "Native" },
-              { lang: "Hindi", level: "Proficient" },
-              { lang: "Kannada", level: "Advanced" },
-            ].map(({ lang, level }) => (
-              <div key={lang} className="px-5 py-3 rounded-xl border border-white/[0.08] bg-white/[0.02]">
-                <p className="text-white text-sm font-medium">{lang}</p>
-                <p className="text-gray-600 text-xs mt-0.5">{level}</p>
-              </div>
-            ))}
+          <SectionHeading eyebrow="beyond code">Leadership & languages</SectionHeading>
+          <div className="grid md:grid-cols-2 gap-8">
+            <div className="space-y-3">
+              {leadership.map(({ role, org }) => (
+                <div key={role} className="card-glass p-5 flex justify-between items-center gap-4">
+                  <p className="font-display font-bold text-paper text-sm">{role}</p>
+                  <p className="font-mono text-xs text-fog text-right">{org}</p>
+                </div>
+              ))}
+            </div>
+            <div className="flex flex-wrap gap-3 content-start">
+              {[
+                { lang: "English", level: "Native" },
+                { lang: "Hindi", level: "Proficient" },
+                { lang: "Kannada", level: "Advanced" },
+              ].map(({ lang, level }) => (
+                <div key={lang} className="card-glass px-5 py-4 min-w-[140px]">
+                  <p className="text-paper text-sm font-medium">{lang}</p>
+                  <p className="text-fog text-xs mt-1 font-mono">{level}</p>
+                </div>
+              ))}
+            </div>
           </div>
         </motion.div>
       </section>
@@ -615,40 +718,49 @@ function App() {
           viewport={{ once: true, margin: "-80px" }}
           variants={stagger}
         >
-          <motion.div variants={fadeUp} className="flex flex-col items-center mb-8">
-            <h2 className="text-3xl md:text-4xl font-bold">Get in Touch</h2>
-            <div className="mt-2 h-1 w-14 rounded-full bg-gradient-to-r from-blue-500 to-violet-500" />
-            <p className="text-gray-600 text-sm mt-4">
-              Open to opportunities, collaborations, and conversations.
+          <motion.div variants={fadeUp} className="flex flex-col items-center mb-10">
+            <p className="font-mono text-xs tracking-[0.2em] uppercase text-mint mb-4">contact</p>
+            <h2 className="font-display text-3xl md:text-5xl font-bold text-center leading-tight">
+              Let&apos;s build something<br />that <span className="gradient-text">learns</span>.
+            </h2>
+            <p className="text-fog text-sm mt-5 max-w-md">
+              Whether it&apos;s a role, a collaboration, or a hard problem — my inbox converges fast.
             </p>
-            <p className="text-gray-500 text-xs mt-2">
-              Local time (IST): {localTime}
-            </p>
+            <p className="text-fog text-xs mt-2 font-mono">Local time (IST): {localTime}</p>
+          </motion.div>
+
+          <motion.div variants={fadeUp} className="mb-10">
+            <a
+              href="mailto:coooltejasdagr@gmail.com"
+              className="font-display font-extrabold text-2xl md:text-4xl gradient-text hover:opacity-80 transition-opacity"
+            >
+              coooltejasdagr@gmail.com
+            </a>
           </motion.div>
 
           <motion.div variants={fadeUp} className="flex flex-col sm:flex-row gap-3 mb-8 w-full max-w-2xl">
-            <div className="flex items-center gap-3 px-5 py-3.5 rounded-xl border border-white/[0.08] bg-white/[0.02] hover:bg-white/[0.05] hover:border-blue-500/25 transition-all duration-200 group flex-1">
-              <FaEnvelope className="text-blue-400 shrink-0" />
-              <a href="mailto:coooltejasdagr@gmail.com" className="text-gray-400 text-sm group-hover:text-white transition-colors truncate flex-1">
+            <div className="flex items-center gap-3 card-glass px-5 py-3.5 hover:border-mint/30 transition-all group flex-1">
+              <FaEnvelope className="text-mint shrink-0" />
+              <a href="mailto:coooltejasdagr@gmail.com" className="text-fog text-sm group-hover:text-paper transition-colors truncate flex-1">
                 coooltejasdagr@gmail.com
               </a>
               <button
                 type="button"
                 onClick={() => copyToClipboard("coooltejasdagr@gmail.com", "email")}
-                className="text-[11px] px-2 py-1 rounded border border-white/[0.12] text-gray-400 hover:text-white hover:border-white/[0.28] transition-colors"
+                className="font-mono text-[11px] px-2 py-1 rounded border border-white/[0.12] text-fog hover:text-paper hover:border-white/[0.28] transition-colors"
               >
                 {copiedField === "email" ? "Copied" : copiedField === "error-email" ? "Failed" : "Copy"}
               </button>
             </div>
-            <div className="flex items-center gap-3 px-5 py-3.5 rounded-xl border border-white/[0.08] bg-white/[0.02] hover:bg-white/[0.05] hover:border-blue-500/25 transition-all duration-200 group flex-1">
-              <FaPhone className="text-blue-400 shrink-0" />
-              <a href="tel:+917019280175" className="text-gray-400 text-sm group-hover:text-white transition-colors flex-1">
+            <div className="flex items-center gap-3 card-glass px-5 py-3.5 hover:border-mint/30 transition-all group flex-1">
+              <FaPhone className="text-mint shrink-0" />
+              <a href="tel:+917019280175" className="text-fog text-sm group-hover:text-paper transition-colors flex-1">
                 +91 7019280175
               </a>
               <button
                 type="button"
                 onClick={() => copyToClipboard("+917019280175", "phone")}
-                className="text-[11px] px-2 py-1 rounded border border-white/[0.12] text-gray-400 hover:text-white hover:border-white/[0.28] transition-colors"
+                className="font-mono text-[11px] px-2 py-1 rounded border border-white/[0.12] text-fog hover:text-paper hover:border-white/[0.28] transition-colors"
               >
                 {copiedField === "phone" ? "Copied" : copiedField === "error-phone" ? "Failed" : "Copy"}
               </button>
@@ -658,23 +770,23 @@ function App() {
           <motion.form
             variants={fadeUp}
             onSubmit={submitQuickMessage}
-            className="w-full max-w-2xl rounded-2xl border border-white/[0.08] bg-white/[0.02] p-4 mb-8 text-left"
+            className="w-full max-w-2xl card-glass p-5 mb-8 text-left"
           >
-            <p className="text-sm text-gray-300 mb-3">Quick message</p>
+            <p className="font-mono text-xs tracking-widest uppercase text-fog mb-4">Quick message</p>
             <div className="grid sm:grid-cols-2 gap-3 mb-3">
               <input
                 type="text"
                 value={messageForm.name}
                 onChange={(e) => setMessageForm((prev) => ({ ...prev, name: e.target.value }))}
                 placeholder="Your name"
-                className="rounded-lg border border-white/[0.08] bg-white/[0.02] px-3 py-2 text-sm text-gray-200 placeholder:text-gray-600 outline-none focus:border-blue-500/40"
+                className="rounded-lg border border-white/[0.08] bg-ink-0/50 px-3 py-2 text-sm text-paper placeholder:text-fog/60 outline-none focus:border-mint/40 font-body"
               />
               <input
                 type="email"
                 value={messageForm.email}
                 onChange={(e) => setMessageForm((prev) => ({ ...prev, email: e.target.value }))}
                 placeholder="Your email"
-                className="rounded-lg border border-white/[0.08] bg-white/[0.02] px-3 py-2 text-sm text-gray-200 placeholder:text-gray-600 outline-none focus:border-blue-500/40"
+                className="rounded-lg border border-white/[0.08] bg-ink-0/50 px-3 py-2 text-sm text-paper placeholder:text-fog/60 outline-none focus:border-mint/40 font-body"
               />
             </div>
             <textarea
@@ -682,10 +794,13 @@ function App() {
               onChange={(e) => setMessageForm((prev) => ({ ...prev, message: e.target.value }))}
               placeholder="Write your message..."
               rows={4}
-              className="w-full rounded-lg border border-white/[0.08] bg-white/[0.02] px-3 py-2 text-sm text-gray-200 placeholder:text-gray-600 outline-none focus:border-blue-500/40"
+              className="w-full rounded-lg border border-white/[0.08] bg-ink-0/50 px-3 py-2 text-sm text-paper placeholder:text-fog/60 outline-none focus:border-mint/40 font-body"
             />
             <div className="mt-3 flex items-center justify-between gap-3">
-              <p className="text-xs text-red-400 min-h-4">{formError}</p>
+              <div className="min-h-4">
+                {formError && <p className="text-xs text-red-400">{formError}</p>}
+                {formSuccess && <p className="text-xs text-mint">{formSuccess}</p>}
+              </div>
               <div className="flex items-center gap-2">
                 <button
                   type="button"
@@ -693,46 +808,56 @@ function App() {
                     const cleared = { name: "", email: "", message: "" };
                     setMessageForm(cleared);
                     setFormError("");
+                    setFormSuccess("");
                     window.localStorage.removeItem("portfolio-contact-draft");
                   }}
-                  className="px-3 py-2 rounded-lg border border-white/[0.15] text-gray-300 text-xs hover:text-white hover:border-white/[0.28] transition-colors"
+                  disabled={isSubmitting}
+                  className="px-3 py-2 rounded-full border border-white/[0.15] text-fog text-xs font-mono hover:text-paper hover:border-white/[0.28] transition-colors disabled:opacity-50"
                 >
                   Clear
                 </button>
                 <button
                   type="submit"
-                  className="px-4 py-2 rounded-lg bg-gradient-to-r from-blue-600 to-violet-600 text-white text-xs font-medium hover:opacity-90 transition-opacity"
+                  disabled={isSubmitting}
+                  className="px-5 py-2 rounded-full bg-gradient-to-r from-iris to-mint text-ink-0 text-xs font-medium hover:opacity-90 transition-opacity disabled:opacity-50"
                 >
-                  Send via Email
+                  {isSubmitting ? "Sending..." : "Send Message"}
                 </button>
               </div>
             </div>
           </motion.form>
 
-          <motion.div variants={fadeUp} className="flex gap-6">
+          <motion.div variants={fadeUp} className="flex gap-8 font-mono text-xs tracking-widest uppercase">
             <a
               href="https://github.com/Tejasdagr8"
               target="_blank"
               rel="noreferrer"
-              className="flex items-center gap-2 text-gray-600 hover:text-white transition-colors text-sm"
+              className="flex items-center gap-2 text-fog hover:text-mint transition-colors"
             >
-              <FaGithub size={16} /> GitHub
+              <FaGithub size={14} /> GitHub
             </a>
             <a
               href="https://www.linkedin.com/in/tejas-melkote-390545309/"
               target="_blank"
               rel="noreferrer"
-              className="flex items-center gap-2 text-gray-600 hover:text-blue-400 transition-colors text-sm"
+              className="flex items-center gap-2 text-fog hover:text-mint transition-colors"
             >
-              <FaLinkedin size={16} /> LinkedIn
+              <FaLinkedin size={14} /> LinkedIn
             </a>
           </motion.div>
         </motion.div>
       </section>
 
       {/* FOOTER */}
-      <footer className="py-6 text-center text-gray-700 text-xs border-t border-white/[0.05]">
-        © {new Date().getFullYear()} Tejas Melkote. All rights reserved.
+      <footer className="py-8 px-4 border-t border-white/[0.13] flex flex-col sm:flex-row justify-between items-center gap-3 font-mono text-[11px] tracking-widest text-fog uppercase">
+        <span>© {new Date().getFullYear()} Tejas Melkote — built by hand</span>
+        <button
+          type="button"
+          onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
+          className="hover:text-mint transition-colors"
+        >
+          back to top ↑
+        </button>
       </footer>
 
       {showBackToTop && (

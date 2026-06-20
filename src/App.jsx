@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import { FaGithub, FaLinkedin, FaEnvelope, FaPhone, FaDownload, FaExternalLinkAlt, FaArrowUp } from "react-icons/fa";
 import profile from "./assets/profile.jpeg";
+import GradientField from "./components/GradientField";
 
 const fadeUp = {
   hidden: { opacity: 0, y: 30 },
@@ -44,7 +45,6 @@ const projects = [
     title: "AI Trip Planner",
     description: "Frontend: frontend-beryl-one-21.vercel.app | Backend: ai-trip-planner-production-a327.up.railway.app",
     tags: ["LangGraph", "FastAPI", "LangChain"],
-    link: "https://frontend-beryl-one-21.vercel.app",
   },
   {
     title: "Crop Yield Prediction",
@@ -72,7 +72,7 @@ const projects = [
     title: "TatvaOps Blog",
     description: "AI-first construction insights blog with admin CMS publishing.",
     tags: ["Blog", "CMS", "SEO", "AI"],
-    link: "https://tatvaops-blog-page.vercel.app/",
+    link: "https://vantage.withtatva.ai/",
   },
 ];
 
@@ -210,11 +210,11 @@ function App() {
   };
 
   return (
-    <div className="bg-[#07070f] text-white font-sans min-h-screen">
-      <div className="fixed top-0 left-0 z-[60] h-[2px] bg-gradient-to-r from-blue-500 to-violet-500" style={{ width: `${scrollProgress}%` }} />
+    <div className="bg-[#0B0E16] text-white font-sans min-h-screen">
+      <div className="fixed top-0 left-0 z-[60] h-[2px] bg-gradient-to-r from-[#8C7BFF] to-[#5EE6D0]" style={{ width: `${scrollProgress}%` }} />
 
       {/* NAVBAR */}
-      <nav className="fixed w-full top-0 bg-[#07070f]/80 backdrop-blur-md z-50 border-b border-white/[0.06]">
+      <nav className="fixed w-full top-0 z-[100] border-b border-transparent bg-gradient-to-b from-[#0B0E16]/85 to-transparent backdrop-blur-sm">
         <div className={`${sectionContainer} py-4 flex justify-between items-center`}>
           <span className="text-lg font-bold bg-gradient-to-r from-blue-400 to-violet-400 bg-clip-text text-transparent">
             Tejas
@@ -251,14 +251,10 @@ function App() {
 
       {/* HERO */}
       <section className="min-h-screen flex flex-col justify-center items-center text-center relative overflow-hidden pt-20">
-        {/* Background glows */}
-        <div className="absolute inset-0 pointer-events-none">
-          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[700px] h-[700px] bg-blue-600/[0.07] rounded-full blur-3xl" />
-          <div className="absolute top-1/3 left-2/3 w-[400px] h-[400px] bg-violet-600/[0.05] rounded-full blur-3xl" />
-        </div>
+        <GradientField className="absolute inset-0 w-full h-full block pointer-events-none" />
 
         <motion.div
-          className={`relative z-10 flex flex-col items-center ${sectionContainer}`}
+          className={`relative z-[2] flex flex-col items-center ${sectionContainer}`}
           initial="hidden"
           animate="visible"
           variants={stagger}
@@ -430,7 +426,7 @@ function App() {
               degree: "B.Tech Computer Science Engineering (AI)",
               institution: "Manipal Institute of Technology",
               detail: "2022 – 2026",
-              grade: "CGPA 8.26",
+              grade: "CGPA 8.46",
             },
             {
               degree: "12th Grade",
@@ -705,7 +701,7 @@ function App() {
         <button
           type="button"
           onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
-          className="fixed bottom-6 right-6 z-50 p-3 rounded-full border border-blue-500/35 bg-[#0e1020]/90 text-blue-300 hover:text-white hover:border-blue-400/60 hover:bg-[#151933] transition-colors"
+          className="fixed bottom-6 right-6 z-[100] p-3 rounded-full border border-[#8C7BFF]/35 bg-[#0B0E16]/90 text-[#5EE6D0] hover:text-white hover:border-[#5EE6D0]/60 hover:bg-[#141929] transition-colors"
           aria-label="Back to top"
         >
           <FaArrowUp size={12} />

@@ -1,11 +1,13 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { motion } from "framer-motion";
-import { FaGithub, FaLinkedin, FaEnvelope, FaPhone, FaDownload, FaExternalLinkAlt, FaArrowUp, FaBars, FaTimes } from "react-icons/fa";
+import { FaGithub, FaLinkedin, FaEnvelope, FaPhone, FaDownload, FaExternalLinkAlt, FaArrowUp, FaBars, FaTimes, FaTerminal } from "react-icons/fa";
 import profile from "./assets/profile.jpeg";
 import GradientField from "./components/GradientField";
 import SkillsMarquee from "./components/SkillsMarquee";
+import Terminal from "./components/Terminal";
 import useAnalytics from "./hooks/useAnalytics";
-import { track } from "./lib/analytics";
+import { track, getCampaignRef } from "./lib/analytics";
+import { getCampaignContent } from "./lib/campaign";
 
 const CONTACT_EMAILS = {
   primary: "coooltejasdagr@gmail.com",
@@ -118,6 +120,10 @@ function App() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [localTime, setLocalTime] = useState("");
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [terminalOpen, setTerminalOpen] = useState(false);
+
+  const campaignRef = useMemo(() => getCampaignRef(), []);
+  const campaign = useMemo(() => getCampaignContent(campaignRef), [campaignRef]);
 
   useAnalytics();
 
@@ -214,6 +220,33 @@ function App() {
     const interval = setInterval(updateTime, 1000);
     return () => clearInterval(interval);
   }, []);
+
+  useEffect(() => {
+    const toggleTerminal = () => setTerminalOpen((open) => !open);
+
+    const onKeyDown = (e) => {
+      const tag = e.target?.tagName?.toLowerCase();
+      const inField = tag === "input" || tag === "textarea" || e.target?.isContentEditable;
+
+      if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === "k") {
+        e.preventDefault();
+        toggleTerminal();
+        return;
+      }
+
+      if (!inField && e.key === "`") {
+        e.preventDefault();
+        toggleTerminal();
+      }
+    };
+
+    window.addEventListener("keydown", onKeyDown);
+    return () => window.removeEventListener("keydown", onKeyDown);
+  }, []);
+
+  const navigateToSection = (id) => {
+    document.getElementById(id)?.scrollIntoView({ behavior: "smooth" });
+  };
 
   const copyToClipboard = async (value, field) => {
     try {
@@ -315,6 +348,14 @@ function App() {
                 </a>
               ))}
             </div>
+            <button
+              type="button"
+              onClick={() => setTerminalOpen(true)}
+              className="hidden sm:flex items-center gap-1.5 px-3 py-2 rounded-full border border-white/[0.1] text-fog text-[10px] font-mono tracking-wider hover:text-mint hover:border-mint/30 transition-colors"
+              title="Open terminal (⌘K)"
+            >
+              <FaTerminal size={10} /> ⌘K
+            </button>
             <a
               href="/resume.pdf"
               download
@@ -387,9 +428,16 @@ function App() {
             </motion.div>
 
             <div className="flex-1 text-center lg:text-left min-w-0">
-              <p className="font-mono text-[10px] sm:text-xs md:text-sm text-mint tracking-[0.12em] sm:tracking-[0.14em] uppercase mb-5 sm:mb-6 flex items-center justify-center lg:justify-start gap-2 sm:gap-3">
+              <p className="font-mono text-[10px] sm:text-xs md:text-sm text-mint tracking-[0.12em] sm:tracking-[0.14em] uppercase mb-5 sm:mb-6 flex items-center justify-center lg:justify-start gap-2 sm:gap-3 flex-wrap">
                 <span className="w-6 sm:w-8 h-px bg-mint inline-block shrink-0" />
-                <span className="text-left">gradient descent — shipping since 2022</span>
+                <span className="text-left">
+                  {campaign?.eyebrow ?? "gradient descent — shipping since 2022"}
+                </span>
+                {campaign && (
+                  <span className="text-[9px] sm:text-[10px] px-2 py-0.5 rounded-full border border-mint/30 text-mint/90 normal-case tracking-normal">
+                    ref:{campaign.ref}
+                  </span>
+                )}
               </p>
 
               <h1 className="font-display font-extrabold uppercase leading-[0.95] tracking-tight break-words">
@@ -406,14 +454,20 @@ function App() {
               </h1>
 
               <p className="text-fog text-sm sm:text-base md:text-lg max-w-xl mx-auto lg:mx-0 mt-6 sm:mt-8 leading-relaxed">
-                <strong className="text-paper font-medium">AI/ML engineer & full-stack developer.</strong>{" "}
-                Final-year B.Tech CS (AI) at MIT Manipal — shipping production features at SuperAGI and building LLM agents, RAG pipelines, and the products around them.
+                {campaign?.blurb ? (
+                  campaign.blurb
+                ) : (
+                  <>
+                    <strong className="text-paper font-medium">AI/ML engineer & full-stack developer.</strong>{" "}
+                    Final-year B.Tech CS (AI) at MIT Manipal — shipping production features at SuperAGI and building LLM agents, RAG pipelines, and the products around them.
+                  </>
+                )}
               </p>
 
               <div className="font-mono text-[11px] sm:text-xs text-fog tracking-wide flex flex-wrap justify-center lg:justify-start gap-x-4 sm:gap-x-6 gap-y-2 mt-6 sm:mt-8">
                 <span><span className="text-mint">●</span> Bengaluru, IN</span>
                 <span><span className="text-mint">●</span> Open to opportunities</span>
-                <span className="hidden sm:inline"><span className="text-mint">●</span> Move cursor — field responds</span>
+                <span className="hidden sm:inline"><span className="text-mint">●</span> Press ⌘K for terminal</span>
               </div>
 
               <div className="flex flex-wrap justify-center lg:justify-start gap-3 sm:gap-4 mt-8 sm:mt-10">
@@ -885,6 +939,14 @@ function App() {
           <FaArrowUp size={12} />
         </button>
       )}
+
+      <Terminal
+        open={terminalOpen}
+        onClose={() => setTerminalOpen(false)}
+        sections={sectionIds}
+        projects={projects}
+        onNavigate={navigateToSection}
+      />
 
     </div>
   );

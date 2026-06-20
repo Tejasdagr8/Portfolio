@@ -232,8 +232,8 @@ export function aggregate(events) {
 }
 
 export function checkPassword(req) {
-  const expected = process.env.VIEWS_PASSWORD || "Tejas500";
+  const expected = (process.env.VIEWS_PASSWORD || "Tejas500").trim();
   const auth = req.headers.authorization || "";
-  const token = auth.startsWith("Bearer ") ? auth.slice(7) : "";
+  const token = (auth.startsWith("Bearer ") ? auth.slice(7) : auth).trim();
   return token === expected;
 }

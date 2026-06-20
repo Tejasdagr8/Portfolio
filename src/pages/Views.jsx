@@ -80,6 +80,13 @@ export default function Views() {
         headers: { Authorization: `Bearer ${token}` },
       });
       const data = await res.json();
+      if (res.status === 401) throw new Error("Wrong password. Try Tejas500");
+      if (res.status === 503) {
+        setStats({ summary: {}, last14Days: [], topClicks: [], topReferrers: [], topCampaignRefs: [], sectionFunnel: [], topProjects: [], scrollDepth: [], devices: {}, recentSessions: [], lastUpdated: Date.now(), storageError: data.error });
+        setAuthed(true);
+        sessionStorage.setItem(AUTH_KEY, token);
+        return;
+      }
       if (!res.ok) throw new Error(data.error || "Failed to load stats");
       setStats(data);
       setAuthed(true);
@@ -155,6 +162,13 @@ export default function Views() {
         </div>
 
         {error && <p className="text-red-400 text-sm mb-4">{error}</p>}
+
+        {stats?.storageError && (
+          <div className="card-glass p-4 mb-6 border border-amber-500/30">
+            <p className="text-amber-200 text-sm">{stats.storageError}</p>
+            <p className="text-fog text-xs mt-2">Vercel → portfolio2 → Storage → connect Upstash Redis, then redeploy.</p>
+          </div>
+        )}
 
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 md:gap-4 mb-6">
           <StatCard label="Total views" value={s.totalPageViews ?? 0} hint="All-time page loads" />

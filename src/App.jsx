@@ -4,6 +4,8 @@ import { FaGithub, FaLinkedin, FaEnvelope, FaPhone, FaDownload, FaExternalLinkAl
 import profile from "./assets/profile.jpeg";
 import GradientField from "./components/GradientField";
 import SkillsMarquee from "./components/SkillsMarquee";
+import useAnalytics from "./hooks/useAnalytics";
+import { track } from "./lib/analytics";
 
 const CONTACT_EMAILS = {
   primary: "coooltejasdagr@gmail.com",
@@ -116,6 +118,8 @@ function App() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [localTime, setLocalTime] = useState("");
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+
+  useAnalytics();
 
   useEffect(() => {
     const observers = sectionIds
@@ -268,6 +272,7 @@ function App() {
         setMessageForm({ name: "", email: "", message: "" });
         window.localStorage.removeItem("portfolio-contact-draft");
         setFormSuccess("Message sent! I'll get back to you soon.");
+        track("click", { label: "contact_form_success" });
         return;
       }
 
@@ -288,7 +293,7 @@ function App() {
       {/* NAVBAR */}
       <nav className="fixed w-full top-0 z-[100] border-b border-transparent bg-gradient-to-b from-[#0B0E16]/85 to-transparent backdrop-blur-sm">
         <div className={`${sectionContainer} py-4 flex justify-between items-center`}>
-          <a href="#" className="font-mono text-xs sm:text-sm tracking-widest text-paper hover:text-mint transition-colors shrink-0">
+          <a href="#" data-track="brand_name" className="font-mono text-xs sm:text-sm tracking-widest text-paper hover:text-mint transition-colors shrink-0">
             tejas<span className="text-mint">.</span>melkote
           </a>
           <div className="flex items-center gap-4">
@@ -313,6 +318,7 @@ function App() {
             <a
               href="/resume.pdf"
               download
+              data-track="resume_nav"
               className="hidden sm:flex items-center gap-1.5 px-4 py-2 rounded-full border border-white/[0.13] text-paper text-xs font-mono tracking-wider hover:border-mint/50 hover:bg-mint/[0.06] transition-colors"
             >
               <FaDownload size={9} /> Resume
@@ -349,6 +355,7 @@ function App() {
               <a
                 href="/resume.pdf"
                 download
+                data-track="resume_nav"
                 onClick={closeMobileMenu}
                 className="mt-4 flex items-center justify-center gap-2 py-3 px-4 rounded-xl border border-[#8C7BFF]/40 text-[#8C7BFF] text-sm hover:bg-[#8C7BFF]/10 transition-colors"
               >
@@ -412,6 +419,7 @@ function App() {
               <div className="flex flex-wrap justify-center lg:justify-start gap-3 sm:gap-4 mt-8 sm:mt-10">
                 <a
                   href="#contact"
+                  data-track="contact_cta"
                   className="w-full sm:w-auto text-center px-6 sm:px-7 py-3 rounded-full bg-gradient-to-r from-iris to-mint text-ink-0 text-sm font-medium hover:opacity-90 transition-opacity"
                 >
                   Get in touch
@@ -419,6 +427,7 @@ function App() {
                 <a
                   href="/resume.pdf"
                   download
+                  data-track="resume"
                   className="w-full sm:w-auto text-center px-6 sm:px-7 py-3 rounded-full border border-white/[0.15] text-fog text-sm hover:text-paper hover:border-mint/40 hover:bg-mint/[0.06] transition-all"
                 >
                   Download CV
@@ -426,13 +435,13 @@ function App() {
               </div>
 
               <div className="flex justify-center lg:justify-start gap-5 mt-6 sm:mt-8 text-fog">
-                <a href="https://github.com/Tejasdagr8" target="_blank" rel="noreferrer" className="hover:text-paper transition-colors text-xl" aria-label="GitHub">
+                <a href="https://github.com/Tejasdagr8" target="_blank" rel="noreferrer" data-track="github" className="hover:text-paper transition-colors text-xl" aria-label="GitHub">
                   <FaGithub />
                 </a>
-                <a href="https://www.linkedin.com/in/tejas-melkote-390545309/" target="_blank" rel="noreferrer" className="hover:text-mint transition-colors text-xl" aria-label="LinkedIn">
+                <a href="https://www.linkedin.com/in/tejas-melkote-390545309/" target="_blank" rel="noreferrer" data-track="linkedin" className="hover:text-mint transition-colors text-xl" aria-label="LinkedIn">
                   <FaLinkedin />
                 </a>
-                <a href="mailto:coooltejasdagr@gmail.com" className="hover:text-mint transition-colors text-xl" aria-label="Email">
+                <a href="mailto:coooltejasdagr@gmail.com" data-track="email" className="hover:text-mint transition-colors text-xl" aria-label="Email">
                   <FaEnvelope />
                 </a>
               </div>
@@ -632,6 +641,7 @@ function App() {
                     href={project.link}
                     target="_blank"
                     rel="noreferrer"
+                    data-track={`project:${project.title}`}
                     className="inline-flex items-center gap-1.5 text-xs font-mono text-mint hover:text-paper transition-colors mt-4"
                   >
                     <FaExternalLinkAlt size={10} /> View live
@@ -734,6 +744,7 @@ function App() {
           <motion.div variants={fadeUp} className="mb-8 sm:mb-10 w-full px-2">
             <a
               href="mailto:coooltejasdagr@gmail.com"
+              data-track="email"
               className="font-display font-extrabold text-base sm:text-2xl md:text-4xl gradient-text hover:opacity-80 transition-opacity break-all leading-snug inline-block max-w-full"
             >
               coooltejasdagr@gmail.com
@@ -834,6 +845,7 @@ function App() {
               href="https://github.com/Tejasdagr8"
               target="_blank"
               rel="noreferrer"
+              data-track="github"
               className="flex items-center gap-2 text-fog hover:text-mint transition-colors"
             >
               <FaGithub size={14} /> GitHub
@@ -842,6 +854,7 @@ function App() {
               href="https://www.linkedin.com/in/tejas-melkote-390545309/"
               target="_blank"
               rel="noreferrer"
+              data-track="linkedin"
               className="flex items-center gap-2 text-fog hover:text-mint transition-colors"
             >
               <FaLinkedin size={14} /> LinkedIn

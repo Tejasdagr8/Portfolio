@@ -1,0 +1,5 @@
+User-agent: *
+Allow: /
+Disallow: /views
+
+Sitemap: https://tejas-melkote.vercel.app/sitemap.xml

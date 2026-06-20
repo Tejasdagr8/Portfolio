@@ -22,14 +22,14 @@ const stagger = {
 
 function SectionHeading({ eyebrow, children }) {
   return (
-    <div className="mb-8 md:mb-12">
+    <div className="mb-6 md:mb-12">
       {eyebrow && (
-        <p className="font-mono text-xs tracking-[0.2em] uppercase text-mint flex items-center gap-3 mb-4">
+        <p className="font-mono text-[10px] sm:text-xs tracking-[0.16em] sm:tracking-[0.2em] uppercase text-mint flex items-center gap-2 sm:gap-3 mb-3 sm:mb-4">
           {eyebrow}
           <span className="flex-1 h-px bg-white/[0.13]" />
         </p>
       )}
-      <h2 className="font-display text-3xl md:text-5xl font-bold tracking-tight leading-tight">{children}</h2>
+      <h2 className="font-display text-2xl sm:text-3xl md:text-5xl font-bold tracking-tight leading-tight">{children}</h2>
     </div>
   );
 }
@@ -104,6 +104,7 @@ const projects = [
 
 function App() {
   const sectionContainer = "w-full max-w-6xl mx-auto px-4 sm:px-6 lg:px-8";
+  const sectionPad = "py-16 md:py-24";
   const sectionIds = ["about", "experience", "education", "projects", "skills", "contact"];
   const [activeSection, setActiveSection] = useState("about");
   const [copiedField, setCopiedField] = useState("");
@@ -281,13 +282,13 @@ function App() {
   };
 
   return (
-    <div className="bg-ink-0 text-paper font-body font-light min-h-screen">
+    <div className="bg-ink-0 text-paper font-body font-light min-h-screen overflow-x-hidden">
       <div className="fixed top-0 left-0 z-[60] h-[2px] bg-gradient-to-r from-[#8C7BFF] to-[#5EE6D0]" style={{ width: `${scrollProgress}%` }} />
 
       {/* NAVBAR */}
       <nav className="fixed w-full top-0 z-[100] border-b border-transparent bg-gradient-to-b from-[#0B0E16]/85 to-transparent backdrop-blur-sm">
         <div className={`${sectionContainer} py-4 flex justify-between items-center`}>
-          <a href="#" className="font-mono text-sm tracking-widest text-paper hover:text-mint transition-colors">
+          <a href="#" className="font-mono text-xs sm:text-sm tracking-widest text-paper hover:text-mint transition-colors shrink-0">
             tejas<span className="text-mint">.</span>melkote
           </a>
           <div className="flex items-center gap-4">
@@ -329,8 +330,8 @@ function App() {
         </div>
 
         {mobileMenuOpen && (
-          <div className="md:hidden fixed inset-0 top-[65px] z-[99] bg-[#0B0E16]/95 backdrop-blur-md">
-            <div className="flex flex-col px-6 py-6 gap-1">
+          <div className="md:hidden fixed inset-0 top-[60px] z-[99] bg-[#0B0E16]/98 backdrop-blur-md overflow-y-auto">
+            <div className="flex flex-col px-4 py-5 gap-1 pb-10">
               {sectionIds.map((id) => (
                 <a
                   key={id}
@@ -359,7 +360,7 @@ function App() {
       </nav>
 
       {/* HERO */}
-      <section className="min-h-screen flex flex-col justify-center relative overflow-hidden pt-24 pb-16">
+      <section className="min-h-[100dvh] flex flex-col justify-center relative overflow-hidden pt-20 pb-20 md:pt-24 md:pb-16">
         <GradientField className="absolute inset-0 w-full h-full block pointer-events-none" />
 
         <motion.div
@@ -368,54 +369,63 @@ function App() {
           animate="visible"
           variants={stagger}
         >
-          <motion.div variants={fadeUp} className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-12">
-            <div className="flex-1 text-left">
-              <p className="font-mono text-xs md:text-sm text-mint tracking-[0.14em] uppercase mb-6 flex items-center gap-3">
-                <span className="w-8 h-px bg-mint inline-block" />
-                gradient descent — shipping since 2022
+          <motion.div variants={fadeUp} className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-8 md:gap-12">
+            <motion.div variants={fadeUp} className="relative shrink-0 order-first mx-auto lg:order-last lg:mx-0">
+              <div className="absolute inset-0 rounded-full bg-gradient-to-r from-iris to-mint blur-2xl opacity-30 scale-110" />
+              <img
+                src={profile}
+                alt="Tejas Melkote — AI/ML Engineer"
+                className="relative w-32 h-32 sm:w-40 sm:h-40 md:w-52 md:h-52 rounded-full object-cover border border-white/10"
+              />
+            </motion.div>
+
+            <div className="flex-1 text-center lg:text-left min-w-0">
+              <p className="font-mono text-[10px] sm:text-xs md:text-sm text-mint tracking-[0.12em] sm:tracking-[0.14em] uppercase mb-5 sm:mb-6 flex items-center justify-center lg:justify-start gap-2 sm:gap-3">
+                <span className="w-6 sm:w-8 h-px bg-mint inline-block shrink-0" />
+                <span className="text-left">gradient descent — shipping since 2022</span>
               </p>
 
-              <h1 className="font-display font-extrabold uppercase leading-[0.94] tracking-tight">
-                <span className="block text-5xl sm:text-7xl md:text-8xl text-paper">Tejas</span>
+              <h1 className="font-display font-extrabold uppercase leading-[0.95] tracking-tight break-words">
+                <span className="block text-[2.75rem] sm:text-6xl md:text-8xl text-paper">Tejas</span>
                 <span
-                  className="block text-5xl sm:text-7xl md:text-8xl text-transparent"
+                  className="block text-[2.75rem] sm:text-6xl md:text-8xl text-transparent"
                   style={{ WebkitTextStroke: "1.5px rgba(234,237,246,0.38)" }}
                 >
                   Melkote
                 </span>
-                <span className="block text-4xl sm:text-6xl md:text-7xl mt-1">
+                <span className="block text-[2rem] sm:text-5xl md:text-7xl mt-1">
                   builds <span className="gradient-text">minds</span>
                 </span>
               </h1>
 
-              <p className="text-fog text-base md:text-lg max-w-xl mt-8 leading-relaxed">
+              <p className="text-fog text-sm sm:text-base md:text-lg max-w-xl mx-auto lg:mx-0 mt-6 sm:mt-8 leading-relaxed">
                 <strong className="text-paper font-medium">AI/ML engineer & full-stack developer.</strong>{" "}
                 Final-year B.Tech CS (AI) at MIT Manipal — shipping production features at SuperAGI and building LLM agents, RAG pipelines, and the products around them.
               </p>
 
-              <div className="font-mono text-xs text-fog tracking-wider flex flex-wrap gap-x-6 gap-y-2 mt-8">
+              <div className="font-mono text-[11px] sm:text-xs text-fog tracking-wide flex flex-wrap justify-center lg:justify-start gap-x-4 sm:gap-x-6 gap-y-2 mt-6 sm:mt-8">
                 <span><span className="text-mint">●</span> Bengaluru, IN</span>
                 <span><span className="text-mint">●</span> Open to opportunities</span>
                 <span className="hidden sm:inline"><span className="text-mint">●</span> Move cursor — field responds</span>
               </div>
 
-              <div className="flex flex-wrap gap-4 mt-10">
+              <div className="flex flex-wrap justify-center lg:justify-start gap-3 sm:gap-4 mt-8 sm:mt-10">
                 <a
                   href="#contact"
-                  className="px-7 py-3 rounded-full bg-gradient-to-r from-iris to-mint text-ink-0 text-sm font-medium hover:opacity-90 transition-opacity"
+                  className="w-full sm:w-auto text-center px-6 sm:px-7 py-3 rounded-full bg-gradient-to-r from-iris to-mint text-ink-0 text-sm font-medium hover:opacity-90 transition-opacity"
                 >
                   Get in touch
                 </a>
                 <a
                   href="/resume.pdf"
                   download
-                  className="px-7 py-3 rounded-full border border-white/[0.15] text-fog text-sm hover:text-paper hover:border-mint/40 hover:bg-mint/[0.06] transition-all"
+                  className="w-full sm:w-auto text-center px-6 sm:px-7 py-3 rounded-full border border-white/[0.15] text-fog text-sm hover:text-paper hover:border-mint/40 hover:bg-mint/[0.06] transition-all"
                 >
                   Download CV
                 </a>
               </div>
 
-              <div className="flex gap-5 mt-8 text-fog">
+              <div className="flex justify-center lg:justify-start gap-5 mt-6 sm:mt-8 text-fog">
                 <a href="https://github.com/Tejasdagr8" target="_blank" rel="noreferrer" className="hover:text-paper transition-colors text-xl" aria-label="GitHub">
                   <FaGithub />
                 </a>
@@ -427,19 +437,10 @@ function App() {
                 </a>
               </div>
             </div>
-
-            <motion.div variants={fadeUp} className="relative shrink-0 mx-auto lg:mx-0">
-              <div className="absolute inset-0 rounded-full bg-gradient-to-r from-iris to-mint blur-2xl opacity-30 scale-110" />
-              <img
-                src={profile}
-                alt="Tejas Melkote — AI/ML Engineer"
-                className="relative w-44 h-44 md:w-52 md:h-52 rounded-full object-cover border border-white/10"
-              />
-            </motion.div>
           </motion.div>
         </motion.div>
 
-        <div className="scroll-hint absolute bottom-8 left-1/2 font-mono text-[11px] tracking-[0.3em] uppercase text-fog z-[2]">
+        <div className="scroll-hint absolute bottom-6 md:bottom-8 left-1/2 font-mono text-[11px] tracking-[0.3em] uppercase text-fog z-[2]">
           scroll
         </div>
       </section>
@@ -449,7 +450,7 @@ function App() {
       {/* ABOUT */}
       <motion.section
         id="about"
-        className={`py-24 ${sectionContainer}`}
+        className={`${sectionPad} ${sectionContainer}`}
         initial="hidden"
         whileInView="visible"
         viewport={{ once: true, margin: "-80px" }}
@@ -458,7 +459,7 @@ function App() {
         <SectionHeading eyebrow="about">
           Full-stack curiosity, <span className="gradient-text">model-first</span> thinking.
         </SectionHeading>
-        <div className="grid lg:grid-cols-[1.4fr_1fr] gap-12 items-start">
+        <div className="grid lg:grid-cols-[1.4fr_1fr] gap-8 lg:gap-12 items-start">
           <p className="text-fog text-base md:text-lg leading-8">
             Most engineers pick a layer of the stack and stay there. I work at the seam — where trained models meet real users, latency budgets, and edge cases.
             Equally at home writing a training loop in PyTorch and architecting the API, frontend, and infrastructure that serve it.{" "}
@@ -480,7 +481,7 @@ function App() {
       </motion.section>
 
       {/* EXPERIENCE */}
-      <section id="experience" className={`py-24 ${sectionContainer}`}>
+      <section id="experience" className={`${sectionPad} ${sectionContainer}`}>
         <motion.div initial="hidden" whileInView="visible" viewport={{ once: true, margin: "-80px" }} variants={fadeUp}>
           <SectionHeading eyebrow="experience">
             Where I&apos;ve <span className="gradient-text">trained</span>.
@@ -515,14 +516,14 @@ function App() {
             <motion.div
               key={i}
               variants={fadeUp}
-              className="grid md:grid-cols-[200px_1fr] gap-6 md:gap-14 py-8 border-t border-white/[0.13] first:border-t-0 md:first:border-t"
+              className="grid grid-cols-1 md:grid-cols-[200px_1fr] gap-3 md:gap-14 py-6 md:py-8 border-t border-white/[0.13] first:border-t-0"
             >
-              <div className="font-mono text-sm text-mint tracking-wide pt-1">
+              <div className="font-mono text-xs sm:text-sm text-mint tracking-wide md:pt-1">
                 <p>{exp.period}</p>
                 <p className="text-fog text-xs mt-1">{exp.location}</p>
               </div>
               <div>
-                <h3 className="font-display font-bold text-xl md:text-2xl text-paper">{exp.role}</h3>
+                <h3 className="font-display font-bold text-lg sm:text-xl md:text-2xl text-paper">{exp.role}</h3>
                 <p className="font-mono text-sm text-fog mt-1">{exp.company}</p>
                 <p className="text-fog text-sm leading-7 mt-4 max-w-2xl">{exp.description}</p>
                 <div className="flex flex-wrap gap-2 mt-5">
@@ -539,7 +540,7 @@ function App() {
       </section>
 
       {/* EDUCATION */}
-      <section id="education" className={`py-24 ${sectionContainer}`}>
+      <section id="education" className={`${sectionPad} ${sectionContainer}`}>
         <motion.div initial="hidden" whileInView="visible" viewport={{ once: true, margin: "-80px" }} variants={fadeUp}>
           <SectionHeading eyebrow="education">Education</SectionHeading>
         </motion.div>
@@ -573,23 +574,23 @@ function App() {
             <motion.div
               key={i}
               variants={fadeUp}
-              className="flex items-center justify-between card-glass card-glass-hover p-6"
+              className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 card-glass card-glass-hover p-5 sm:p-6"
             >
-              <div>
-                <h3 className="font-display font-bold text-paper text-base">{edu.degree}</h3>
+              <div className="min-w-0">
+                <h3 className="font-display font-bold text-paper text-sm sm:text-base leading-snug">{edu.degree}</h3>
                 <p className="text-fog text-xs mt-1 font-mono">
                   {edu.institution}
                   {edu.detail && ` · ${edu.detail}`}
                 </p>
               </div>
-              <span className="gradient-text font-display font-bold text-sm shrink-0 ml-4">{edu.grade}</span>
+              <span className="gradient-text font-display font-bold text-sm sm:ml-4 sm:shrink-0 self-start sm:self-auto">{edu.grade}</span>
             </motion.div>
           ))}
         </motion.div>
       </section>
 
       {/* PROJECTS */}
-      <section id="projects" className={`py-24 ${sectionContainer}`}>
+      <section id="projects" className={`${sectionPad} ${sectionContainer}`}>
         <motion.div
           initial="hidden"
           whileInView="visible"
@@ -611,11 +612,11 @@ function App() {
             <motion.div
               key={`${project.title}-${i}`}
               variants={fadeUp}
-              className="group relative grid md:grid-cols-[80px_1fr_auto] gap-4 md:gap-10 items-baseline py-8 md:py-10 border-t border-white/[0.13] hover:pl-3 transition-all duration-300"
+              className="group relative grid grid-cols-1 md:grid-cols-[80px_1fr_auto] gap-2 md:gap-10 py-6 md:py-10 border-t border-white/[0.13] md:hover:pl-3 transition-all duration-300"
             >
-              <span className="font-mono text-sm text-fog">P—{String(i + 1).padStart(2, "0")}</span>
-              <div>
-                <h3 className="font-display font-bold text-xl md:text-3xl text-paper group-hover:text-mint transition-colors leading-tight">
+              <span className="font-mono text-xs sm:text-sm text-fog">P—{String(i + 1).padStart(2, "0")}</span>
+              <div className="min-w-0">
+                <h3 className="font-display font-bold text-lg sm:text-xl md:text-3xl text-paper group-hover:text-mint transition-colors leading-tight">
                   {project.title}
                 </h3>
                 <p className="text-fog text-sm md:text-base leading-7 mt-3 max-w-2xl">{project.description}</p>
@@ -647,7 +648,7 @@ function App() {
       </section>
 
       {/* SKILLS */}
-      <section id="skills" className={`py-24 ${sectionContainer}`}>
+      <section id="skills" className={`${sectionPad} ${sectionContainer}`}>
         <motion.div initial="hidden" whileInView="visible" viewport={{ once: true, margin: "-80px" }} variants={fadeUp}>
           <SectionHeading eyebrow="stack">
             Tools of the <span className="gradient-text">trade</span>.
@@ -676,7 +677,7 @@ function App() {
       </section>
 
       {/* LEADERSHIP & LANGUAGES */}
-      <section className={`py-20 ${sectionContainer}`}>
+      <section className={`py-12 md:py-20 ${sectionContainer}`}>
         <motion.div
           initial="hidden"
           whileInView="visible"
@@ -687,9 +688,9 @@ function App() {
           <div className="grid md:grid-cols-2 gap-8">
             <div className="space-y-3">
               {leadership.map(({ role, org }) => (
-                <div key={role} className="card-glass p-5 flex justify-between items-center gap-4">
+                <div key={role} className="card-glass p-4 sm:p-5 flex flex-col sm:flex-row sm:justify-between sm:items-center gap-1 sm:gap-4">
                   <p className="font-display font-bold text-paper text-sm">{role}</p>
-                  <p className="font-mono text-xs text-fog text-right">{org}</p>
+                  <p className="font-mono text-xs text-fog sm:text-right">{org}</p>
                 </div>
               ))}
             </div>
@@ -710,7 +711,7 @@ function App() {
       </section>
 
       {/* CONTACT */}
-      <section id="contact" className={`py-24 ${sectionContainer}`}>
+      <section id="contact" className={`${sectionPad} ${sectionContainer}`}>
         <motion.div
           className="flex flex-col items-center text-center"
           initial="hidden"
@@ -720,8 +721,9 @@ function App() {
         >
           <motion.div variants={fadeUp} className="flex flex-col items-center mb-10">
             <p className="font-mono text-xs tracking-[0.2em] uppercase text-mint mb-4">contact</p>
-            <h2 className="font-display text-3xl md:text-5xl font-bold text-center leading-tight">
-              Let&apos;s build something<br />that <span className="gradient-text">learns</span>.
+            <h2 className="font-display text-2xl sm:text-3xl md:text-5xl font-bold text-center leading-tight px-2">
+              Let&apos;s build something<br className="hidden sm:block" />
+              <span className="sm:hidden"> </span>that <span className="gradient-text">learns</span>.
             </h2>
             <p className="text-fog text-sm mt-5 max-w-md">
               Whether it&apos;s a role, a collaboration, or a hard problem — my inbox converges fast.
@@ -729,10 +731,10 @@ function App() {
             <p className="text-fog text-xs mt-2 font-mono">Local time (IST): {localTime}</p>
           </motion.div>
 
-          <motion.div variants={fadeUp} className="mb-10">
+          <motion.div variants={fadeUp} className="mb-8 sm:mb-10 w-full px-2">
             <a
               href="mailto:coooltejasdagr@gmail.com"
-              className="font-display font-extrabold text-2xl md:text-4xl gradient-text hover:opacity-80 transition-opacity"
+              className="font-display font-extrabold text-base sm:text-2xl md:text-4xl gradient-text hover:opacity-80 transition-opacity break-all leading-snug inline-block max-w-full"
             >
               coooltejasdagr@gmail.com
             </a>
@@ -796,12 +798,12 @@ function App() {
               rows={4}
               className="w-full rounded-lg border border-white/[0.08] bg-ink-0/50 px-3 py-2 text-sm text-paper placeholder:text-fog/60 outline-none focus:border-mint/40 font-body"
             />
-            <div className="mt-3 flex items-center justify-between gap-3">
-              <div className="min-h-4">
+            <div className="mt-4 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+              <div className="min-h-4 order-2 sm:order-1">
                 {formError && <p className="text-xs text-red-400">{formError}</p>}
                 {formSuccess && <p className="text-xs text-mint">{formSuccess}</p>}
               </div>
-              <div className="flex items-center gap-2">
+              <div className="flex items-center gap-2 order-1 sm:order-2 self-end sm:self-auto w-full sm:w-auto">
                 <button
                   type="button"
                   onClick={() => {
@@ -812,14 +814,14 @@ function App() {
                     window.localStorage.removeItem("portfolio-contact-draft");
                   }}
                   disabled={isSubmitting}
-                  className="px-3 py-2 rounded-full border border-white/[0.15] text-fog text-xs font-mono hover:text-paper hover:border-white/[0.28] transition-colors disabled:opacity-50"
+                  className="flex-1 sm:flex-none px-3 py-2.5 rounded-full border border-white/[0.15] text-fog text-xs font-mono hover:text-paper hover:border-white/[0.28] transition-colors disabled:opacity-50"
                 >
                   Clear
                 </button>
                 <button
                   type="submit"
                   disabled={isSubmitting}
-                  className="px-5 py-2 rounded-full bg-gradient-to-r from-iris to-mint text-ink-0 text-xs font-medium hover:opacity-90 transition-opacity disabled:opacity-50"
+                  className="flex-1 sm:flex-none px-5 py-2.5 rounded-full bg-gradient-to-r from-iris to-mint text-ink-0 text-xs font-medium hover:opacity-90 transition-opacity disabled:opacity-50"
                 >
                   {isSubmitting ? "Sending..." : "Send Message"}
                 </button>
@@ -849,8 +851,8 @@ function App() {
       </section>
 
       {/* FOOTER */}
-      <footer className="py-8 px-4 border-t border-white/[0.13] flex flex-col sm:flex-row justify-between items-center gap-3 font-mono text-[11px] tracking-widest text-fog uppercase">
-        <span>© {new Date().getFullYear()} Tejas Melkote — built by hand</span>
+      <footer className="py-6 md:py-8 px-4 border-t border-white/[0.13] flex flex-col sm:flex-row justify-between items-center gap-3 font-mono text-[10px] sm:text-[11px] tracking-widest text-fog uppercase text-center sm:text-left">
+        <span className="max-w-xs sm:max-w-none leading-relaxed">© {new Date().getFullYear()} Tejas Melkote — built by hand</span>
         <button
           type="button"
           onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}

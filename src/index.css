@@ -85,9 +85,22 @@ body::after {
   transition: transform 0.35s cubic-bezier(0.2, 0.7, 0.2, 1), border-color 0.3s;
 }
 
-.card-glass-hover:hover {
-  transform: translateY(-4px);
-  border-color: rgba(140, 123, 255, 0.45);
+@media (hover: hover) {
+  .card-glass-hover:hover {
+    transform: translateY(-4px);
+    border-color: rgba(140, 123, 255, 0.45);
+  }
+}
+
+@media (max-width: 640px) {
+  .marquee-item {
+    margin-left: 1rem;
+    margin-right: 1rem;
+  }
+
+  .marquee-item::after {
+    margin-left: 2rem;
+  }
 }
 
 @keyframes bob {

@@ -10,7 +10,7 @@ export default function SkillsMarquee() {
     <div className="border-y border-white/[0.13] overflow-hidden py-5 bg-[#0B0E16]/50" aria-hidden="true">
       <div className="marquee-track flex w-max">
         {track.map((item, i) => (
-          <span key={`${item}-${i}`} className="marquee-item font-mono text-sm tracking-widest uppercase text-[#9AA3BD] mx-7">
+          <span key={`${item}-${i}`} className="marquee-item font-mono text-xs sm:text-sm tracking-widest uppercase text-[#9AA3BD]">
             {item}
           </span>
         ))}

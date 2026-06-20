@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { motion } from "framer-motion";
-import { FaGithub, FaLinkedin, FaEnvelope, FaPhone, FaDownload, FaExternalLinkAlt, FaArrowUp } from "react-icons/fa";
+import { FaGithub, FaLinkedin, FaEnvelope, FaPhone, FaDownload, FaExternalLinkAlt, FaArrowUp, FaBars, FaTimes } from "react-icons/fa";
 import profile from "./assets/profile.jpeg";
 import GradientField from "./components/GradientField";
 
@@ -24,55 +24,56 @@ function SectionHeading({ children }) {
 }
 
 const skills = [
-  "Python", "Machine Learning", "Deep Learning", "NLP", "Computer Vision",
-  "RAG", "LLMs", "AI Agents", "LangChain", "FastAPI", "React", "Node.js",
-  "SQL", "Docker", "Cloud", "Golang", "Ruby on Rails", "Vue.js",
+  "Python", "Go", "Java", "C/C++", "Ruby on Rails", "JavaScript", "TypeScript",
+  "Machine Learning", "Deep Learning", "NLP", "Computer Vision", "LLMs", "RAG", "AI Agents",
+  "LangChain", "FastAPI", "Streamlit", "React", "Vue.js", "PostgreSQL", "Redis", "Kafka",
+  "Docker", "Jenkins", "ArgoCD", "PowerBI", "Git",
 ];
 
 const projects = [
   {
-    title: "PDF Chatbot & Medical Image Analysis",
-    description: "AI-powered document chatbot with medical image analysis capabilities.",
-    tags: ["Python", "LLM", "RAG", "FastAPI"],
-    link: "https://medimage.streamlit.app/",
+    title: "TatvaOps Platform (Vantage)",
+    description: "AI-powered construction content platform with blogs, forums, CMS, and analytics — built for high-intent SEO traffic and community engagement.",
+    tags: ["React", "CMS", "SEO", "AI"],
+    link: "https://vantage.withtatva.ai/",
   },
   {
-    title: "Speech-to-Text System",
-    description: "Advanced speech recognition system leveraging NLP and OpenAI APIs.",
-    tags: ["Python", "NLP", "OpenAI", "Whisper"],
+    title: "TatvaOps Verified Vendor Profile",
+    description: "Production vendor profile system with verified ratings, pricing insights, and searchable contractor listings for the construction industry.",
+    tags: ["Web App", "Full Stack", "Portfolio"],
+    link: "https://vendor-profilepage.vercel.app/",
   },
   {
     title: "AI Trip Planner",
-    description: "Frontend: frontend-beryl-one-21.vercel.app | Backend: ai-trip-planner-production-a327.up.railway.app",
-    tags: ["LangGraph", "FastAPI", "LangChain"],
+    description: "Agentic trip planner orchestrating 7 APIs (Weather, Tavily, Google Places, Groq) via a LangGraph workflow with FastAPI backend and Docker deployment.",
+    tags: ["LangGraph", "FastAPI", "Docker", "Agents"],
+  },
+  {
+    title: "Medical Image Analyzer & PDF Summarizer",
+    description: "Multimodal tool for medical image analysis and PDF summarization with user authentication, analytics dashboards, and RAG-powered document Q&A.",
+    tags: ["Python", "LLM", "RAG", "Streamlit"],
+    link: "https://medimage.streamlit.app/",
   },
   {
     title: "Crop Yield Prediction",
-    description: "Hybrid CNN-RNN-LSTM model for agricultural yield forecasting.",
+    description: "Hybrid CNN-RNN-LSTM model for agricultural yield forecasting across crop types and regions, with end-to-end training and evaluation pipeline.",
     tags: ["TensorFlow", "CNN", "LSTM", "Python"],
     link: "https://colab.research.google.com/drive/1c5BOmHjO4dQDWb-YuZ5j42uGF-bvkQKS?usp=sharing",
   },
   {
     title: "Car Price Prediction",
-    description: "ML pipeline achieving 99% accuracy for automotive price estimation.",
+    description: "End-to-end ML pipeline with feature engineering, model selection, and evaluation for automotive price estimation on real-world listing data.",
     tags: ["Scikit-learn", "Python", "ML"],
   },
   {
-    title: "RAG Systems & Analytics",
-    description: "Retrieval-augmented generation pipelines with web scraping and PowerBI dashboards.",
-    tags: ["RAG", "LangChain", "PowerBI", "Python"],
+    title: "Customer Churn & Segmentation",
+    description: "Churn prediction and customer segmentation using KNN, DBSCAN, and SVM — with clustering analysis to identify at-risk user cohorts.",
+    tags: ["KNN", "DBSCAN", "SVM", "Python"],
   },
   {
-    title: "TatvaOps Verified Vendor Profile",
-    description: "Verified vendor profile with ratings and pricing insights.",
-    tags: ["Vendor Profile", "Portfolio", "Web App"],
-    link: "https://vendor-profilepage.vercel.app/",
-  },
-  {
-    title: "TatvaOps Blog",
-    description: "AI-first construction insights blog with admin CMS publishing.",
-    tags: ["Blog", "CMS", "SEO", "AI"],
-    link: "https://vantage.withtatva.ai/",
+    title: "Speech-to-Text System",
+    description: "Accessibility-focused speech recognition system built with NLP pipelines and OpenAI Whisper for real-time transcription.",
+    tags: ["Python", "NLP", "OpenAI", "Whisper"],
   },
 ];
 
@@ -86,6 +87,7 @@ function App() {
   const [messageForm, setMessageForm] = useState({ name: "", email: "", message: "" });
   const [formError, setFormError] = useState("");
   const [localTime, setLocalTime] = useState("");
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   useEffect(() => {
     const observers = sectionIds
@@ -155,6 +157,15 @@ function App() {
   }, [messageForm]);
 
   useEffect(() => {
+    document.body.style.overflow = mobileMenuOpen ? "hidden" : "";
+    return () => {
+      document.body.style.overflow = "";
+    };
+  }, [mobileMenuOpen]);
+
+  const closeMobileMenu = () => setMobileMenuOpen(false);
+
+  useEffect(() => {
     const updateTime = () => {
       const now = new Date();
       setLocalTime(
@@ -216,10 +227,10 @@ function App() {
       {/* NAVBAR */}
       <nav className="fixed w-full top-0 z-[100] border-b border-transparent bg-gradient-to-b from-[#0B0E16]/85 to-transparent backdrop-blur-sm">
         <div className={`${sectionContainer} py-4 flex justify-between items-center`}>
-          <span className="text-lg font-bold bg-gradient-to-r from-blue-400 to-violet-400 bg-clip-text text-transparent">
+          <a href="#" className="text-lg font-bold bg-gradient-to-r from-[#8C7BFF] to-[#5EE6D0] bg-clip-text text-transparent">
             Tejas
-          </span>
-          <div className="flex items-center gap-6">
+          </a>
+          <div className="flex items-center gap-4">
             <div className="hidden md:flex gap-5 text-gray-400 text-sm">
               {sectionIds.map((id) => (
                 <a
@@ -231,7 +242,7 @@ function App() {
                 >
                   {id}
                   <span
-                    className={`absolute -bottom-0.5 left-0 h-px bg-blue-400 transition-all duration-300 ${
+                    className={`absolute -bottom-0.5 left-0 h-px bg-[#5EE6D0] transition-all duration-300 ${
                       activeSection === id ? "w-full" : "w-0 group-hover:w-full"
                     }`}
                   />
@@ -241,12 +252,50 @@ function App() {
             <a
               href="/resume.pdf"
               download
-              className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-blue-500/40 text-blue-400 text-xs hover:bg-blue-500/10 transition-colors"
+              className="hidden sm:flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-[#8C7BFF]/40 text-[#8C7BFF] text-xs hover:bg-[#8C7BFF]/10 transition-colors"
             >
               <FaDownload size={9} /> Resume
             </a>
+            <button
+              type="button"
+              onClick={() => setMobileMenuOpen((open) => !open)}
+              className="md:hidden p-2 rounded-lg border border-white/10 text-gray-300 hover:text-white hover:border-white/20 transition-colors"
+              aria-label={mobileMenuOpen ? "Close menu" : "Open menu"}
+              aria-expanded={mobileMenuOpen}
+            >
+              {mobileMenuOpen ? <FaTimes size={16} /> : <FaBars size={16} />}
+            </button>
           </div>
         </div>
+
+        {mobileMenuOpen && (
+          <div className="md:hidden fixed inset-0 top-[65px] z-[99] bg-[#0B0E16]/95 backdrop-blur-md">
+            <div className="flex flex-col px-6 py-6 gap-1">
+              {sectionIds.map((id) => (
+                <a
+                  key={id}
+                  href={`#${id}`}
+                  onClick={closeMobileMenu}
+                  className={`capitalize py-3 px-4 rounded-xl text-base transition-colors ${
+                    activeSection === id
+                      ? "text-white bg-white/[0.06] border border-[#8C7BFF]/30"
+                      : "text-gray-400 hover:text-white hover:bg-white/[0.04]"
+                  }`}
+                >
+                  {id}
+                </a>
+              ))}
+              <a
+                href="/resume.pdf"
+                download
+                onClick={closeMobileMenu}
+                className="mt-4 flex items-center justify-center gap-2 py-3 px-4 rounded-xl border border-[#8C7BFF]/40 text-[#8C7BFF] text-sm hover:bg-[#8C7BFF]/10 transition-colors"
+              >
+                <FaDownload size={12} /> Download Resume
+              </a>
+            </div>
+          </div>
+        )}
       </nav>
 
       {/* HERO */}
@@ -264,7 +313,7 @@ function App() {
             <div className="absolute inset-0 rounded-full bg-gradient-to-r from-blue-500 to-violet-500 blur-xl opacity-40 scale-110" />
             <img
               src={profile}
-              alt="Tejas"
+              alt="Tejas Melkote — AI/ML Engineer"
               className="relative w-36 h-36 rounded-full object-cover border-2 border-white/10"
             />
           </motion.div>
@@ -276,16 +325,16 @@ function App() {
             Tejas Melkote
           </motion.h1>
 
-          <motion.p variants={fadeUp} className="text-blue-400 text-xs md:text-sm mb-2 tracking-widest uppercase font-medium">
-            AI/ML Engineer · Full Stack Developer
+          <motion.p variants={fadeUp} className="text-[#5EE6D0] text-xs md:text-sm mb-2 tracking-widest uppercase font-medium">
+            Software · AI/ML · Data Engineering
           </motion.p>
 
           <motion.p variants={fadeUp} className="text-gray-500 text-sm mb-2">
-            SDE Intern @ SuperAGI
+            SDE Intern @ SuperAGI · Bengaluru, India
           </motion.p>
 
-          <motion.p variants={fadeUp} className="text-gray-600 max-w-md text-sm leading-relaxed mt-2">
-            B.Tech Computer Science student specializing in Artificial Intelligence with a strong foundation in Machine Learning and Data Science.
+          <motion.p variants={fadeUp} className="text-gray-400 max-w-lg text-sm leading-relaxed mt-2">
+            Final-year B.Tech CS (AI) student shipping full-stack production features and building LLM applications, AI agents, and ML pipelines.
           </motion.p>
 
           <motion.div variants={fadeUp} className="flex gap-4 mt-8">
@@ -344,9 +393,10 @@ function App() {
       >
         <SectionHeading>About Me</SectionHeading>
         <p className="text-gray-400 leading-8 max-w-4xl">
-          B.Tech Computer Science student specializing in Artificial Intelligence, with a strong foundation in Machine Learning and Data Science.
-          Demonstrates adaptability and leadership across various roles, consistently enhancing technical skills through hands-on projects and internships.
-          Aims to make a meaningful impact in the tech industry through innovation and collaboration.
+          Final-year B.Tech Computer Science (AI) student with hands-on experience deploying full-stack features in{" "}
+          <span className="text-gray-200">Go, Ruby on Rails, and Vue.js</span>, and building LLM applications, AI agents, and ML pipelines.
+          I work at the intersection of models and production — from training loops and agent orchestration to the APIs and interfaces users actually touch.
+          Currently seeking roles in software engineering, AI/ML, or data engineering.
         </p>
       </motion.section>
 
@@ -365,19 +415,19 @@ function App() {
           {[
             {
               company: "SuperAGI",
-              role: "SDE Intern — Marketing",
+              role: "Software Development Engineer Intern",
               period: "Jan 2026 – Jun 2026",
               location: "Bangalore, India",
               description:
-                "Worked in a full-stack production environment using Golang, Ruby on Rails, and Vue.js to develop marketing campaign features (Email and WhatsApp). Deployed multiple PRs to production via Jenkins and ArgoCD. Worked with Redis, Kafka, database migrations, and CRM systems.",
-              tags: ["Golang", "Ruby on Rails", "Vue.js", "Jenkins", "ArgoCD", "Redis", "Kafka"],
+                "Built marketing campaign features (Email and WhatsApp) in a full-stack production codebase using Go, Ruby on Rails, and Vue.js. Deployed 15+ pull requests via Jenkins and ArgoCD CI/CD, including email-campaign validation and WhatsApp test-send features. Worked with Sidekiq, Redis, and Kafka for background jobs and event streaming; ran database migrations and integrated CRM platform workflows.",
+              tags: ["Go", "Ruby on Rails", "Vue.js", "Jenkins", "ArgoCD", "Sidekiq", "Redis", "Kafka"],
             },
             {
               company: "CirrusLabs Pvt Ltd",
-              role: "AI Intern",
+              role: "AI / ML Intern",
               period: "May 2025 – Jul 2025",
               location: "Bengaluru, India",
-              description: "Built advanced LLM chatbots, AI agents, and ML pipelines using Streamlit and FastAPI.",
+              description: "Built LLM chatbots, AI agents, and ML pipelines for internal project tooling. Packaged models behind Streamlit and FastAPI interfaces for team use.",
               tags: ["LLMs", "AI Agents", "FastAPI", "Streamlit", "Python"],
             },
           ].map((exp, i) => (
@@ -431,13 +481,13 @@ function App() {
             {
               degree: "12th Grade",
               institution: "Narayana PU College",
-              detail: "",
+              detail: "2022",
               grade: "90.33%",
             },
             {
               degree: "10th Grade",
               institution: "Frank Anthony Public School",
-              detail: "",
+              detail: "2020",
               grade: "95%",
             },
           ].map((edu, i) => (
@@ -462,24 +512,12 @@ function App() {
       {/* PROJECTS */}
       <section id="projects" className={`py-24 ${sectionContainer}`}>
         <motion.div
-          className="flex flex-col md:flex-row md:items-end md:justify-between"
           initial="hidden"
           whileInView="visible"
           viewport={{ once: true, margin: "-80px" }}
           variants={fadeUp}
         >
           <SectionHeading>Projects</SectionHeading>
-          <button
-            type="button"
-            onClick={() => {
-              projects
-                .filter((project) => project.link)
-                .forEach((project) => window.open(project.link, "_blank", "noopener,noreferrer"));
-            }}
-            className="mb-10 w-fit px-4 py-2 rounded-lg border border-blue-500/35 text-blue-300 text-xs hover:bg-blue-500/10 transition-colors"
-          >
-            Open Live Projects
-          </button>
         </motion.div>
         <motion.div
           className="grid md:grid-cols-2 lg:grid-cols-3 gap-5"

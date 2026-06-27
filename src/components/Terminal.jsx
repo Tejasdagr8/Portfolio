@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { track } from "../lib/analytics";
+import { playSound, setSoundEnabled } from "../lib/sounds";
 
 const PROMPT = "tejas@portfolio ~ % ";
 
@@ -63,6 +64,7 @@ export default function Terminal({ open, onClose, sections, projects, onNavigate
       if (!trimmed) return;
 
       writeln(`${PROMPT}${trimmed}`, "input");
+      playSound("terminal");
       setCmdHistory((prev) => [trimmed, ...prev.slice(0, 49)]);
       setHistoryIdx(-1);
 
@@ -82,6 +84,7 @@ export default function Terminal({ open, onClose, sections, projects, onNavigate
   contact           show contact info
   whoami            about Tejas
   speedrun          recruiter tour (or press R)
+  sound on|off      toggle UI sounds
   clear             clear terminal
   exit              close terminal
 
@@ -175,6 +178,18 @@ Tip: press ⌘K or Ctrl+K anytime to toggle.`);
           setTimeout(onClose, 300);
           break;
 
+        case "sound":
+          if (arg === "on") {
+            setSoundEnabled(true);
+            writeln("  UI sounds enabled");
+          } else if (arg === "off") {
+            setSoundEnabled(false);
+            writeln("  UI sounds disabled");
+          } else {
+            writeln('  Usage: sound on | sound off');
+          }
+          break;
+
         case "clear":
           setLines([]);
           break;
@@ -187,6 +202,7 @@ Tip: press ⌘K or Ctrl+K anytime to toggle.`);
 
         case "sudo":
           if (arg === "hire tejas" || arg === "hire-me tejas") {
+            playSound("success");
             writeln("  Permission granted. Redirecting to contact…");
             onNavigate("contact");
             setTimeout(onClose, 600);
@@ -209,6 +225,7 @@ Tip: press ⌘K or Ctrl+K anytime to toggle.`);
           break;
 
         default:
+          playSound("error");
           writeln(`command not found: ${cmd}. Type "help" for available commands.`);
       }
     },

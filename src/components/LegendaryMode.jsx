@@ -3,6 +3,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import ConfettiBurst from "./ConfettiBurst";
 import { useKonami } from "../hooks/useKonami";
 import { track } from "../lib/analytics";
+import { playSound } from "../lib/sounds";
 
 export default function LegendaryMode() {
   const [showToast, setShowToast] = useState(false);
@@ -10,6 +11,7 @@ export default function LegendaryMode() {
   const toastTimer = useRef(null);
 
   const unlocked = useKonami(() => {
+    playSound("unlock");
     setConfetti(true);
     setShowToast(true);
     track("click", { label: "konami_unlock" });

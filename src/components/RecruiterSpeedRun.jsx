@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { track } from "../lib/analytics";
+import { playSound } from "../lib/sounds";
 
 const STEPS = [
   { id: "about", label: "About", hint: "Model-first engineer" },
@@ -37,6 +38,7 @@ export default function RecruiterSpeedRun({ onComplete }) {
       if (!step || !activeRef.current) return;
 
       document.getElementById(step.id)?.scrollIntoView({ behavior: "smooth", block: "start" });
+      if (index > 0) playSound("whoosh");
       stepRef.current = index;
       setStepIndex(index);
       setProgress(0);
@@ -48,6 +50,7 @@ export default function RecruiterSpeedRun({ onComplete }) {
         if (index < STEPS.length - 1) {
           goToStep(index + 1);
         } else {
+          playSound("success");
           track("click", { label: "speedrun_complete" });
           onComplete?.();
           setTimeout(stop, 1200);
@@ -60,6 +63,7 @@ export default function RecruiterSpeedRun({ onComplete }) {
   const start = useCallback(() => {
     if (activeRef.current) return;
     track("click", { label: "speedrun_start" });
+    playSound("whoosh");
     activeRef.current = true;
     setActive(true);
     goToStep(0);

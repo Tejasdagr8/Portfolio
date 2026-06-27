@@ -10,8 +10,10 @@ import ProjectSpotlight from "./components/ProjectSpotlight";
 import CustomCursor from "./components/CustomCursor";
 import LegendaryMode from "./components/LegendaryMode";
 import RecruiterSpeedRun from "./components/RecruiterSpeedRun";
+import SoundToggle from "./components/SoundToggle";
 import useAnalytics from "./hooks/useAnalytics";
 import { track, getCampaignRef } from "./lib/analytics";
+import { playSound } from "./lib/sounds";
 import { getCampaignContent, getHeroCtas } from "./lib/campaign";
 import { projects } from "./data/projects";
 
@@ -183,7 +185,23 @@ function App() {
   }, []);
 
   useEffect(() => {
-    const toggleTerminal = () => setTerminalOpen((open) => !open);
+    const toggleTerminal = () => {
+    setTerminalOpen((open) => {
+      if (!open) playSound("terminalOpen");
+      return !open;
+    });
+  };
+
+  const openTerminal = () => {
+    playSound("terminalOpen");
+    setTerminalOpen(true);
+  };
+
+  const openSpotlight = (project) => {
+    playSound("open");
+    setSpotlightProject(project);
+    track("click", { label: `spotlight_open:${project.title}` });
+  };
 
     const onKeyDown = (e) => {
       const tag = e.target?.tagName?.toLowerCase();
@@ -312,9 +330,10 @@ function App() {
                 </a>
               ))}
             </div>
+            <SoundToggle />
             <button
               type="button"
-              onClick={() => setTerminalOpen(true)}
+              onClick={openTerminal}
               className="hidden sm:flex items-center gap-1.5 px-3 py-2 rounded-full border border-white/[0.1] text-fog text-[10px] font-mono tracking-wider hover:text-mint hover:border-mint/30 transition-colors"
               title="Open terminal (⌘K)"
             >
@@ -644,10 +663,7 @@ function App() {
               key={`${project.title}-${i}`}
               type="button"
               variants={fadeUp}
-              onClick={() => {
-                setSpotlightProject(project);
-                track("click", { label: `spotlight_open:${project.title}` });
-              }}
+              onClick={() => openSpotlight(project)}
               className="group relative grid grid-cols-1 md:grid-cols-[80px_1fr_auto] gap-2 md:gap-10 py-6 md:py-10 border-t border-white/[0.13] md:hover:pl-3 transition-all duration-300 w-full text-left cursor-pointer"
             >
               <span className="font-mono text-xs sm:text-sm text-fog">P—{String(i + 1).padStart(2, "0")}</span>

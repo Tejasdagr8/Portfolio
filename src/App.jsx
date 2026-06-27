@@ -6,7 +6,6 @@ import GradientField from "./components/GradientField";
 import SkillsMarquee from "./components/SkillsMarquee";
 import Terminal from "./components/Terminal";
 import GitHubPulse from "./components/GitHubPulse";
-import ScrollEpochHUD from "./components/ScrollEpochHUD";
 import ProjectSpotlight from "./components/ProjectSpotlight";
 import CustomCursor from "./components/CustomCursor";
 import LegendaryMode from "./components/LegendaryMode";
@@ -286,7 +285,6 @@ function App() {
       <CustomCursor />
       <LegendaryMode />
       <RecruiterSpeedRun />
-      <ScrollEpochHUD progress={scrollProgress} />
       <div className="fixed top-0 left-0 z-[60] h-[2px] bg-gradient-to-r from-[#8C7BFF] to-[#5EE6D0]" style={{ width: `${scrollProgress}%` }} />
 
       {/* NAVBAR */}

@@ -1,6 +1,7 @@
 import { motion, AnimatePresence } from "framer-motion";
 import { useEffect } from "react";
 import { FaExternalLinkAlt, FaTimes } from "react-icons/fa";
+import ArchitectureDiagram from "./ArchitectureDiagram";
 
 export default function ProjectSpotlight({ project, onClose }) {
   useEffect(() => {
@@ -77,6 +78,10 @@ export default function ProjectSpotlight({ project, onClose }) {
                     ))}
                   </ul>
                 </div>
+              )}
+
+              {spotlight?.architecture && (
+                <ArchitectureDiagram steps={spotlight.architecture} />
               )}
 
               <div className="flex flex-wrap gap-2">

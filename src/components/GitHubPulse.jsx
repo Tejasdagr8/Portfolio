@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { FaGithub, FaStar, FaCodeBranch } from "react-icons/fa";
+import { FaGithub, FaStar, FaCodeBranch, FaClock } from "react-icons/fa";
 
 const USERNAME = "Tejasdagr8";
 const CACHE_KEY = "github_pulse_cache";
@@ -9,7 +9,20 @@ const FALLBACK = {
   publicRepos: "—",
   followers: "—",
   topLang: "Python",
+  recentRepo: null,
+  pushedAgo: null,
 };
+
+function formatPushedAgo(iso) {
+  if (!iso) return null;
+  const diff = Date.now() - new Date(iso).getTime();
+  const days = Math.floor(diff / 86400000);
+  if (days === 0) return "today";
+  if (days === 1) return "1d ago";
+  if (days < 30) return `${days}d ago`;
+  const months = Math.floor(days / 30);
+  return months === 1 ? "1mo ago" : `${months}mo ago`;
+}
 
 export default function GitHubPulse() {
   const [stats, setStats] = useState(null);
@@ -34,7 +47,7 @@ export default function GitHubPulse() {
 
         const [userRes, reposRes] = await Promise.all([
           fetch(`https://api.github.com/users/${USERNAME}`),
-          fetch(`https://api.github.com/users/${USERNAME}/repos?sort=updated&per_page=6`),
+          fetch(`https://api.github.com/users/${USERNAME}/repos?sort=pushed&per_page=8`),
         ]);
 
         if (!userRes.ok) throw new Error("user fetch failed");
@@ -42,10 +55,13 @@ export default function GitHubPulse() {
         const user = await userRes.json();
         let topLang = FALLBACK.topLang;
         let recentRepo = null;
+        let pushedAgo = null;
 
         if (reposRes.ok) {
           const repos = await reposRes.json();
-          recentRepo = repos[0]?.name || null;
+          const latest = repos[0];
+          recentRepo = latest?.name || null;
+          pushedAgo = formatPushedAgo(latest?.pushed_at);
           const langs = repos.flatMap((r) => r.language).filter(Boolean);
           if (langs.length) {
             const counts = langs.reduce((acc, l) => {
@@ -61,6 +77,7 @@ export default function GitHubPulse() {
           followers: user.followers,
           topLang,
           recentRepo,
+          pushedAgo,
           profileUrl: user.html_url,
         };
 
@@ -97,7 +114,7 @@ export default function GitHubPulse() {
             {loading && <span className="text-fog/50 normal-case tracking-normal">syncing…</span>}
           </div>
 
-          <div className="flex flex-wrap items-center justify-center gap-5 sm:gap-8 font-mono text-[11px] sm:text-xs text-fog">
+          <div className="flex flex-wrap items-center justify-center gap-4 sm:gap-7 font-mono text-[11px] sm:text-xs text-fog">
             <span className="flex items-center gap-1.5">
               <FaCodeBranch className="text-iris" size={11} />
               <span className="text-paper tabular-nums">{display.publicRepos}</span> repos
@@ -112,6 +129,11 @@ export default function GitHubPulse() {
             {display.recentRepo && (
               <span className="hidden md:inline text-fog/70">
                 last push · <span className="text-paper">{display.recentRepo}</span>
+                {display.pushedAgo && (
+                  <span className="text-fog/50 ml-1 inline-flex items-center gap-1">
+                    <FaClock size={9} /> {display.pushedAgo}
+                  </span>
+                )}
               </span>
             )}
           </div>

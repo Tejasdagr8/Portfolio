@@ -81,6 +81,7 @@ export default function Terminal({ open, onClose, sections, projects, onNavigate
   skills            print tech stack
   contact           show contact info
   whoami            about Tejas
+  speedrun          recruiter tour (or press R)
   clear             clear terminal
   exit              close terminal
 
@@ -166,6 +167,12 @@ Tip: press ⌘K or Ctrl+K anytime to toggle.`);
 
         case "whoami":
           FILES["whoami.txt"].split("\n").forEach((line) => writeln(`  ${line}`));
+          break;
+
+        case "speedrun":
+          window.dispatchEvent(new CustomEvent("start-speedrun"));
+          writeln("→ recruiter speed run started (press R anytime)");
+          setTimeout(onClose, 300);
           break;
 
         case "clear":

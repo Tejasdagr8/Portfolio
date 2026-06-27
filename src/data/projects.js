@@ -13,6 +13,7 @@ export const projects = [
         "Production deployment serving real users in construction vertical",
       ],
       stack: ["React", "CMS", "Analytics", "AI-assisted content"],
+      architecture: ["User", "React SPA", "CMS API", "Analytics", "SEO index"],
     },
   },
   {
@@ -44,6 +45,7 @@ export const projects = [
         "Multi-step agent reasoning for itinerary generation",
       ],
       stack: ["LangGraph", "FastAPI", "Groq", "Docker", "Tavily"],
+      architecture: ["User", "FastAPI", "LangGraph agent", "7 APIs", "Itinerary"],
     },
   },
   {
@@ -60,6 +62,7 @@ export const projects = [
         "Live on Streamlit Cloud",
       ],
       stack: ["Python", "Streamlit", "LLM", "RAG"],
+      architecture: ["User", "Streamlit", "Auth", "RAG pipeline", "LLM + Vision"],
     },
   },
   {
@@ -76,6 +79,7 @@ export const projects = [
         "Multi-crop, multi-region agricultural dataset handling",
       ],
       stack: ["TensorFlow", "CNN", "LSTM", "Python"],
+      architecture: ["Raw data", "Preprocess", "CNN-RNN-LSTM", "Train", "Forecast"],
     },
   },
   {

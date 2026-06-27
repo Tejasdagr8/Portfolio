@@ -10,9 +10,10 @@ import ScrollEpochHUD from "./components/ScrollEpochHUD";
 import ProjectSpotlight from "./components/ProjectSpotlight";
 import CustomCursor from "./components/CustomCursor";
 import LegendaryMode from "./components/LegendaryMode";
+import RecruiterSpeedRun from "./components/RecruiterSpeedRun";
 import useAnalytics from "./hooks/useAnalytics";
 import { track, getCampaignRef } from "./lib/analytics";
-import { getCampaignContent } from "./lib/campaign";
+import { getCampaignContent, getHeroCtas } from "./lib/campaign";
 import { projects } from "./data/projects";
 
 const CONTACT_EMAILS = {
@@ -84,6 +85,7 @@ function App() {
 
   const campaignRef = useMemo(() => getCampaignRef(), []);
   const campaign = useMemo(() => getCampaignContent(campaignRef), [campaignRef]);
+  const heroCtas = useMemo(() => getHeroCtas(campaignRef), [campaignRef]);
 
   useAnalytics();
 
@@ -283,6 +285,7 @@ function App() {
     <div className="bg-ink-0 text-paper font-body font-light min-h-screen overflow-x-hidden">
       <CustomCursor />
       <LegendaryMode />
+      <RecruiterSpeedRun />
       <ScrollEpochHUD progress={scrollProgress} />
       <div className="fixed top-0 left-0 z-[60] h-[2px] bg-gradient-to-r from-[#8C7BFF] to-[#5EE6D0]" style={{ width: `${scrollProgress}%` }} />
 
@@ -430,24 +433,25 @@ function App() {
               <div className="font-mono text-[11px] sm:text-xs text-fog tracking-wide flex flex-wrap justify-center lg:justify-start gap-x-4 sm:gap-x-6 gap-y-2 mt-6 sm:mt-8">
                 <span><span className="text-mint">●</span> Bengaluru, IN</span>
                 <span><span className="status-pulse text-mint">●</span> Open to opportunities</span>
-                <span className="hidden sm:inline"><span className="text-mint">●</span> Press ⌘K for terminal</span>
+                <span className="hidden sm:inline"><span className="text-mint">●</span> ⌘K terminal · R speed run</span>
               </div>
 
               <div className="flex flex-wrap justify-center lg:justify-start gap-3 sm:gap-4 mt-8 sm:mt-10">
                 <a
-                  href="#contact"
-                  data-track="contact_cta"
+                  href={heroCtas.primary.href}
+                  {...(heroCtas.primary.download ? { download: true } : {})}
+                  data-track={heroCtas.primary.track}
                   className="w-full sm:w-auto text-center px-6 sm:px-7 py-3 rounded-full bg-gradient-to-r from-iris to-mint text-ink-0 text-sm font-medium hover:opacity-90 transition-opacity"
                 >
-                  Get in touch
+                  {heroCtas.primary.label}
                 </a>
                 <a
-                  href="/resume.pdf"
-                  download
-                  data-track="resume"
+                  href={heroCtas.secondary.href}
+                  {...(heroCtas.secondary.download ? { download: true } : {})}
+                  data-track={heroCtas.secondary.track}
                   className="w-full sm:w-auto text-center px-6 sm:px-7 py-3 rounded-full border border-white/[0.15] text-fog text-sm hover:text-paper hover:border-mint/40 hover:bg-mint/[0.06] transition-all"
                 >
-                  Download CV
+                  {heroCtas.secondary.label}
                 </a>
               </div>
 
@@ -897,13 +901,18 @@ function App() {
       {/* FOOTER */}
       <footer className="py-6 md:py-8 px-4 border-t border-white/[0.13] flex flex-col sm:flex-row justify-between items-center gap-3 font-mono text-[10px] sm:text-[11px] tracking-widest text-fog uppercase text-center sm:text-left">
         <span className="max-w-xs sm:max-w-none leading-relaxed">© {new Date().getFullYear()} Tejas Melkote — built by hand</span>
-        <button
-          type="button"
-          onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
-          className="hover:text-mint transition-colors"
-        >
-          back to top ↑
-        </button>
+        <div className="flex items-center gap-4 sm:gap-6">
+          <a href="/hire" data-track="footer_hire" className="hover:text-mint transition-colors">
+            /hire
+          </a>
+          <button
+            type="button"
+            onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
+            className="hover:text-mint transition-colors"
+          >
+            back to top ↑
+          </button>
+        </div>
       </footer>
 
       {showBackToTop && (

@@ -4,12 +4,14 @@ import { BrowserRouter, Route, Routes } from "react-router-dom";
 import "./index.css";
 import App from "./App.jsx";
 import Views from "./pages/Views.jsx";
+import Hire from "./pages/Hire.jsx";
 
 createRoot(document.getElementById("root")).render(
   <StrictMode>
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<App />} />
+        <Route path="/hire" element={<Hire />} />
         <Route path="/views" element={<Views />} />
       </Routes>
     </BrowserRouter>

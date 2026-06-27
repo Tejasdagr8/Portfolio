@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useCallback, useEffect, useMemo, useState } from "react";
 import { motion } from "framer-motion";
 import { FaGithub, FaLinkedin, FaEnvelope, FaPhone, FaDownload, FaExternalLinkAlt, FaArrowUp, FaBars, FaTimes, FaTerminal } from "react-icons/fa";
 import profile from "./assets/profile.jpeg";
@@ -184,25 +184,25 @@ function App() {
     return () => clearInterval(interval);
   }, []);
 
-  useEffect(() => {
-    const toggleTerminal = () => {
+  const toggleTerminal = useCallback(() => {
     setTerminalOpen((open) => {
       if (!open) playSound("terminalOpen");
       return !open;
     });
-  };
+  }, []);
 
-  const openTerminal = () => {
+  const openTerminal = useCallback(() => {
     playSound("terminalOpen");
     setTerminalOpen(true);
-  };
+  }, []);
 
-  const openSpotlight = (project) => {
+  const openSpotlight = useCallback((project) => {
     playSound("open");
     setSpotlightProject(project);
     track("click", { label: `spotlight_open:${project.title}` });
-  };
+  }, []);
 
+  useEffect(() => {
     const onKeyDown = (e) => {
       const tag = e.target?.tagName?.toLowerCase();
       const inField = tag === "input" || tag === "textarea" || e.target?.isContentEditable;
@@ -221,7 +221,7 @@ function App() {
 
     window.addEventListener("keydown", onKeyDown);
     return () => window.removeEventListener("keydown", onKeyDown);
-  }, []);
+  }, [toggleTerminal]);
 
   const navigateToSection = (id) => {
     document.getElementById(id)?.scrollIntoView({ behavior: "smooth" });

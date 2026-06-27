@@ -158,3 +158,69 @@ body::after {
     animation: none;
   }
 }
+
+/* Custom cursor (desktop) */
+body.custom-cursor-active,
+body.custom-cursor-active a,
+body.custom-cursor-active button {
+  cursor: none !important;
+}
+
+.custom-cursor-dot {
+  width: 6px;
+  height: 6px;
+  margin: -3px 0 0 -3px;
+  border-radius: 50%;
+  background: #5ee6d0;
+}
+
+.custom-cursor-ring {
+  width: 32px;
+  height: 32px;
+  margin: -16px 0 0 -16px;
+  border-radius: 50%;
+  border: 1px solid rgba(140, 123, 255, 0.45);
+  transition: width 0.2s ease, height 0.2s ease, margin 0.2s ease, border-color 0.2s ease;
+}
+
+.custom-cursor-ring.is-hover {
+  width: 44px;
+  height: 44px;
+  margin: -22px 0 0 -22px;
+  border-color: rgba(94, 230, 208, 0.65);
+}
+
+/* Availability pulse */
+@keyframes status-pulse {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.35;
+  }
+}
+
+.status-pulse {
+  animation: status-pulse 2.4s ease-in-out infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .status-pulse {
+    animation: none;
+  }
+}
+
+/* Konami legendary mode */
+body[data-legendary="true"]::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 89;
+  background: radial-gradient(ellipse 80% 50% at 50% 0%, rgba(140, 123, 255, 0.08), transparent 70%);
+}
+
+body[data-legendary="true"] .gradient-text {
+  filter: brightness(1.15);
+}

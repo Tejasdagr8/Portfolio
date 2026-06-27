@@ -64,12 +64,14 @@ export default function GradientField({ className = "" }) {
         let ay = Math.sin(a) * 0.06;
 
         if (mouse.active) {
+          const legendary = document.body.dataset.legendary === "true";
           const dx = mouse.x - p.x;
           const dy = mouse.y - p.y;
           const d2 = dx * dx + dy * dy;
-          if (d2 < 240 * 240) {
+          const radius = legendary ? 320 : 240;
+          if (d2 < radius * radius) {
             const d = Math.sqrt(d2) || 1;
-            const pull = (1 - d / 240) * 0.22;
+            const pull = (1 - d / radius) * (legendary ? 0.34 : 0.22);
             ax += (dx / d) * pull;
             ay += (dy / d) * pull;
           }

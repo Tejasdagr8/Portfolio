@@ -5,9 +5,15 @@ import profile from "./assets/profile.jpeg";
 import GradientField from "./components/GradientField";
 import SkillsMarquee from "./components/SkillsMarquee";
 import Terminal from "./components/Terminal";
+import GitHubPulse from "./components/GitHubPulse";
+import ScrollEpochHUD from "./components/ScrollEpochHUD";
+import ProjectSpotlight from "./components/ProjectSpotlight";
+import CustomCursor from "./components/CustomCursor";
+import LegendaryMode from "./components/LegendaryMode";
 import useAnalytics from "./hooks/useAnalytics";
 import { track, getCampaignRef } from "./lib/analytics";
 import { getCampaignContent } from "./lib/campaign";
+import { projects } from "./data/projects";
 
 const CONTACT_EMAILS = {
   primary: "coooltejasdagr@gmail.com",
@@ -59,53 +65,6 @@ const leadership = [
   { role: "Operations Head", org: "College Fest" },
 ];
 
-const projects = [
-  {
-    title: "TatvaOps Platform (Vantage)",
-    description: "AI-powered construction content platform with blogs, forums, CMS, and analytics — built for high-intent SEO traffic and community engagement.",
-    tags: ["React", "CMS", "SEO", "AI"],
-    link: "https://vantage.withtatva.ai/",
-  },
-  {
-    title: "TatvaOps Verified Vendor Profile",
-    description: "Production vendor profile system with verified ratings, pricing insights, and searchable contractor listings for the construction industry.",
-    tags: ["Web App", "Full Stack", "Portfolio"],
-    link: "https://vendor-profilepage.vercel.app/",
-  },
-  {
-    title: "AI Trip Planner",
-    description: "Agentic trip planner orchestrating 7 APIs (Weather, Tavily, Google Places, Groq) via a LangGraph workflow with FastAPI backend and Docker deployment.",
-    tags: ["LangGraph", "FastAPI", "Docker", "Agents"],
-  },
-  {
-    title: "Medical Image Analyzer & PDF Summarizer",
-    description: "Multimodal tool for medical image analysis and PDF summarization with user authentication, analytics dashboards, and RAG-powered document Q&A.",
-    tags: ["Python", "LLM", "RAG", "Streamlit"],
-    link: "https://medimage.streamlit.app/",
-  },
-  {
-    title: "Crop Yield Prediction",
-    description: "Hybrid CNN-RNN-LSTM model for agricultural yield forecasting across crop types and regions, with end-to-end training and evaluation pipeline.",
-    tags: ["TensorFlow", "CNN", "LSTM", "Python"],
-    link: "https://colab.research.google.com/drive/1c5BOmHjO4dQDWb-YuZ5j42uGF-bvkQKS?usp=sharing",
-  },
-  {
-    title: "Car Price Prediction",
-    description: "End-to-end ML pipeline with feature engineering, model selection, and evaluation for automotive price estimation on real-world listing data.",
-    tags: ["Scikit-learn", "Python", "ML"],
-  },
-  {
-    title: "Customer Churn & Segmentation",
-    description: "Churn prediction and customer segmentation using KNN, DBSCAN, and SVM — with clustering analysis to identify at-risk user cohorts.",
-    tags: ["KNN", "DBSCAN", "SVM", "Python"],
-  },
-  {
-    title: "Speech-to-Text System",
-    description: "Accessibility-focused speech recognition system built with NLP pipelines and OpenAI Whisper for real-time transcription.",
-    tags: ["Python", "NLP", "OpenAI", "Whisper"],
-  },
-];
-
 function App() {
   const sectionContainer = "w-full max-w-6xl mx-auto px-4 sm:px-6 lg:px-8";
   const sectionPad = "py-16 md:py-24";
@@ -121,6 +80,7 @@ function App() {
   const [localTime, setLocalTime] = useState("");
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [terminalOpen, setTerminalOpen] = useState(false);
+  const [spotlightProject, setSpotlightProject] = useState(null);
 
   const campaignRef = useMemo(() => getCampaignRef(), []);
   const campaign = useMemo(() => getCampaignContent(campaignRef), [campaignRef]);
@@ -321,6 +281,9 @@ function App() {
 
   return (
     <div className="bg-ink-0 text-paper font-body font-light min-h-screen overflow-x-hidden">
+      <CustomCursor />
+      <LegendaryMode />
+      <ScrollEpochHUD progress={scrollProgress} />
       <div className="fixed top-0 left-0 z-[60] h-[2px] bg-gradient-to-r from-[#8C7BFF] to-[#5EE6D0]" style={{ width: `${scrollProgress}%` }} />
 
       {/* NAVBAR */}
@@ -466,7 +429,7 @@ function App() {
 
               <div className="font-mono text-[11px] sm:text-xs text-fog tracking-wide flex flex-wrap justify-center lg:justify-start gap-x-4 sm:gap-x-6 gap-y-2 mt-6 sm:mt-8">
                 <span><span className="text-mint">●</span> Bengaluru, IN</span>
-                <span><span className="text-mint">●</span> Open to opportunities</span>
+                <span><span className="status-pulse text-mint">●</span> Open to opportunities</span>
                 <span className="hidden sm:inline"><span className="text-mint">●</span> Press ⌘K for terminal</span>
               </div>
 
@@ -509,6 +472,8 @@ function App() {
       </section>
 
       <SkillsMarquee />
+
+      <GitHubPulse />
 
       {/* ABOUT */}
       <motion.section
@@ -663,6 +628,7 @@ function App() {
           <SectionHeading eyebrow="selected work">
             Things I&apos;ve <span className="gradient-text">shipped</span>.
           </SectionHeading>
+          <p className="text-fog text-sm font-mono -mt-4 mb-2 hidden sm:block">Click any project for the spotlight view</p>
         </motion.div>
         <motion.div
           className="space-y-0"
@@ -672,10 +638,15 @@ function App() {
           variants={stagger}
         >
           {projects.map((project, i) => (
-            <motion.div
+            <motion.button
               key={`${project.title}-${i}`}
+              type="button"
               variants={fadeUp}
-              className="group relative grid grid-cols-1 md:grid-cols-[80px_1fr_auto] gap-2 md:gap-10 py-6 md:py-10 border-t border-white/[0.13] md:hover:pl-3 transition-all duration-300"
+              onClick={() => {
+                setSpotlightProject(project);
+                track("click", { label: `spotlight_open:${project.title}` });
+              }}
+              className="group relative grid grid-cols-1 md:grid-cols-[80px_1fr_auto] gap-2 md:gap-10 py-6 md:py-10 border-t border-white/[0.13] md:hover:pl-3 transition-all duration-300 w-full text-left cursor-pointer"
             >
               <span className="font-mono text-xs sm:text-sm text-fog">P—{String(i + 1).padStart(2, "0")}</span>
               <div className="min-w-0">
@@ -690,22 +661,28 @@ function App() {
                     </span>
                   ))}
                 </div>
-                {project.link && (
-                  <a
-                    href={project.link}
-                    target="_blank"
-                    rel="noreferrer"
-                    data-track={`project:${project.title}`}
-                    className="inline-flex items-center gap-1.5 text-xs font-mono text-mint hover:text-paper transition-colors mt-4"
-                  >
-                    <FaExternalLinkAlt size={10} /> View live
-                  </a>
-                )}
+                <div className="flex flex-wrap items-center gap-4 mt-4">
+                  <span className="inline-flex items-center gap-1.5 text-xs font-mono text-fog group-hover:text-mint transition-colors">
+                    Spotlight →
+                  </span>
+                  {project.link && (
+                    <a
+                      href={project.link}
+                      target="_blank"
+                      rel="noreferrer"
+                      data-track={`project:${project.title}`}
+                      onClick={(e) => e.stopPropagation()}
+                      className="inline-flex items-center gap-1.5 text-xs font-mono text-mint hover:text-paper transition-colors"
+                    >
+                      <FaExternalLinkAlt size={10} /> View live
+                    </a>
+                  )}
+                </div>
               </div>
               <span className="hidden md:block font-display text-2xl text-fog group-hover:text-mint group-hover:translate-x-1 group-hover:-translate-y-1 transition-all">
                 ↗
               </span>
-            </motion.div>
+            </motion.button>
           ))}
           <div className="border-t border-white/[0.13]" />
         </motion.div>
@@ -946,6 +923,11 @@ function App() {
         sections={sectionIds}
         projects={projects}
         onNavigate={navigateToSection}
+      />
+
+      <ProjectSpotlight
+        project={spotlightProject}
+        onClose={() => setSpotlightProject(null)}
       />
 
     </div>

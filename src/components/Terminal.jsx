@@ -183,6 +183,11 @@ Tip: press ⌘K or Ctrl+K anytime to toggle.`);
             writeln("  Permission granted. Redirecting to contact…");
             onNavigate("contact");
             setTimeout(onClose, 600);
+          } else if (arg === "legendary" || arg === "unlock") {
+            sessionStorage.setItem("portfolio_legendary_mode", "1");
+            document.body.dataset.legendary = "true";
+            window.dispatchEvent(new CustomEvent("legendary-unlock"));
+            writeln("  Legendary mode activated. Gradients intensified.");
           } else {
             writeln("  Nice try. Try: sudo hire tejas");
           }

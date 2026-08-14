@@ -54,9 +54,12 @@ export default function Hire() {
           </a>
         </div>
 
-        <div className="flex justify-center gap-6 mt-8 text-fog">
-          <a href="https://github.com/Tejasdagr8" target="_blank" rel="noreferrer" data-track="hire_github" className="hover:text-mint transition-colors" aria-label="GitHub">
-            <FaGithub size={18} />
+        <div className="flex flex-wrap justify-center gap-4 sm:gap-6 mt-8 text-fog">
+          <a href="https://github.com/Tejasdagr8" target="_blank" rel="noreferrer" data-track="hire_github" className="hover:text-mint transition-colors text-sm font-mono" aria-label="GitHub personal">
+            <FaGithub size={18} className="inline mr-1.5" />Tejasdagr8
+          </a>
+          <a href="https://github.com/tejasm-tatvaops" target="_blank" rel="noreferrer" data-track="hire_github_work" className="hover:text-mint transition-colors text-sm font-mono" aria-label="GitHub work">
+            <FaGithub size={18} className="inline mr-1.5" />tejasm-tatvaops
           </a>
           <a href="https://www.linkedin.com/in/tejas-melkote-390545309/" target="_blank" rel="noreferrer" data-track="hire_linkedin" className="hover:text-mint transition-colors" aria-label="LinkedIn">
             <FaLinkedin size={18} />

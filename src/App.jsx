@@ -473,9 +473,19 @@ function App() {
                 </a>
               </div>
 
-              <div className="flex justify-center lg:justify-start gap-5 mt-6 sm:mt-8 text-fog">
-                <a href="https://github.com/Tejasdagr8" target="_blank" rel="noreferrer" data-track="github" className="hover:text-paper transition-colors text-xl" aria-label="GitHub">
+              <div className="flex flex-wrap justify-center lg:justify-start items-center gap-4 sm:gap-5 mt-6 sm:mt-8 text-fog">
+                <a href="https://github.com/Tejasdagr8" target="_blank" rel="noreferrer" data-track="github" className="hover:text-paper transition-colors text-xl" aria-label="GitHub — Tejasdagr8">
                   <FaGithub />
+                </a>
+                <a
+                  href="https://github.com/tejasm-tatvaops"
+                  target="_blank"
+                  rel="noreferrer"
+                  data-track="github_work"
+                  className="font-mono text-[10px] tracking-wide px-2.5 py-1 rounded-full border border-white/[0.12] hover:text-mint hover:border-mint/35 transition-colors"
+                  title="GitHub work account — tejasm-tatvaops"
+                >
+                  @tejasm-tatvaops
                 </a>
                 <a href="https://www.linkedin.com/in/tejas-melkote-390545309/" target="_blank" rel="noreferrer" data-track="linkedin" className="hover:text-mint transition-colors text-xl" aria-label="LinkedIn">
                   <FaLinkedin />

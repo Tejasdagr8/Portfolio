@@ -29,6 +29,7 @@ Packaged models behind Streamlit and FastAPI interfaces.`,
   "contact.txt": `Email:  coooltejasdagr@gmail.com
 Phone:  +91 7019280175
 GitHub:  github.com/Tejasdagr8
+GitHub (work): github.com/tejasm-tatvaops
 LinkedIn: linkedin.com/in/tejas-melkote-390545309`,
 
   "whoami.txt": `Tejas Melkote

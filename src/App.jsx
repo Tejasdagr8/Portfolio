@@ -16,7 +16,7 @@ import { track, getCampaignRef } from "./lib/analytics";
 import { playSound } from "./lib/sounds";
 import { getCampaignContent, getHeroCtas } from "./lib/campaign";
 import { projects } from "./data/projects";
-import { publications } from "./data/publications";
+import { publications, paperLinks } from "./data/publications";
 
 const CONTACT_EMAILS = {
   primary: "coooltejasdagr@gmail.com",
@@ -523,14 +523,31 @@ function App() {
           <div className="space-y-3">
             {[
               { label: "focus", value: "ML systems, end to end" },
-              { label: "research", value: "Sci-FM @ COLM 2026" },
+              { label: "research", value: "Sci-FM @ COLM 2026", href: paperLinks.arxiv },
               { label: "currently", value: "LLM agents & RAG" },
               { label: "internship", value: "SDE @ SuperAGI" },
-            ].map(({ label, value }) => (
-              <div key={label} className="card-glass p-6">
-                <p className="font-mono text-[11px] tracking-[0.16em] uppercase text-mint mb-2">{label}</p>
-                <p className="font-display font-bold text-xl text-paper">{value}</p>
-              </div>
+            ].map(({ label, value, href }) => (
+              href ? (
+                <a
+                  key={label}
+                  href={href}
+                  target="_blank"
+                  rel="noreferrer"
+                  data-track="about_research_paper"
+                  className="block card-glass card-glass-hover p-6 group"
+                >
+                  <p className="font-mono text-[11px] tracking-[0.16em] uppercase text-mint mb-2">{label}</p>
+                  <p className="font-display font-bold text-xl text-paper group-hover:text-mint transition-colors inline-flex items-center gap-2">
+                    {value}
+                    <FaExternalLinkAlt size={12} className="opacity-60" />
+                  </p>
+                </a>
+              ) : (
+                <div key={label} className="card-glass p-6">
+                  <p className="font-mono text-[11px] tracking-[0.16em] uppercase text-mint mb-2">{label}</p>
+                  <p className="font-display font-bold text-xl text-paper">{value}</p>
+                </div>
+              )
             ))}
           </div>
         </div>
@@ -630,6 +647,22 @@ function App() {
               </div>
               <p className="font-mono text-xs sm:text-sm text-fog">{pub.workshop} · {pub.year}</p>
               <p className="text-fog text-sm leading-7 mt-4 max-w-3xl">{pub.description}</p>
+              {pub.links?.length > 0 && (
+                <div className="flex flex-wrap gap-3 mt-5">
+                  {pub.links.map(({ label, href, track }) => (
+                    <a
+                      key={label}
+                      href={href}
+                      target="_blank"
+                      rel="noreferrer"
+                      data-track={track}
+                      className="inline-flex items-center gap-1.5 text-xs font-mono text-mint hover:text-paper transition-colors px-3 py-1.5 rounded-full border border-mint/30 hover:border-mint/60 bg-mint/[0.04]"
+                    >
+                      <FaExternalLinkAlt size={10} /> {label}
+                    </a>
+                  ))}
+                </div>
+              )}
               <div className="flex flex-wrap gap-2 mt-5">
                 {pub.tags.map((tag) => (
                   <span key={tag} className="font-mono text-[11px] tracking-wide px-3 py-1 rounded-full border border-white/[0.13] text-fog">

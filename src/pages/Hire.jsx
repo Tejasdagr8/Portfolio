@@ -2,11 +2,22 @@ import { Link } from "react-router-dom";
 import { FaGithub, FaLinkedin, FaEnvelope, FaDownload, FaExternalLinkAlt } from "react-icons/fa";
 import ProfileAvatar from "../components/ProfileAvatar";
 import useAnalytics from "../hooks/useAnalytics";
+import { paperLinks } from "../data/publications";
 
 const HIGHLIGHTS = [
-  "Accepted poster — Sci-FM 2026 @ COLM · LLM calibration & performance prediction research",
-  "AI/ML engineer & full-stack developer · B.Tech CS (AI), CGPA 8.38",
-  "SDE Intern @ SuperAGI — Go, Rails, Vue, 15+ PRs in production",
+  {
+    text: "Accepted poster — Sci-FM 2026 @ COLM · LLM calibration & performance prediction research",
+    href: paperLinks.arxiv,
+    track: "hire_paper",
+  },
+  { text: "AI/ML engineer & full-stack developer · B.Tech CS (AI), CGPA 8.38" },
+  { text: "SDE Intern @ SuperAGI — Go, Rails, Vue, 15+ PRs in production" },
+];
+
+const PAPER_LINKS = [
+  { label: "Paper", href: paperLinks.arxiv, track: "hire_paper_arxiv" },
+  { label: "Code", href: paperLinks.code, track: "hire_paper_code" },
+  { label: "Workshop", href: paperLinks.workshop, track: "hire_paper_workshop" },
 ];
 
 export default function Hire() {
@@ -25,12 +36,40 @@ export default function Hire() {
 
         <ul className="mt-8 space-y-3 text-left">
           {HIGHLIGHTS.map((item) => (
-            <li key={item} className="flex gap-3 text-sm text-fog leading-relaxed card-glass px-4 py-3">
+            <li key={item.text} className="flex gap-3 text-sm text-fog leading-relaxed card-glass px-4 py-3">
               <span className="text-mint shrink-0">→</span>
-              <span>{item}</span>
+              {item.href ? (
+                <a
+                  href={item.href}
+                  target="_blank"
+                  rel="noreferrer"
+                  data-track={item.track}
+                  className="hover:text-mint transition-colors inline-flex items-center gap-1.5"
+                >
+                  {item.text}
+                  <FaExternalLinkAlt size={10} className="opacity-70" />
+                </a>
+              ) : (
+                <span>{item.text}</span>
+              )}
             </li>
           ))}
         </ul>
+
+        <div className="flex flex-wrap justify-center gap-2 mt-4">
+          {PAPER_LINKS.map(({ label, href, track }) => (
+            <a
+              key={label}
+              href={href}
+              target="_blank"
+              rel="noreferrer"
+              data-track={track}
+              className="inline-flex items-center gap-1.5 text-[11px] font-mono text-mint hover:text-paper px-3 py-1.5 rounded-full border border-mint/30 hover:border-mint/60 transition-colors"
+            >
+              <FaExternalLinkAlt size={9} /> {label}
+            </a>
+          ))}
+        </div>
 
         <div className="mt-8 flex flex-col gap-3">
           <a

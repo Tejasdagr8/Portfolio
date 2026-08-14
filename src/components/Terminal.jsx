@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { track } from "../lib/analytics";
 import { playSound, setSoundEnabled } from "../lib/sounds";
+import { paperLinks } from "../data/publications";
 
 const PROMPT = "tejas@portfolio ~ % ";
 
@@ -42,8 +43,18 @@ Open to opportunities`,
   "publication.txt": `Research Publication — Sci-FM 2026 @ COLM
 Algorithmic Blindness in Large Language Models:
 A Calibration Study of Performance Prediction
+arXiv title: Large Language Models are Algorithmically Blind
 Accepted Poster | Sci-FM Workshop, COLM 2026 | 2026
-Note: workshop paper (non-archival), not main-track COLM`,
+Authors: Sohan Venkatesh, Ashish Mahendran Kurapath, Tejas Melkote
+
+Links:
+  Paper   ${paperLinks.arxiv}
+  Code    ${paperLinks.code}
+  DOI     ${paperLinks.doi}
+  Workshop ${paperLinks.workshop}
+
+Note: workshop paper (non-archival), not main-track COLM
+Try: open paper | open code | open workshop`,
 };
 
 function slugify(title) {
@@ -87,7 +98,7 @@ export default function Terminal({ open, onClose, sections, projects, onNavigate
   ls [projects]     list sections or projects
   cat <file>        read a file (try: about.txt, publication.txt)
   cd <section>      jump to section (about, projects, contact…)
-  open <target>     open link (resume, github, linkedin, or project slug)
+  open <target>     open link (resume, github, paper, code, workshop…)
   skills            print tech stack
   contact           show contact info
   whoami            about Tejas
@@ -140,6 +151,12 @@ Tip: press ⌘K or Ctrl+K anytime to toggle.`);
             github: "https://github.com/Tejasdagr8",
             linkedin: "https://www.linkedin.com/in/tejas-melkote-390545309/",
             email: "mailto:coooltejasdagr@gmail.com",
+            paper: paperLinks.arxiv,
+            arxiv: paperLinks.arxiv,
+            doi: paperLinks.doi,
+            code: paperLinks.code,
+            workshop: paperLinks.workshop,
+            colm: paperLinks.colm,
           };
           const project = projects.find((p) => slugify(p.title).includes(arg) || arg.includes(slugify(p.title)));
           if (targets[arg]) {
@@ -158,7 +175,7 @@ Tip: press ⌘K or Ctrl+K anytime to toggle.`);
             writeln(`→ opened ${project.title}`);
             track("click", { label: `terminal_open_project:${project.title}` });
           } else {
-            writeln(`open: unknown target "${argRaw}". Try: resume, github, linkedin, or a project slug`);
+            writeln(`open: unknown target "${argRaw}". Try: resume, github, paper, code, workshop, or a project slug`);
           }
           break;
         }

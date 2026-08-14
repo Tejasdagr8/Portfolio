@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 import { FaGithub, FaLinkedin, FaEnvelope, FaDownload, FaExternalLinkAlt } from "react-icons/fa";
-import profile from "../assets/profile.jpeg";
+import ProfileAvatar from "../components/ProfileAvatar";
 import useAnalytics from "../hooks/useAnalytics";
 
 const HIGHLIGHTS = [
@@ -17,11 +17,7 @@ export default function Hire() {
       <div className="absolute inset-0 bg-gradient-to-b from-iris/[0.06] via-transparent to-mint/[0.04] pointer-events-none" />
 
       <div className="relative z-10 w-full max-w-md text-center">
-        <img
-          src={profile}
-          alt="Tejas Melkote"
-          className="w-24 h-24 rounded-full object-cover border border-white/10 mx-auto mb-6"
-        />
+        <ProfileAvatar size="sm" className="mx-auto mb-6" />
 
         <p className="font-mono text-[10px] tracking-[0.2em] uppercase text-mint mb-2">open to opportunities</p>
         <h1 className="font-display font-extrabold text-3xl sm:text-4xl tracking-tight text-paper">Tejas Melkote</h1>

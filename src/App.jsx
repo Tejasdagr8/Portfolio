@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useMemo, useState } from "react";
 import { motion } from "framer-motion";
 import { FaGithub, FaLinkedin, FaEnvelope, FaPhone, FaDownload, FaExternalLinkAlt, FaArrowUp, FaBars, FaTimes, FaTerminal } from "react-icons/fa";
-import profile from "./assets/profile.jpeg";
+import ProfileAvatar from "./components/ProfileAvatar";
 import GradientField from "./components/GradientField";
 import SkillsMarquee from "./components/SkillsMarquee";
 import Terminal from "./components/Terminal";
@@ -402,13 +402,8 @@ function App() {
           variants={stagger}
         >
           <motion.div variants={fadeUp} className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-8 md:gap-12">
-            <motion.div variants={fadeUp} className="relative shrink-0 order-first mx-auto lg:order-last lg:mx-0">
-              <div className="absolute inset-0 rounded-full bg-gradient-to-r from-iris to-mint blur-2xl opacity-30 scale-110" />
-              <img
-                src={profile}
-                alt="Tejas Melkote — AI/ML Engineer"
-                className="relative w-32 h-32 sm:w-40 sm:h-40 md:w-52 md:h-52 rounded-full object-cover border border-white/10"
-              />
+            <motion.div variants={fadeUp}>
+              <ProfileAvatar className="order-first mx-auto lg:order-last lg:mx-0" />
             </motion.div>
 
             <div className="flex-1 text-center lg:text-left min-w-0">

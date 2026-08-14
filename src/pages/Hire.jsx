@@ -4,9 +4,9 @@ import profile from "../assets/profile.jpeg";
 import useAnalytics from "../hooks/useAnalytics";
 
 const HIGHLIGHTS = [
-  "AI/ML engineer & full-stack developer · B.Tech CS (AI), CGPA 8.46",
+  "Accepted poster — Sci-FM 2026 @ COLM · LLM calibration & performance prediction research",
+  "AI/ML engineer & full-stack developer · B.Tech CS (AI), CGPA 8.38",
   "SDE Intern @ SuperAGI — Go, Rails, Vue, 15+ PRs in production",
-  "Built LLM agents, RAG pipelines, and shipped products end-to-end",
 ];
 
 export default function Hire() {

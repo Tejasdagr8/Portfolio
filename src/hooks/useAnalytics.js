@@ -1,7 +1,7 @@
 import { useEffect, useRef } from "react";
 import { track } from "../lib/analytics";
 
-const SECTIONS = ["about", "experience", "education", "projects", "skills", "contact"];
+const SECTIONS = ["about", "experience", "research", "education", "projects", "skills", "contact"];
 const SCROLL_MARKS = [25, 50, 75, 100];
 
 export default function useAnalytics() {

@@ -22,7 +22,7 @@ CirrusLabs Pvt Ltd · Bengaluru
 Built LLM chatbots, AI agents, and ML pipelines for internal tooling.
 Packaged models behind Streamlit and FastAPI interfaces.`,
 
-  "education.txt": `B.Tech CS (AI) · MIT Manipal · 2022–2026 · CGPA 8.46
+  "education.txt": `B.Tech CS (AI) · MIT Manipal · 2022–2026 · CGPA 8.38
 12th · Narayana PU College · 2022 · 90.33%
 10th · Frank Anthony Public School · 2020 · 95%`,
 
@@ -33,9 +33,16 @@ LinkedIn: linkedin.com/in/tejas-melkote-390545309`,
 
   "whoami.txt": `Tejas Melkote
 AI/ML Engineer & Full-Stack Developer
-B.Tech CS (AI) · MIT Manipal · CGPA 8.46
+B.Tech CS (AI) · MIT Manipal · CGPA 8.38
 SDE Intern @ SuperAGI · Bengaluru, IN
+Research: Sci-FM 2026 @ COLM (Accepted Poster)
 Open to opportunities`,
+
+  "publication.txt": `Research Publication — Sci-FM 2026 @ COLM
+Algorithmic Blindness in Large Language Models:
+A Calibration Study of Performance Prediction
+Accepted Poster | Sci-FM Workshop, COLM 2026 | 2026
+Note: workshop paper (non-archival), not main-track COLM`,
 };
 
 function slugify(title) {
@@ -77,7 +84,7 @@ export default function Terminal({ open, onClose, sections, projects, onNavigate
           writeln(`Commands:
   help              show this message
   ls [projects]     list sections or projects
-  cat <file>        read a file (try: about.txt, superagi.txt)
+  cat <file>        read a file (try: about.txt, publication.txt)
   cd <section>      jump to section (about, projects, contact…)
   open <target>     open link (resume, github, linkedin, or project slug)
   skills            print tech stack

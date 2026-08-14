@@ -16,6 +16,7 @@ import { track, getCampaignRef } from "./lib/analytics";
 import { playSound } from "./lib/sounds";
 import { getCampaignContent, getHeroCtas } from "./lib/campaign";
 import { projects } from "./data/projects";
+import { publications } from "./data/publications";
 
 const CONTACT_EMAILS = {
   primary: "coooltejasdagr@gmail.com",
@@ -70,7 +71,7 @@ const leadership = [
 function App() {
   const sectionContainer = "w-full max-w-6xl mx-auto px-4 sm:px-6 lg:px-8";
   const sectionPad = "py-16 md:py-24";
-  const sectionIds = ["about", "experience", "education", "projects", "skills", "contact"];
+  const sectionIds = ["about", "experience", "research", "education", "projects", "skills", "contact"];
   const [activeSection, setActiveSection] = useState("about");
   const [copiedField, setCopiedField] = useState("");
   const [showBackToTop, setShowBackToTop] = useState(false);
@@ -517,6 +518,7 @@ function App() {
           <div className="space-y-3">
             {[
               { label: "focus", value: "ML systems, end to end" },
+              { label: "research", value: "Sci-FM @ COLM 2026" },
               { label: "currently", value: "LLM agents & RAG" },
               { label: "internship", value: "SDE @ SuperAGI" },
             ].map(({ label, value }) => (
@@ -588,6 +590,54 @@ function App() {
         </motion.div>
       </section>
 
+      {/* RESEARCH */}
+      <section id="research" className={`${sectionPad} ${sectionContainer}`}>
+        <motion.div initial="hidden" whileInView="visible" viewport={{ once: true, margin: "-80px" }} variants={fadeUp}>
+          <SectionHeading eyebrow="research">
+            Peer-reviewed <span className="gradient-text">LLM research</span>.
+          </SectionHeading>
+        </motion.div>
+        <motion.div
+          className="space-y-5"
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, margin: "-80px" }}
+          variants={stagger}
+        >
+          {publications.map((pub) => (
+            <motion.article
+              key={pub.title}
+              variants={fadeUp}
+              className="card-glass card-glass-hover p-6 sm:p-8 border-mint/20"
+            >
+              <div className="flex flex-col lg:flex-row lg:items-start lg:justify-between gap-4 mb-4">
+                <div className="min-w-0">
+                  <p className="font-mono text-[10px] sm:text-xs tracking-[0.16em] uppercase text-mint mb-2">
+                    {pub.venue}
+                  </p>
+                  <h3 className="font-display font-bold text-lg sm:text-xl md:text-2xl text-paper leading-snug">
+                    {pub.title}
+                  </h3>
+                </div>
+                <span className="shrink-0 self-start font-mono text-[10px] sm:text-xs tracking-wider uppercase px-3 py-1.5 rounded-full border border-ember/40 text-ember bg-ember/[0.08]">
+                  {pub.status}
+                </span>
+              </div>
+              <p className="font-mono text-xs sm:text-sm text-fog">{pub.workshop} · {pub.year}</p>
+              <p className="text-fog text-sm leading-7 mt-4 max-w-3xl">{pub.description}</p>
+              <div className="flex flex-wrap gap-2 mt-5">
+                {pub.tags.map((tag) => (
+                  <span key={tag} className="font-mono text-[11px] tracking-wide px-3 py-1 rounded-full border border-white/[0.13] text-fog">
+                    {tag}
+                  </span>
+                ))}
+              </div>
+              <p className="font-mono text-[10px] text-fog/60 mt-5 leading-relaxed">{pub.note}</p>
+            </motion.article>
+          ))}
+        </motion.div>
+      </section>
+
       {/* EDUCATION */}
       <section id="education" className={`${sectionPad} ${sectionContainer}`}>
         <motion.div initial="hidden" whileInView="visible" viewport={{ once: true, margin: "-80px" }} variants={fadeUp}>
@@ -605,7 +655,7 @@ function App() {
               degree: "B.Tech Computer Science Engineering (AI)",
               institution: "Manipal Institute of Technology",
               detail: "2022 – 2026",
-              grade: "CGPA 8.46",
+              grade: "CGPA 8.38",
             },
             {
               degree: "12th Grade",

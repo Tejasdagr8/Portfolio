@@ -37,7 +37,7 @@ const CAMPAIGNS = [
   {
     match: /recruiter|hr|talent|hiring/i,
     eyebrow: "thanks for stopping by",
-    blurb: "Final-year B.Tech CS (AI), CGPA 8.46, SDE Intern @ SuperAGI. Open to full-time roles in AI/ML and full-stack engineering. Resume one click away.",
+    blurb: "Final-year B.Tech CS (AI), CGPA 8.38, SDE Intern @ SuperAGI. Open to full-time roles in AI/ML and full-stack engineering. Resume one click away.",
     primaryCta: { label: "Download resume", href: "/resume.pdf", download: true, track: "cta_resume" },
     secondaryCta: { label: "Quick hire page", href: "/hire", track: "cta_hire" },
   },
@@ -51,7 +51,7 @@ const CAMPAIGNS = [
   {
     match: /mit|manipal/i,
     eyebrow: "MIT Manipal · AI-C",
-    blurb: "Class rep, E-Cell PR head, fest ops — I lead as much as I code. B.Tech CS (AI), graduating 8.46.",
+    blurb: "Class rep, E-Cell PR head, fest ops — I lead as much as I code. B.Tech CS (AI), graduating 8.38.",
     primaryCta: { label: "Get in touch", href: "#contact", track: "cta_contact" },
     secondaryCta: { label: "Projects", href: "#projects", track: "cta_projects" },
   },

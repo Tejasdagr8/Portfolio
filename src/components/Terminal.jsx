@@ -77,6 +77,8 @@ export default function Terminal({ open, onClose, sections, projects, onNavigate
   const [input, setInput] = useState("");
   const [cmdHistory, setCmdHistory] = useState([]);
   const [historyIdx, setHistoryIdx] = useState(-1);
+  const [minimized, setMinimized] = useState(false);
+  const [maximized, setMaximized] = useState(false);
   const inputRef = useRef(null);
   const scrollRef = useRef(null);
   const booted = useRef(false);
@@ -292,7 +294,12 @@ Tip: press ⌘K or Ctrl+K anytime to toggle.`);
   );
 
   useEffect(() => {
-    if (!open) return;
+    if (!open) {
+      setMinimized(false);
+      setMaximized(false);
+      return;
+    }
+    if (minimized) return;
     inputRef.current?.focus();
     if (!booted.current) {
       booted.current = true;
@@ -303,7 +310,7 @@ Tip: press ⌘K or Ctrl+K anytime to toggle.`);
       ]);
       track("click", { label: "terminal_open" });
     }
-  }, [open]);
+  }, [open, minimized]);
 
   useEffect(() => {
     scrollRef.current?.scrollTo({ top: scrollRef.current.scrollHeight });
@@ -349,6 +356,70 @@ Tip: press ⌘K or Ctrl+K anytime to toggle.`);
 
   if (!open) return null;
 
+  const titleBar = (
+    <div className="flex items-center gap-2 px-4 py-3 border-b border-white/[0.08] bg-ink-0/80 shrink-0">
+      <button
+        type="button"
+        onClick={(e) => {
+          e.stopPropagation();
+          onClose();
+        }}
+        className="w-3 h-3 rounded-full bg-red-500/80 hover:bg-red-500 transition-colors"
+        aria-label="Close terminal"
+        title="Close"
+      />
+      <button
+        type="button"
+        onClick={(e) => {
+          e.stopPropagation();
+          setMinimized(true);
+          setMaximized(false);
+        }}
+        className="w-3 h-3 rounded-full bg-amber-400/80 hover:bg-amber-400 transition-colors"
+        aria-label="Minimize terminal"
+        title="Minimize"
+      />
+      <button
+        type="button"
+        onClick={(e) => {
+          e.stopPropagation();
+          setMinimized(false);
+          setMaximized((m) => !m);
+        }}
+        className="w-3 h-3 rounded-full bg-emerald-400/80 hover:bg-emerald-400 transition-colors"
+        aria-label={maximized ? "Restore terminal size" : "Maximize terminal"}
+        title={maximized ? "Restore" : "Maximize"}
+      />
+      <span className="ml-3 font-mono text-[10px] sm:text-xs text-fog tracking-wider truncate">tejas@portfolio — zsh</span>
+      {!minimized && (
+        <button
+          type="button"
+          onClick={onClose}
+          className="ml-auto font-mono text-[10px] text-fog hover:text-mint transition-colors shrink-0"
+        >
+          esc
+        </button>
+      )}
+    </div>
+  );
+
+  if (minimized) {
+    return (
+      <div className="fixed bottom-4 left-1/2 -translate-x-1/2 z-[200] w-[min(92vw,420px)]">
+        <div
+          className="terminal-window rounded-xl border border-white/[0.12] bg-ink-2/95 backdrop-blur-md shadow-2xl overflow-hidden cursor-pointer"
+          onClick={() => setMinimized(false)}
+          role="button"
+          tabIndex={0}
+          onKeyDown={(e) => e.key === "Enter" && setMinimized(false)}
+          aria-label="Restore terminal"
+        >
+          {titleBar}
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div
       className="terminal-overlay fixed inset-0 z-[200] flex items-start justify-center p-3 sm:p-8 md:pt-[12vh]"
@@ -357,24 +428,19 @@ Tip: press ⌘K or Ctrl+K anytime to toggle.`);
       onClick={onClose}
     >
       <div
-        className="terminal-window w-full max-w-2xl rounded-xl border border-white/[0.12] bg-ink-2/95 backdrop-blur-md shadow-2xl overflow-hidden"
+        className={`terminal-window w-full rounded-xl border border-white/[0.12] bg-ink-2/95 backdrop-blur-md shadow-2xl overflow-hidden transition-all duration-200 ${
+          maximized ? "max-w-[min(96vw,960px)]" : "max-w-2xl"
+        }`}
         onClick={(e) => e.stopPropagation()}
       >
-        <div className="flex items-center gap-2 px-4 py-3 border-b border-white/[0.08] bg-ink-0/80">
-          <span className="w-3 h-3 rounded-full bg-red-500/80" />
-          <span className="w-3 h-3 rounded-full bg-amber-400/80" />
-          <span className="w-3 h-3 rounded-full bg-emerald-400/80" />
-          <span className="ml-3 font-mono text-[10px] sm:text-xs text-fog tracking-wider">tejas@portfolio — zsh</span>
-          <button
-            type="button"
-            onClick={onClose}
-            className="ml-auto font-mono text-[10px] text-fog hover:text-mint transition-colors"
-          >
-            esc
-          </button>
-        </div>
+        {titleBar}
 
-        <div ref={scrollRef} className="terminal-body h-[min(60vh,420px)] overflow-y-auto p-4 font-mono text-xs sm:text-sm leading-relaxed">
+        <div
+          ref={scrollRef}
+          className={`terminal-body overflow-y-auto p-4 font-mono text-xs sm:text-sm leading-relaxed ${
+            maximized ? "h-[min(72vh,640px)]" : "h-[min(60vh,420px)]"
+          }`}
+        >
           {lines.map((line, i) => (
             <div
               key={i}

@@ -128,13 +128,13 @@ export default function Views() {
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             placeholder="Password"
-            className="w-full rounded-lg border border-white/[0.08] bg-ink-0/50 px-3 py-2.5 text-sm text-paper outline-none focus:border-mint/40 mb-4"
+            className="form-input w-full rounded-lg px-3 py-2.5 text-sm mb-4"
           />
           {error && <p className="text-red-400 text-xs mb-3">{error}</p>}
           <button
             type="submit"
             disabled={loading}
-            className="w-full py-2.5 rounded-full bg-gradient-to-r from-iris to-mint text-ink-0 text-sm font-medium disabled:opacity-50"
+            className="w-full py-2.5 rounded-full bg-gradient-to-r from-iris to-mint text-ink-contrast text-sm font-medium disabled:opacity-50"
           >
             {loading ? "Loading..." : "Unlock dashboard"}
           </button>

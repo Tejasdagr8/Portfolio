@@ -76,7 +76,7 @@ export default function Hire() {
             href="/resume.pdf"
             download
             data-track="hire_resume"
-            className="flex items-center justify-center gap-2 w-full py-3.5 rounded-full bg-gradient-to-r from-iris to-mint text-ink-0 text-sm font-medium hover:opacity-90 transition-opacity"
+            className="flex items-center justify-center gap-2 w-full py-3.5 rounded-full bg-gradient-to-r from-iris to-mint text-ink-contrast text-sm font-medium hover:opacity-90 transition-opacity"
           >
             <FaDownload size={12} /> Download resume
           </a>

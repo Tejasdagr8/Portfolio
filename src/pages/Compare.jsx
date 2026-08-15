@@ -25,7 +25,7 @@ export default function Compare() {
         </div>
 
         <div className="flex flex-wrap gap-4 mt-10">
-          <Link to="/" className="px-5 py-2.5 rounded-full bg-gradient-to-r from-iris to-mint text-ink-0 text-sm font-medium">
+          <Link to="/" className="px-5 py-2.5 rounded-full bg-gradient-to-r from-iris to-mint text-ink-contrast text-sm font-medium">
             Full portfolio
           </Link>
           <Link to="/hire" className="px-5 py-2.5 rounded-full border border-white/[0.15] text-fog text-sm hover:text-paper">

@@ -20,6 +20,7 @@ export default {
         iris: "var(--iris)",
         mint: "var(--mint)",
         fog: "var(--fog)",
+        "fog-muted": "var(--fog-muted)",
         paper: "var(--paper)",
         ember: "var(--ember)",
       },

@@ -9,6 +9,9 @@
   --line: rgba(168, 178, 214, 0.13);
   --paper: #eaedf6;
   --fog: #9aa3bd;
+  --fog-muted: #7a849e;
+  --outline-stroke: rgba(234, 237, 246, 0.38);
+  --border-subtle: rgba(255, 255, 255, 0.15);
   --iris: #8c7bff;
   --mint: #5ee6d0;
   --ember: #ffb36b;
@@ -20,6 +23,10 @@
   --hero-bg: linear-gradient(180deg, #0b0e16 0%, #0f1420 100%);
   --muted-surface: rgba(255, 255, 255, 0.03);
   --muted-surface-hover: rgba(255, 255, 255, 0.06);
+  --input-bg: rgba(11, 14, 22, 0.55);
+  --input-text: #eaedf6;
+  --input-placeholder: #7a849e;
+  --input-border: rgba(255, 255, 255, 0.1);
 }
 
 html {
@@ -248,7 +255,10 @@ html.paper-mode {
   --ink-contrast: #0b0e16;
   --line: rgba(15, 23, 42, 0.1);
   --paper: #0f172a;
-  --fog: #64748b;
+  --fog: #475569;
+  --fog-muted: #64748b;
+  --outline-stroke: rgba(15, 23, 42, 0.28);
+  --border-subtle: rgba(15, 23, 42, 0.14);
   --iris: #4f46e5;
   --mint: #0d9488;
   --ember: #c2410c;
@@ -260,6 +270,10 @@ html.paper-mode {
   --hero-bg: linear-gradient(180deg, #f0f4f8 0%, #f6f7f9 100%);
   --muted-surface: rgba(15, 23, 42, 0.04);
   --muted-surface-hover: rgba(15, 23, 42, 0.07);
+  --input-bg: #ffffff;
+  --input-text: #0f172a;
+  --input-placeholder: #94a3b8;
+  --input-border: rgba(15, 23, 42, 0.12);
 }
 
 html.paper-mode body::after {
@@ -285,6 +299,58 @@ html.paper-mode .terminal-overlay {
 
 .hero-section {
   background: var(--hero-bg);
+}
+
+html.paper-mode .border-white\/\[0\.15\] {
+  border-color: var(--border-subtle);
+}
+
+.form-input {
+  background: var(--input-bg);
+  color: var(--input-text);
+  border: 1px solid var(--input-border);
+}
+
+.form-input::placeholder {
+  color: var(--input-placeholder);
+}
+
+.form-input:focus {
+  border-color: rgba(13, 148, 136, 0.45);
+  outline: none;
+}
+
+.form-input:-webkit-autofill,
+.form-input:-webkit-autofill:hover,
+.form-input:-webkit-autofill:focus {
+  -webkit-box-shadow: 0 0 0 1000px var(--input-bg) inset;
+  -webkit-text-fill-color: var(--input-text);
+  caret-color: var(--input-text);
+  transition: background-color 9999s ease-out;
+}
+
+.hero-name-outline {
+  color: transparent;
+  -webkit-text-stroke: 1.5px var(--outline-stroke);
+}
+
+html.paper-mode .hero-name-outline {
+  color: transparent;
+  -webkit-text-stroke: 1.5px var(--outline-stroke);
+}
+
+.btn-ghost {
+  border: 1px solid var(--border-subtle);
+}
+
+html.paper-mode .btn-ghost {
+  color: var(--fog);
+}
+
+html.paper-mode .btn-ghost:hover {
+  color: var(--paper);
+  border-color: rgba(13, 148, 136, 0.45);
+  background: rgba(13, 148, 136, 0.06);
 }
 
 html.paper-mode .border-white\/\[0\.06\],

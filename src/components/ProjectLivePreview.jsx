@@ -53,7 +53,7 @@ export default function ProjectLivePreview({ livePreview, projectTitle, liveUrl 
                 onLoad={() => setLoaded(true)}
               />
               <div className="absolute inset-0 bg-[#0a0d14]/0 group-hover:bg-[#0a0d14]/40 transition-colors flex items-center justify-center">
-                <span className="opacity-0 group-hover:opacity-100 transition-opacity inline-flex items-center gap-2 px-4 py-2 rounded-full bg-gradient-to-r from-iris to-mint text-ink-0 text-xs font-medium">
+                <span className="opacity-0 group-hover:opacity-100 transition-opacity inline-flex items-center gap-2 px-4 py-2 rounded-full bg-gradient-to-r from-iris to-mint text-ink-contrast text-xs font-medium">
                   <FaExternalLinkAlt size={10} /> Visit live site
                 </span>
               </div>

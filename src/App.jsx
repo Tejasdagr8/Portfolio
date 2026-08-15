@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useMemo, useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { motion } from "framer-motion";
-import { FaGithub, FaLinkedin, FaEnvelope, FaPhone, FaDownload, FaExternalLinkAlt, FaArrowUp, FaBars, FaTimes, FaTerminal, FaGlobe, FaBriefcase } from "react-icons/fa";
+import { FaGithub, FaLinkedin, FaEnvelope, FaPhone, FaDownload, FaExternalLinkAlt, FaArrowUp, FaBars, FaTimes, FaTerminal, FaBriefcase } from "react-icons/fa";
 import ProfileAvatar from "./components/ProfileAvatar";
 import GradientField from "./components/GradientField";
 import SkillsMarquee from "./components/SkillsMarquee";
@@ -27,12 +27,6 @@ import { unlockAchievement } from "./components/AchievementBadges";
 import { projects } from "./data/projects";
 import { publications, paperLinks } from "./data/publications";
 import { experience } from "./data/experience";
-
-const COMPANY_LINK = {
-  label: "TatvaOps",
-  href: "https://vantage.withtatva.ai/",
-  track: "tatvaops",
-};
 
 const CONTACT_EMAILS = {
   primary: "coooltejasdagr@gmail.com",
@@ -357,7 +351,7 @@ function App() {
                 className={`px-2.5 py-1.5 rounded-md font-mono text-[10px] tracking-[0.14em] uppercase transition-colors relative ${
                   activeSection === id
                     ? "text-paper bg-[var(--muted-surface-hover)]"
-                    : "text-fog hover:text-paper hover:bg-[var(--muted-surface)]"
+                    : "text-fog-muted hover:text-paper hover:bg-[var(--muted-surface)]"
                 }`}
               >
                 {id}
@@ -427,7 +421,7 @@ function App() {
                   className={`capitalize py-3 px-4 rounded-xl text-base transition-colors ${
                     activeSection === id
                       ? "text-paper bg-[var(--muted-surface-hover)] border border-iris/30"
-                      : "text-fog hover:text-paper hover:bg-[var(--muted-surface)]"
+                      : "text-fog-muted hover:text-paper hover:bg-[var(--muted-surface)]"
                   }`}
                 >
                   {id}
@@ -491,10 +485,7 @@ function App() {
 
               <h1 className="font-display font-extrabold uppercase leading-[0.95] tracking-tight break-words">
                 <span className="block text-[2.75rem] sm:text-6xl md:text-8xl text-paper">Tejas</span>
-                <span
-                  className="block text-[2.75rem] sm:text-6xl md:text-8xl text-transparent"
-                  style={{ WebkitTextStroke: "1.5px rgba(234,237,246,0.38)" }}
-                >
+                <span className="hero-name-outline block text-[2.75rem] sm:text-6xl md:text-8xl">
                   Melkote
                 </span>
                 <span className="block text-[2rem] sm:text-5xl md:text-7xl mt-1">
@@ -513,14 +504,14 @@ function App() {
                 )}
               </p>
 
-              <div className="font-mono text-[11px] sm:text-xs text-fog tracking-wide flex flex-wrap justify-center lg:justify-start gap-x-4 sm:gap-x-6 gap-y-2 mt-6 sm:mt-8">
+              <div className="font-mono text-[11px] sm:text-xs text-fog-muted tracking-wide flex flex-wrap justify-center lg:justify-start gap-x-4 sm:gap-x-6 gap-y-2 mt-6 sm:mt-8">
                 <span><span className="text-mint">●</span> Bengaluru, IN</span>
                 <span><span className="status-pulse text-mint">●</span> Open to opportunities</span>
                 <span className="hidden sm:inline"><span className="text-mint">●</span> ⌘K terminal · R speed run</span>
               </div>
 
               <p className="font-mono text-xs sm:text-sm text-fog mt-4 flex flex-wrap justify-center lg:justify-start items-center gap-2">
-                <span className="text-fog/60">currently building</span>
+                <span className="text-fog-muted">currently building</span>
                 <TypingHero />
               </p>
 
@@ -529,7 +520,7 @@ function App() {
                   href={heroCtas.primary.href}
                   {...(heroCtas.primary.download ? { download: true } : {})}
                   data-track={heroCtas.primary.track}
-                  className="w-full sm:w-auto text-center px-6 sm:px-7 py-3 rounded-full bg-gradient-to-r from-iris to-mint text-ink-0 text-sm font-medium hover:opacity-90 transition-opacity"
+                  className="w-full sm:w-auto text-center px-6 sm:px-7 py-3 rounded-full bg-gradient-to-r from-iris to-mint text-ink-contrast text-sm font-medium hover:opacity-90 transition-opacity"
                 >
                   {heroCtas.primary.label}
                 </a>
@@ -537,7 +528,7 @@ function App() {
                   href={heroCtas.secondary.href}
                   {...(heroCtas.secondary.download ? { download: true } : {})}
                   data-track={heroCtas.secondary.track}
-                  className="w-full sm:w-auto text-center px-6 sm:px-7 py-3 rounded-full border border-white/[0.15] text-fog text-sm hover:text-paper hover:border-mint/40 hover:bg-mint/[0.06] transition-all"
+                  className="btn-ghost w-full sm:w-auto text-center px-6 sm:px-7 py-3 rounded-full text-fog text-sm hover:text-paper transition-all"
                 >
                   {heroCtas.secondary.label}
                 </a>
@@ -577,7 +568,7 @@ function App() {
           </motion.div>
         </motion.div>
 
-        <div className="scroll-hint absolute bottom-4 md:bottom-6 left-1/2 font-mono text-[10px] tracking-[0.28em] uppercase text-fog/70 z-[2] pointer-events-none">
+        <div className="scroll-hint absolute bottom-4 md:bottom-6 left-1/2 font-mono text-[10px] tracking-[0.28em] uppercase text-fog-muted z-[2] pointer-events-none">
           scroll
         </div>
       </section>
@@ -1006,7 +997,7 @@ function App() {
               type="button"
               onClick={() => setPacketOpen(true)}
               data-track="contact_packet"
-              className="px-6 py-3 rounded-full bg-gradient-to-r from-iris to-mint text-ink-0 text-sm font-medium hover:opacity-90 inline-flex items-center gap-2"
+              className="px-6 py-3 rounded-full bg-gradient-to-r from-iris to-mint text-ink-contrast text-sm font-medium hover:opacity-90 inline-flex items-center gap-2"
             >
               <FaBriefcase size={12} /> Recruiter packet
             </button>
@@ -1045,14 +1036,14 @@ function App() {
                 value={messageForm.name}
                 onChange={(e) => setMessageForm((prev) => ({ ...prev, name: e.target.value }))}
                 placeholder="Your name"
-                className="rounded-lg border border-white/[0.08] bg-ink-0/50 px-3 py-2 text-sm text-paper placeholder:text-fog/60 outline-none focus:border-mint/40 font-body"
+                className="form-input rounded-lg px-3 py-2 text-sm font-body"
               />
               <input
                 type="email"
                 value={messageForm.email}
                 onChange={(e) => setMessageForm((prev) => ({ ...prev, email: e.target.value }))}
                 placeholder="Your email"
-                className="rounded-lg border border-white/[0.08] bg-ink-0/50 px-3 py-2 text-sm text-paper placeholder:text-fog/60 outline-none focus:border-mint/40 font-body"
+                className="form-input rounded-lg px-3 py-2 text-sm font-body"
               />
             </div>
             <textarea
@@ -1060,7 +1051,7 @@ function App() {
               onChange={(e) => setMessageForm((prev) => ({ ...prev, message: e.target.value }))}
               placeholder="Write your message..."
               rows={4}
-              className="w-full rounded-lg border border-white/[0.08] bg-ink-0/50 px-3 py-2 text-sm text-paper placeholder:text-fog/60 outline-none focus:border-mint/40 font-body"
+              className="form-input w-full rounded-lg px-3 py-2 text-sm font-body"
             />
             <div className="mt-4 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
               <div className="min-h-4 order-2 sm:order-1">
@@ -1085,7 +1076,7 @@ function App() {
                 <button
                   type="submit"
                   disabled={isSubmitting}
-                  className="flex-1 sm:flex-none px-5 py-2.5 rounded-full bg-gradient-to-r from-iris to-mint text-ink-0 text-xs font-medium hover:opacity-90 transition-opacity disabled:opacity-50"
+                  className="flex-1 sm:flex-none px-5 py-2.5 rounded-full bg-gradient-to-r from-iris to-mint text-ink-contrast text-xs font-medium hover:opacity-90 transition-opacity disabled:opacity-50"
                 >
                   {isSubmitting ? "Sending..." : "Send Message"}
                 </button>
@@ -1104,13 +1095,13 @@ function App() {
               <FaGithub size={14} /> GitHub
             </a>
             <a
-              href={COMPANY_LINK.href}
+              href="https://www.linkedin.com/in/tejas-melkote-390545309/"
               target="_blank"
               rel="noreferrer"
-              data-track={COMPANY_LINK.track}
+              data-track="linkedin"
               className="flex items-center gap-2 text-fog hover:text-mint transition-colors"
             >
-              <FaGlobe size={14} /> {COMPANY_LINK.label}
+              <FaLinkedin size={14} /> LinkedIn
             </a>
           </motion.div>
         </motion.div>

@@ -474,32 +474,63 @@ function App() {
                 </a>
               </div>
 
-              <div className="flex flex-wrap justify-center lg:justify-start items-center gap-4 sm:gap-5 mt-6 sm:mt-8 text-fog">
-                <a href="https://github.com/Tejasdagr8" target="_blank" rel="noreferrer" data-track="github" className="hover:text-paper transition-colors text-xl" aria-label="GitHub — Tejasdagr8">
-                  <FaGithub />
+              <div className="inline-flex flex-wrap items-center gap-1 sm:gap-1.5 mt-6 sm:mt-8 p-1.5 sm:p-2 rounded-2xl border border-white/[0.10] bg-[#141929]/50 backdrop-blur-sm">
+                <a
+                  href="https://github.com/Tejasdagr8"
+                  target="_blank"
+                  rel="noreferrer"
+                  data-track="github"
+                  className="flex items-center justify-center w-9 h-9 rounded-xl text-fog hover:text-paper hover:bg-white/[0.06] transition-colors"
+                  aria-label="GitHub — Tejasdagr8"
+                  title="GitHub personal"
+                >
+                  <FaGithub size={16} />
                 </a>
                 <a
                   href="https://github.com/tejasm-tatvaops"
                   target="_blank"
                   rel="noreferrer"
                   data-track="github_work"
-                  className="font-mono text-[10px] tracking-wide px-2.5 py-1 rounded-full border border-white/[0.12] hover:text-mint hover:border-mint/35 transition-colors"
-                  title="GitHub work account — tejasm-tatvaops"
+                  className="font-mono text-[10px] tracking-wide px-2.5 py-2 rounded-xl border border-mint/20 text-fog hover:text-mint hover:bg-mint/[0.06] transition-colors"
+                  title="GitHub work — tejasm-tatvaops"
                 >
                   @tejasm-tatvaops
                 </a>
-                <a href="https://www.linkedin.com/in/tejas-melkote-390545309/" target="_blank" rel="noreferrer" data-track="linkedin" className="hover:text-mint transition-colors text-xl" aria-label="LinkedIn">
-                  <FaLinkedin />
+                <span className="hidden sm:block w-px h-5 bg-white/[0.10] mx-0.5" aria-hidden="true" />
+                <a
+                  href={COMPANY_LINK.href}
+                  target="_blank"
+                  rel="noreferrer"
+                  data-track={COMPANY_LINK.track}
+                  className="font-mono text-[10px] tracking-wide px-2.5 py-2 rounded-xl border border-iris/20 text-fog hover:text-iris hover:bg-iris/[0.06] transition-colors inline-flex items-center gap-1.5"
+                  title="TatvaOps — Vantage"
+                >
+                  <FaGlobe size={11} /> {COMPANY_LINK.label}
                 </a>
-                <a href="mailto:coooltejasdagr@gmail.com" data-track="email" className="hover:text-mint transition-colors text-xl" aria-label="Email">
-                  <FaEnvelope />
+                <a
+                  href="https://www.linkedin.com/in/tejas-melkote-390545309/"
+                  target="_blank"
+                  rel="noreferrer"
+                  data-track="linkedin"
+                  className="flex items-center justify-center w-9 h-9 rounded-xl text-fog hover:text-mint hover:bg-white/[0.06] transition-colors"
+                  aria-label="LinkedIn"
+                >
+                  <FaLinkedin size={16} />
+                </a>
+                <a
+                  href="mailto:coooltejasdagr@gmail.com"
+                  data-track="email"
+                  className="flex items-center justify-center w-9 h-9 rounded-xl text-fog hover:text-mint hover:bg-white/[0.06] transition-colors"
+                  aria-label="Email"
+                >
+                  <FaEnvelope size={16} />
                 </a>
               </div>
             </div>
           </motion.div>
         </motion.div>
 
-        <div className="scroll-hint absolute bottom-6 md:bottom-8 left-1/2 font-mono text-[11px] tracking-[0.3em] uppercase text-fog z-[2]">
+        <div className="scroll-hint absolute bottom-4 md:bottom-6 left-1/2 font-mono text-[10px] tracking-[0.28em] uppercase text-fog/70 z-[2] pointer-events-none">
           scroll
         </div>
       </section>

@@ -1,13 +1,15 @@
-import { useEffect, useState } from "react";
-import { FaGithub, FaStar, FaCodeBranch, FaClock } from "react-icons/fa";
+import { useCallback, useEffect, useState } from "react";
+import { FaGithub, FaStar, FaCodeBranch, FaClock, FaSync } from "react-icons/fa";
+import ContributionGraph from "./ContributionGraph";
 
 const ACCOUNTS = [
   { username: "Tejasdagr8", label: "personal", accent: "iris" },
   { username: "tejasm-tatvaops", label: "work", accent: "mint" },
 ];
 
-const CACHE_KEY = "github_pulse_cache_v2";
-const CACHE_TTL = 1000 * 60 * 30;
+const CACHE_KEY = "github_pulse_cache_v4";
+const REFRESH_MS = 1000 * 60 * 15; // re-fetch every 15 min while page is open
+const HIGHLIGHT_START = "2026-03-25";
 
 const FALLBACK = {
   accounts: ACCOUNTS.map(({ username, label, accent }) => ({
@@ -26,40 +28,58 @@ const FALLBACK = {
   recentRepo: null,
   recentAccount: null,
   pushedAgo: null,
+  contributions: [],
+  contributionTotal: 0,
+  phaseTotal: 0,
+  fetchedAt: null,
 };
 
-function formatPushedAgo(iso) {
-  if (!iso) return null;
-  const diff = Date.now() - new Date(iso).getTime();
-  const days = Math.floor(diff / 86400000);
-  if (days === 0) return "today";
-  if (days === 1) return "1d ago";
-  if (days < 30) return `${days}d ago`;
-  const months = Math.floor(days / 30);
-  return months === 1 ? "1mo ago" : `${months}mo ago`;
+function phaseTotal(contributions) {
+  return contributions
+    .filter((d) => d.date >= HIGHLIGHT_START)
+    .reduce((sum, d) => sum + d.count, 0);
 }
 
-function topLanguage(repos) {
-  const langs = repos.flatMap((r) => r.language).filter(Boolean);
-  if (!langs.length) return "Python";
-  const counts = langs.reduce((acc, l) => {
-    acc[l] = (acc[l] || 0) + 1;
-    return acc;
-  }, {});
-  return Object.entries(counts).sort((a, b) => b[1] - a[1])[0][0];
+function readCache() {
+  try {
+    const raw = sessionStorage.getItem(CACHE_KEY);
+    if (!raw) return null;
+    return JSON.parse(raw);
+  } catch {
+    return null;
+  }
 }
 
-async function fetchAccount(username, label, accent) {
-  const [userRes, reposRes] = await Promise.all([
+function writeCache(data) {
+  sessionStorage.setItem(CACHE_KEY, JSON.stringify({ ts: Date.now(), data }));
+}
+
+const CONTRIB_API = "https://github-contributions-api.jogruber.de/v4";
+
+async function fetchAccountClient({ username, label, accent }) {
+  const [userRes, reposRes, contribRes] = await Promise.all([
     fetch(`https://api.github.com/users/${username}`),
     fetch(`https://api.github.com/users/${username}/repos?sort=pushed&per_page=8`),
+    fetch(`${CONTRIB_API}/${username}?y=last`).catch(() => null),
   ]);
 
-  if (!userRes.ok) throw new Error(`user fetch failed: ${username}`);
+  if (!userRes.ok) throw new Error(`user: ${username}`);
 
   const user = await userRes.json();
   const repos = reposRes.ok ? await reposRes.json() : [];
+  const contribData = contribRes?.ok ? await contribRes.json() : { contributions: [] };
   const latest = repos[0];
+
+  const pushedAgo = latest?.pushed_at
+    ? (() => {
+        const days = Math.floor((Date.now() - new Date(latest.pushed_at).getTime()) / 86400000);
+        if (days === 0) return "today";
+        if (days === 1) return "1d ago";
+        if (days < 30) return `${days}d ago`;
+        const months = Math.floor(days / 30);
+        return months === 1 ? "1mo ago" : `${months}mo ago`;
+      })()
+    : null;
 
   return {
     username,
@@ -70,26 +90,52 @@ async function fetchAccount(username, label, accent) {
     profileUrl: user.html_url,
     recentRepo: latest?.name || null,
     pushedAt: latest?.pushed_at || null,
-    pushedAgo: formatPushedAgo(latest?.pushed_at),
-    repos,
+    pushedAgo,
+    contributions: contribData.contributions || [],
   };
 }
 
-function mergeAccounts(accounts) {
-  const allRepos = accounts.flatMap((a) => a.repos || []);
-  const latest = accounts
-    .filter((a) => a.pushedAt)
-    .sort((a, b) => new Date(b.pushedAt) - new Date(a.pushedAt))[0];
+async function fetchPulseDirect() {
+  const raw = await Promise.all(ACCOUNTS.map(fetchAccountClient));
+  const byDate = new Map();
+  for (const account of raw) {
+    for (const day of account.contributions) {
+      byDate.set(day.date, (byDate.get(day.date) || 0) + day.count);
+    }
+  }
+  const contributions = [...byDate.entries()]
+    .sort(([a], [b]) => a.localeCompare(b))
+    .map(([date, count]) => ({ date, count, level: Math.min(4, count <= 0 ? 0 : count <= 3 ? 1 : count <= 6 ? 2 : count <= 9 ? 3 : 4) }));
+
+  const latest = raw.filter((a) => a.pushedAt).sort((a, b) => new Date(b.pushedAt) - new Date(a.pushedAt))[0];
 
   return {
-    accounts: accounts.map(({ repos: _r, pushedAt: _p, ...rest }) => rest),
-    totalRepos: accounts.reduce((sum, a) => sum + (a.publicRepos || 0), 0),
-    totalFollowers: accounts.reduce((sum, a) => sum + (a.followers || 0), 0),
-    topLang: topLanguage(allRepos),
+    accounts: raw.map(({ contributions: _c, pushedAt: _p, ...rest }) => rest),
+    totalRepos: raw.reduce((s, a) => s + a.publicRepos, 0),
+    totalFollowers: raw.reduce((s, a) => s + a.followers, 0),
+    topLang: "Python",
     recentRepo: latest?.recentRepo || null,
     recentAccount: latest?.username || null,
-    pushedAgo: latest ? formatPushedAgo(latest.pushedAt) : null,
+    pushedAgo: latest?.pushedAgo || null,
+    contributions,
+    contributionTotal: contributions.reduce((s, d) => s + d.count, 0),
+    fetchedAt: new Date().toISOString(),
   };
+}
+
+async function fetchPulse() {
+  try {
+    const res = await fetch("/api/github-pulse");
+    if (res.ok) {
+      const data = await res.json();
+      return { ...data, phaseTotal: phaseTotal(data.contributions || []) };
+    }
+  } catch {
+    /* local dev or API unavailable — fall back to client fetch */
+  }
+
+  const data = await fetchPulseDirect();
+  return { ...data, phaseTotal: phaseTotal(data.contributions || []) };
 }
 
 function StatChip({ icon: Icon, iconClass, children }) {
@@ -101,46 +147,67 @@ function StatChip({ icon: Icon, iconClass, children }) {
   );
 }
 
+function formatFetchedAgo(iso) {
+  if (!iso) return null;
+  const mins = Math.floor((Date.now() - new Date(iso).getTime()) / 60000);
+  if (mins < 1) return "just now";
+  if (mins < 60) return `${mins}m ago`;
+  const hrs = Math.floor(mins / 60);
+  return `${hrs}h ago`;
+}
+
 export default function GitHubPulse() {
   const [stats, setStats] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [refreshing, setRefreshing] = useState(false);
+  const [fetchedLabel, setFetchedLabel] = useState(null);
+
+  const load = useCallback(async ({ background = false } = {}) => {
+    if (background) setRefreshing(true);
+    else setLoading(true);
+
+    try {
+      const data = await fetchPulse();
+      writeCache(data);
+      setStats(data);
+      setFetchedLabel(formatFetchedAgo(data.fetchedAt));
+    } catch {
+      if (!background) setStats((prev) => prev ?? FALLBACK);
+    } finally {
+      setLoading(false);
+      setRefreshing(false);
+    }
+  }, []);
 
   useEffect(() => {
-    let cancelled = false;
-
-    async function load() {
-      try {
-        const cached = sessionStorage.getItem(CACHE_KEY);
-        if (cached) {
-          const parsed = JSON.parse(cached);
-          if (Date.now() - parsed.ts < CACHE_TTL) {
-            if (!cancelled) {
-              setStats(parsed.data);
-              setLoading(false);
-            }
-            return;
-          }
-        }
-
-        const accounts = await Promise.all(
-          ACCOUNTS.map(({ username, label, accent }) => fetchAccount(username, label, accent))
-        );
-        const data = mergeAccounts(accounts);
-
-        sessionStorage.setItem(CACHE_KEY, JSON.stringify({ ts: Date.now(), data }));
-        if (!cancelled) setStats(data);
-      } catch {
-        if (!cancelled) setStats(FALLBACK);
-      } finally {
-        if (!cancelled) setLoading(false);
-      }
+    const cached = readCache();
+    if (cached?.data) {
+      setStats({ ...cached.data, phaseTotal: phaseTotal(cached.data.contributions || []) });
+      setFetchedLabel(formatFetchedAgo(cached.data.fetchedAt));
+      setLoading(false);
+      load({ background: true });
+    } else {
+      load();
     }
 
-    load();
-    return () => {
-      cancelled = true;
+    const interval = setInterval(() => load({ background: true }), REFRESH_MS);
+
+    const onVisible = () => {
+      if (document.visibilityState === "visible") load({ background: true });
     };
-  }, []);
+    document.addEventListener("visibilitychange", onVisible);
+
+    return () => {
+      clearInterval(interval);
+      document.removeEventListener("visibilitychange", onVisible);
+    };
+  }, [load]);
+
+  useEffect(() => {
+    if (!stats?.fetchedAt) return;
+    const tick = setInterval(() => setFetchedLabel(formatFetchedAgo(stats.fetchedAt)), 60000);
+    return () => clearInterval(tick);
+  }, [stats?.fetchedAt]);
 
   const display = stats || FALLBACK;
 
@@ -158,8 +225,14 @@ export default function GitHubPulse() {
                   live
                 </span>
               )}
-              {loading && (
-                <span className="text-fog/50 normal-case tracking-normal text-[10px]">syncing…</span>
+              {(loading || refreshing) && (
+                <span className="text-fog/50 normal-case tracking-normal text-[10px] inline-flex items-center gap-1">
+                  <FaSync size={9} className={refreshing ? "animate-spin" : ""} />
+                  {loading ? "syncing…" : "refreshing…"}
+                </span>
+              )}
+              {fetchedLabel && !loading && (
+                <span className="text-fog/40 normal-case tracking-normal text-[10px]">· {fetchedLabel}</span>
               )}
             </div>
 
@@ -197,7 +270,20 @@ export default function GitHubPulse() {
               <span className="text-fog/70">top</span>
               <span className="text-mint">{display.topLang}</span>
             </StatChip>
+            {!loading && display.contributionTotal > 0 && (
+              <StatChip icon={FaGithub} iconClass="text-[#39d353]">
+                <span className="text-paper tabular-nums">{display.contributionTotal.toLocaleString()}</span>
+                <span className="text-fog/70">contrib</span>
+              </StatChip>
+            )}
           </div>
+
+          <ContributionGraph
+            contributions={display.contributions}
+            total={display.contributionTotal}
+            phaseTotal={display.phaseTotal}
+            loading={loading && !display.contributions.length}
+          />
 
           <div className="grid sm:grid-cols-2 gap-2.5">
             {display.accounts.map((account) => (

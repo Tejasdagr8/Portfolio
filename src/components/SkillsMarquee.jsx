@@ -7,9 +7,9 @@ export default function SkillsMarquee() {
   const track = [...marqueeItems, ...marqueeItems];
 
   return (
-    <div className="relative border-y border-white/[0.10] overflow-hidden py-4 sm:py-5 bg-[#0B0E16]/70" aria-hidden="true">
-      <div className="pointer-events-none absolute inset-y-0 left-0 w-12 sm:w-20 z-10 bg-gradient-to-r from-[#0B0E16] to-transparent" />
-      <div className="pointer-events-none absolute inset-y-0 right-0 w-12 sm:w-20 z-10 bg-gradient-to-l from-[#0B0E16] to-transparent" />
+    <div className="relative border-y border-white/[0.10] overflow-hidden py-4 sm:py-5 bg-[var(--surface-band)]" aria-hidden="true">
+      <div className="pointer-events-none absolute inset-y-0 left-0 w-12 sm:w-20 z-10 bg-gradient-to-r from-[var(--surface-fade)] to-transparent" />
+      <div className="pointer-events-none absolute inset-y-0 right-0 w-12 sm:w-20 z-10 bg-gradient-to-l from-[var(--surface-fade)] to-transparent" />
 
       <div className="flex items-center gap-4 sm:gap-6">
         <p className="hidden sm:block shrink-0 pl-4 sm:pl-6 lg:pl-8 font-mono text-[10px] tracking-[0.2em] uppercase text-fog/60">

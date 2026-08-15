@@ -10,7 +10,7 @@ const FILES = {
 Most engineers pick a layer — I work at the seam where models meet users, latency, and edge cases.
 Focus: ML systems end-to-end | Currently: LLM agents & RAG | Internship: SDE @ SuperAGI`,
 
-  "superagi.txt": `Software Development Engineer Intern · Jan 2026 – Jun 2026
+  "superagi.txt": `Software Development Engineer Intern · Jan 2026 – May 2026
 SuperAGI · Bangalore, India
 
 Built marketing campaign features (Email & WhatsApp) in production.
@@ -357,10 +357,10 @@ Tip: press ⌘K or Ctrl+K anytime to toggle.`);
       onClick={onClose}
     >
       <div
-        className="terminal-window w-full max-w-2xl rounded-xl border border-white/[0.12] bg-[#0a0d14]/95 backdrop-blur-md shadow-2xl overflow-hidden"
+        className="terminal-window w-full max-w-2xl rounded-xl border border-white/[0.12] bg-ink-2/95 backdrop-blur-md shadow-2xl overflow-hidden"
         onClick={(e) => e.stopPropagation()}
       >
-        <div className="flex items-center gap-2 px-4 py-3 border-b border-white/[0.08] bg-[#0B0E16]/80">
+        <div className="flex items-center gap-2 px-4 py-3 border-b border-white/[0.08] bg-ink-0/80">
           <span className="w-3 h-3 rounded-full bg-red-500/80" />
           <span className="w-3 h-3 rounded-full bg-amber-400/80" />
           <span className="w-3 h-3 rounded-full bg-emerald-400/80" />

@@ -2,7 +2,7 @@ export const experience = [
   {
     company: "SuperAGI",
     role: "Software Development Engineer Intern",
-    period: "Jan 2026 – Jun 2026",
+    period: "Jan 2026 – May 2026",
     location: "Bangalore, India",
     description:
       "Built marketing campaign features (Email and WhatsApp) in a full-stack production codebase using Go, Ruby on Rails, and Vue.js. Deployed 15+ pull requests via Jenkins and ArgoCD CI/CD, including email-campaign validation and WhatsApp test-send features. Worked with Sidekiq, Redis, and Kafka for background jobs and event streaming; ran database migrations and integrated CRM platform workflows.",

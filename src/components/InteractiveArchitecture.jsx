@@ -24,7 +24,7 @@ export default function InteractiveArchitecture({ flowKey, title }) {
                   className={`px-3 py-2 rounded-lg border font-mono text-[11px] whitespace-nowrap transition-colors ${
                     active === id
                       ? "border-mint/50 bg-mint/[0.08] text-paper"
-                      : "border-white/[0.12] bg-ink-0/50 text-fog hover:text-paper"
+                      : "border-white/[0.12] bg-[var(--muted-surface)] text-fog hover:text-paper"
                   }`}
                 >
                   {n?.label}

@@ -29,7 +29,7 @@ export default function ProjectSpotlight({ project, onClose }) {
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
-          className="fixed inset-0 z-[150] flex items-end sm:items-center justify-center p-0 sm:p-6 bg-[#05070c]/80 backdrop-blur-sm"
+          className="fixed inset-0 z-[150] flex items-end sm:items-center justify-center p-0 sm:p-6 bg-ink-0/80 backdrop-blur-sm"
           onClick={onClose}
           role="dialog"
           aria-modal="true"
@@ -40,10 +40,10 @@ export default function ProjectSpotlight({ project, onClose }) {
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: 24, scale: 0.98 }}
             transition={{ type: "spring", damping: 28, stiffness: 320 }}
-            className="w-full sm:max-w-2xl lg:max-w-3xl max-h-[90dvh] overflow-y-auto rounded-t-2xl sm:rounded-2xl border border-white/[0.12] bg-[#0a0d14] shadow-2xl"
+            className="w-full sm:max-w-2xl lg:max-w-3xl max-h-[90dvh] overflow-y-auto rounded-t-2xl sm:rounded-2xl border border-white/[0.12] bg-ink-2 shadow-2xl"
             onClick={(e) => e.stopPropagation()}
           >
-            <div className="sticky top-0 z-10 flex items-start justify-between gap-4 p-5 sm:p-6 border-b border-white/[0.08] bg-[#0a0d14]/95 backdrop-blur-md">
+            <div className="sticky top-0 z-10 flex items-start justify-between gap-4 p-5 sm:p-6 border-b border-white/[0.08] bg-ink-2/95 backdrop-blur-md">
               <div className="min-w-0">
                 <p className="font-mono text-[10px] tracking-[0.2em] uppercase text-mint mb-2">
                   project spotlight · {spotlight?.year || "—"}

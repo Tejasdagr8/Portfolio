@@ -156,7 +156,7 @@ async function fetchPulse({ bustCache = false } = {}) {
 
 function StatChip({ icon: Icon, iconClass, children }) {
   return (
-    <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full border border-white/[0.08] bg-white/[0.03] text-[11px] sm:text-xs">
+    <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full border border-white/[0.08] bg-[var(--muted-surface)] text-[11px] sm:text-xs">
       <Icon className={iconClass} size={10} />
       {children}
     </span>
@@ -239,7 +239,7 @@ export default function GitHubPulse() {
   const display = stats || FALLBACK;
 
   return (
-    <section className="border-y border-white/[0.08] bg-gradient-to-b from-[#0B0E16]/40 to-[#141929]/30">
+    <section className="border-y border-white/[0.08] bg-[var(--surface-band)]">
       <div className="w-full max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-5 sm:py-6">
         <div className="card-glass px-4 sm:px-5 py-4 sm:py-5 space-y-4">
           <div className="flex flex-wrap items-center justify-between gap-3">

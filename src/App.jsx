@@ -339,71 +339,86 @@ function App() {
       <div className="fixed top-0 left-0 z-[60] h-[2px] bg-gradient-to-r from-[#8C7BFF] to-[#5EE6D0]" style={{ width: `${scrollProgress}%` }} />
 
       {/* NAVBAR */}
-      <nav className="fixed w-full top-0 z-[100] border-b border-transparent bg-gradient-to-b from-[#0B0E16]/85 to-transparent backdrop-blur-sm">
-        <div className={`${sectionContainer} py-4 flex justify-between items-center`}>
-          <a href="#" data-track="brand_name" className="font-mono text-xs sm:text-sm tracking-widest text-paper hover:text-mint transition-colors shrink-0">
+      <nav className="glass-nav fixed w-full top-0 z-[100] backdrop-blur-md">
+        <div className={`${sectionContainer} h-14 sm:h-16 flex items-center gap-4 lg:gap-6`}>
+          <a
+            href="#"
+            data-track="brand_name"
+            className="font-mono text-sm tracking-wide text-paper hover:text-mint transition-colors shrink-0"
+          >
             tejas<span className="text-mint">.</span>melkote
           </a>
-          <div className="flex items-center gap-4">
-            <div className="hidden md:flex gap-7 font-mono text-xs tracking-widest uppercase text-fog">
-              {sectionIds.map((id) => (
-                <a
-                  key={id}
-                  href={`#${id}`}
-                  className={`transition-colors relative group ${
-                    activeSection === id ? "text-paper" : "hover:text-paper"
-                  }`}
-                >
-                  {id}
-                  <span
-                    className={`absolute -bottom-1 left-0 h-px bg-mint transition-all duration-300 ${
-                      activeSection === id ? "w-full" : "w-0 group-hover:w-full"
-                    }`}
-                  />
-                </a>
-              ))}
+
+          <div className="hidden xl:flex flex-1 items-center justify-center gap-1 min-w-0 px-4">
+            {sectionIds.map((id) => (
+              <a
+                key={id}
+                href={`#${id}`}
+                className={`px-2.5 py-1.5 rounded-md font-mono text-[10px] tracking-[0.14em] uppercase transition-colors relative ${
+                  activeSection === id
+                    ? "text-paper bg-[var(--muted-surface-hover)]"
+                    : "text-fog hover:text-paper hover:bg-[var(--muted-surface)]"
+                }`}
+              >
+                {id}
+                {activeSection === id && (
+                  <span className="absolute bottom-0.5 left-2.5 right-2.5 h-px bg-mint/70 rounded-full" />
+                )}
+              </a>
+            ))}
+          </div>
+
+          <div className="flex items-center gap-1.5 sm:gap-2 ml-auto shrink-0">
+            <div className="hidden sm:flex items-center rounded-full border border-white/[0.08] bg-[var(--muted-surface)] p-0.5">
+              <SoundToggle className="!border-0 !bg-transparent !p-1.5" />
+              <PaperModeToggle className="hidden sm:flex !border-0 !bg-transparent !p-1.5" />
             </div>
-            <SoundToggle />
-            <PaperModeToggle className="hidden sm:flex" />
+
+            <span className="hidden lg:block w-px h-4 bg-white/[0.1] mx-0.5" aria-hidden />
+
             <button
               type="button"
               onClick={() => setPacketOpen(true)}
-              className="hidden lg:flex items-center gap-1.5 px-3 py-2 rounded-full border border-ember/30 text-fog text-[10px] font-mono tracking-wider hover:text-ember hover:border-ember/50 transition-colors"
+              className="hidden lg:flex items-center justify-center w-8 h-8 rounded-full border border-white/[0.1] text-fog hover:text-ember hover:border-ember/40 transition-colors"
               title="Recruiter packet"
+              aria-label="Open recruiter packet"
             >
-              <FaBriefcase size={10} /> Packet
+              <FaBriefcase size={11} />
             </button>
             <button
               type="button"
               onClick={openTerminal}
-              className="hidden sm:flex items-center gap-1.5 px-3 py-2 rounded-full border border-white/[0.1] text-fog text-[10px] font-mono tracking-wider hover:text-mint hover:border-mint/30 transition-colors"
-              title="Open terminal (⌘K)"
+              className="hidden sm:flex items-center justify-center w-8 h-8 rounded-full border border-white/[0.1] text-fog hover:text-mint hover:border-mint/35 transition-colors"
+              title="Terminal (⌘K)"
+              aria-label="Open terminal"
             >
-              <FaTerminal size={10} /> ⌘K
+              <FaTerminal size={11} />
             </button>
+
             <a
               href="/resume.pdf"
               download
               data-track="resume_nav"
-              className="hidden sm:flex items-center gap-1.5 px-4 py-2 rounded-full border border-white/[0.13] text-paper text-xs font-mono tracking-wider hover:border-mint/50 hover:bg-mint/[0.06] transition-colors"
+              className="hidden sm:inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-gradient-to-r from-iris to-mint text-ink-contrast text-[11px] font-mono font-medium tracking-wide hover:opacity-90 transition-opacity"
             >
               <FaDownload size={9} /> Resume
             </a>
+
             <button
               type="button"
               onClick={() => setMobileMenuOpen((open) => !open)}
-              className="md:hidden p-2 rounded-lg border border-white/10 text-gray-300 hover:text-white hover:border-white/20 transition-colors"
+              className="xl:hidden flex items-center justify-center w-9 h-9 rounded-lg border border-white/[0.1] text-fog hover:text-paper hover:border-white/[0.2] transition-colors"
               aria-label={mobileMenuOpen ? "Close menu" : "Open menu"}
               aria-expanded={mobileMenuOpen}
             >
-              {mobileMenuOpen ? <FaTimes size={16} /> : <FaBars size={16} />}
+              {mobileMenuOpen ? <FaTimes size={15} /> : <FaBars size={15} />}
             </button>
           </div>
         </div>
 
         {mobileMenuOpen && (
-          <div className="md:hidden fixed inset-0 top-[60px] z-[99] bg-[#0B0E16]/98 backdrop-blur-md overflow-y-auto">
-            <div className="flex flex-col px-4 py-5 gap-1 pb-10">
+          <div className="xl:hidden fixed inset-0 top-14 sm:top-16 z-[99] bg-[var(--overlay)] backdrop-blur-md overflow-y-auto">
+            <div className="flex flex-col px-4 py-5 gap-1 pb-10 max-w-6xl mx-auto">
               {sectionIds.map((id) => (
                 <a
                   key={id}
@@ -411,19 +426,33 @@ function App() {
                   onClick={closeMobileMenu}
                   className={`capitalize py-3 px-4 rounded-xl text-base transition-colors ${
                     activeSection === id
-                      ? "text-white bg-white/[0.06] border border-[#8C7BFF]/30"
-                      : "text-gray-400 hover:text-white hover:bg-white/[0.04]"
+                      ? "text-paper bg-[var(--muted-surface-hover)] border border-iris/30"
+                      : "text-fog hover:text-paper hover:bg-[var(--muted-surface)]"
                   }`}
                 >
                   {id}
                 </a>
               ))}
+              <button
+                type="button"
+                onClick={() => { setPacketOpen(true); closeMobileMenu(); }}
+                className="mt-2 flex items-center gap-2 py-3 px-4 rounded-xl border border-white/[0.08] text-fog hover:text-paper transition-colors"
+              >
+                <FaBriefcase size={12} /> Recruiter packet
+              </button>
+              <button
+                type="button"
+                onClick={() => { openTerminal(); closeMobileMenu(); }}
+                className="flex items-center gap-2 py-3 px-4 rounded-xl border border-white/[0.08] text-fog hover:text-mint transition-colors"
+              >
+                <FaTerminal size={12} /> Terminal (⌘K)
+              </button>
               <a
                 href="/resume.pdf"
                 download
                 data-track="resume_nav"
                 onClick={closeMobileMenu}
-                className="mt-4 flex items-center justify-center gap-2 py-3 px-4 rounded-xl border border-[#8C7BFF]/40 text-[#8C7BFF] text-sm hover:bg-[#8C7BFF]/10 transition-colors"
+                className="mt-2 flex items-center justify-center gap-2 py-3 px-4 rounded-xl bg-gradient-to-r from-iris to-mint text-ink-contrast text-sm font-medium"
               >
                 <FaDownload size={12} /> Download Resume
               </a>
@@ -433,8 +462,8 @@ function App() {
       </nav>
 
       {/* HERO */}
-      <section className="min-h-[100dvh] flex flex-col justify-center relative overflow-hidden pt-20 pb-20 md:pt-24 md:pb-16">
-        <GradientField className="absolute inset-0 w-full h-full block pointer-events-none" />
+      <section className="hero-section min-h-[100dvh] flex flex-col justify-center relative overflow-hidden pt-20 pb-20 md:pt-24 md:pb-16">
+        <GradientField className="gradient-field-canvas absolute inset-0 w-full h-full block pointer-events-none" />
 
         <motion.div
           className={`relative z-[2] ${sectionContainer}`}
@@ -514,7 +543,7 @@ function App() {
                 </a>
               </div>
 
-              <div className="inline-flex items-center gap-1 sm:gap-1.5 mt-6 sm:mt-8 p-1.5 sm:p-2 rounded-2xl border border-white/[0.10] bg-[#141929]/50 backdrop-blur-sm">
+              <div className="inline-flex items-center gap-1 sm:gap-1.5 mt-6 sm:mt-8 p-1.5 sm:p-2 rounded-2xl border border-white/[0.10] bg-[var(--muted-surface)] backdrop-blur-sm">
                 <a
                   href="https://github.com/Tejasdagr8"
                   target="_blank"
@@ -1108,7 +1137,7 @@ function App() {
         <button
           type="button"
           onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
-          className="fixed bottom-6 right-6 z-[100] p-3 rounded-full border border-[#8C7BFF]/35 bg-[#0B0E16]/90 text-[#5EE6D0] hover:text-white hover:border-[#5EE6D0]/60 hover:bg-[#141929] transition-colors"
+          className="fixed bottom-6 right-6 z-[100] p-3 rounded-full border border-iris/35 bg-ink-2/90 text-mint hover:text-paper hover:border-mint/60 hover:bg-ink-2 transition-colors"
           aria-label="Back to top"
         >
           <FaArrowUp size={12} />

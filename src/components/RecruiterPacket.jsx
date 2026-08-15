@@ -56,14 +56,14 @@ export default function RecruiterPacket({ open, onClose }) {
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
-          className="fixed inset-0 z-[160] flex items-end sm:items-center justify-center p-0 sm:p-6 bg-[#05070c]/85 backdrop-blur-sm"
+          className="fixed inset-0 z-[160] flex items-end sm:items-center justify-center p-0 sm:p-6 bg-ink-0/85 backdrop-blur-sm"
           onClick={onClose}
         >
           <motion.div
             initial={{ opacity: 0, y: 40 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: 24 }}
-            className="w-full sm:max-w-lg max-h-[90dvh] overflow-y-auto rounded-t-2xl sm:rounded-2xl border border-white/[0.12] bg-[#0a0d14] shadow-2xl"
+            className="w-full sm:max-w-lg max-h-[90dvh] overflow-y-auto rounded-t-2xl sm:rounded-2xl border border-white/[0.12] bg-ink-2 shadow-2xl"
             onClick={(e) => e.stopPropagation()}
           >
             <div className="flex items-center justify-between p-5 border-b border-white/[0.08]">

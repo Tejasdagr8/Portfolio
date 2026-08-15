@@ -474,38 +474,16 @@ function App() {
                 </a>
               </div>
 
-              <div className="inline-flex flex-wrap items-center gap-1 sm:gap-1.5 mt-6 sm:mt-8 p-1.5 sm:p-2 rounded-2xl border border-white/[0.10] bg-[#141929]/50 backdrop-blur-sm">
+              <div className="inline-flex items-center gap-1 sm:gap-1.5 mt-6 sm:mt-8 p-1.5 sm:p-2 rounded-2xl border border-white/[0.10] bg-[#141929]/50 backdrop-blur-sm">
                 <a
                   href="https://github.com/Tejasdagr8"
                   target="_blank"
                   rel="noreferrer"
                   data-track="github"
                   className="flex items-center justify-center w-9 h-9 rounded-xl text-fog hover:text-paper hover:bg-white/[0.06] transition-colors"
-                  aria-label="GitHub — Tejasdagr8"
-                  title="GitHub personal"
+                  aria-label="GitHub"
                 >
                   <FaGithub size={16} />
-                </a>
-                <a
-                  href="https://github.com/tejasm-tatvaops"
-                  target="_blank"
-                  rel="noreferrer"
-                  data-track="github_work"
-                  className="font-mono text-[10px] tracking-wide px-2.5 py-2 rounded-xl border border-mint/20 text-fog hover:text-mint hover:bg-mint/[0.06] transition-colors"
-                  title="GitHub work — tejasm-tatvaops"
-                >
-                  @tejasm-tatvaops
-                </a>
-                <span className="hidden sm:block w-px h-5 bg-white/[0.10] mx-0.5" aria-hidden="true" />
-                <a
-                  href={COMPANY_LINK.href}
-                  target="_blank"
-                  rel="noreferrer"
-                  data-track={COMPANY_LINK.track}
-                  className="font-mono text-[10px] tracking-wide px-2.5 py-2 rounded-xl border border-iris/20 text-fog hover:text-iris hover:bg-iris/[0.06] transition-colors inline-flex items-center gap-1.5"
-                  title="TatvaOps — Vantage"
-                >
-                  <FaGlobe size={11} /> {COMPANY_LINK.label}
                 </a>
                 <a
                   href="https://www.linkedin.com/in/tejas-melkote-390545309/"

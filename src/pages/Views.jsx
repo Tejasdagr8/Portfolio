@@ -189,6 +189,28 @@ export default function Views() {
         </div>
 
         <div className="card-glass p-5 mb-6">
+          <h3 className="font-mono text-xs tracking-widest uppercase text-ember mb-2">Visitor map</h3>
+          <p className="text-fog text-xs mb-4 leading-relaxed">
+            Approximate locations from browser timezone — e.g. Bengaluru, San Francisco, Seattle.
+          </p>
+          {(stats?.topTimezones || []).length === 0 ? (
+            <p className="text-fog text-sm">No timezone data yet. Views will appear as people open your site.</p>
+          ) : (
+            <div className="flex flex-wrap gap-2">
+              {stats.topTimezones.map(({ label, count, timezone }) => (
+                <span
+                  key={timezone}
+                  className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full border border-white/[0.1] bg-white/[0.03] text-sm text-paper"
+                >
+                  <span className="text-mint font-mono text-xs">{count}</span>
+                  {label}
+                </span>
+              ))}
+            </div>
+          )}
+        </div>
+
+        <div className="card-glass p-5 mb-6">
           <h3 className="font-mono text-xs tracking-widest uppercase text-ember mb-2">Personal link tracking (?ref=)</h3>
           <p className="text-fog text-xs mb-4 leading-relaxed">
             Send unique links to recruiters — e.g.{" "}

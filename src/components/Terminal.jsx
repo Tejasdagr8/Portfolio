@@ -17,6 +17,14 @@ Built marketing campaign features (Email & WhatsApp) in production.
 Stack: Go, Ruby on Rails, Vue.js, Jenkins, ArgoCD, Sidekiq, Redis, Kafka.
 Deployed 15+ PRs including email-campaign validation and WhatsApp test-send.`,
 
+  "tatvaops.txt": `Full-Stack / AI Engineer · Mar 2025 – Present
+TatvaOps · Bengaluru · Remote
+
+Building Vantage — AI-powered construction knowledge platform.
+Shipped vendor profiles, CMS SEO content, analytics, Eva AI modules.
+Stack: React, TypeScript, Vercel, CMS, production users.
+Live: vantage.withtatva.ai`,
+
   "cirruslabs.txt": `AI / ML Intern · May 2025 – Jul 2025
 CirrusLabs Pvt Ltd · Bengaluru
 
@@ -64,7 +72,7 @@ function slugify(title) {
     .replace(/^-|-$/g, "");
 }
 
-export default function Terminal({ open, onClose, sections, projects, onNavigate }) {
+export default function Terminal({ open, onClose, sections, projects, onNavigate, onOpenPacket, onOpenCompare }) {
   const [lines, setLines] = useState([]);
   const [input, setInput] = useState("");
   const [cmdHistory, setCmdHistory] = useState([]);
@@ -103,6 +111,9 @@ export default function Terminal({ open, onClose, sections, projects, onNavigate
   contact           show contact info
   whoami            about Tejas
   speedrun          recruiter tour (or press R)
+  packet              recruiter links + intro blurb
+  compare             Tejas vs typical new grad
+  playground          jump to inference demo
   sound on|off      toggle UI sounds
   clear             clear terminal
   exit              close terminal
@@ -205,6 +216,32 @@ Tip: press ⌘K or Ctrl+K anytime to toggle.`);
           setTimeout(onClose, 300);
           break;
 
+        case "packet":
+          if (onOpenPacket) {
+            onOpenPacket();
+            writeln("→ opened recruiter packet");
+            setTimeout(onClose, 300);
+          } else {
+            writeln("  packet unavailable");
+          }
+          break;
+
+        case "compare":
+          if (onOpenCompare) {
+            onOpenCompare();
+            writeln("→ navigating to /compare");
+            setTimeout(onClose, 300);
+          } else {
+            window.location.href = "/compare";
+          }
+          break;
+
+        case "playground":
+          onNavigate("playground");
+          writeln("→ navigated to #playground");
+          setTimeout(onClose, 400);
+          break;
+
         case "sound":
           if (arg === "on") {
             setSoundEnabled(true);
@@ -236,7 +273,9 @@ Tip: press ⌘K or Ctrl+K anytime to toggle.`);
           } else if (arg === "legendary" || arg === "unlock") {
             sessionStorage.setItem("portfolio_legendary_mode", "1");
             document.body.dataset.legendary = "true";
+            document.documentElement.classList.add("legendary-mode");
             window.dispatchEvent(new CustomEvent("legendary-unlock"));
+            window.dispatchEvent(new CustomEvent("achievement-unlock", { detail: "konami" }));
             writeln("  Legendary mode activated. Gradients intensified.");
           } else {
             writeln("  Nice try. Try: sudo hire tejas");
@@ -256,7 +295,7 @@ Tip: press ⌘K or Ctrl+K anytime to toggle.`);
           writeln(`command not found: ${cmd}. Type "help" for available commands.`);
       }
     },
-    [writeln, sections, projects, onNavigate, onClose]
+    [writeln, sections, projects, onNavigate, onClose, onOpenPacket, onOpenCompare]
   );
 
   useEffect(() => {

@@ -6,6 +6,8 @@ export const paperLinks = {
   colm: "https://colmweb.org/",
 };
 
+export const PRIVATE_REPO_COMMITS = 500;
+
 export const publications = [
   {
     venue: "Sci-FM 2026 @ COLM",
@@ -26,6 +28,16 @@ export const publications = [
       { label: "DOI", href: paperLinks.doi, track: "paper_doi" },
       { label: "Workshop", href: paperLinks.workshop, track: "paper_workshop" },
     ],
+    spotlight: {
+      abstract:
+        "Large language models demonstrate broad declarative knowledge, yet their ability to form calibrated expectations about algorithmic performance remains poorly understood. Using causal discovery as a rigorous testbed spanning eight frontier models, thirteen datasets, and 5,200 algorithm runs, we evaluate whether LLM-predicted performance ranges contain true algorithmic means.",
+      keyFindings: [
+        "Frontier LLMs achieve only 15.9% calibrated coverage — seven of eight models perform worse than random guessing.",
+        "Predicted ranges are 8–27× wider than true confidence intervals yet still fail to contain the true mean most of the time.",
+        "We term this failure algorithmic blindness: a gap between declarative knowledge and calibrated procedural prediction.",
+        "Marginal above-random performance aligns with benchmark memorization, not structure-conditioned generalization.",
+      ],
+    },
   },
 ];
 

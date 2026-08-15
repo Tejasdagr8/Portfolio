@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useState } from "react";
 import { FaGithub, FaStar, FaCodeBranch, FaClock, FaSync } from "react-icons/fa";
 import ContributionGraph from "./ContributionGraph";
+import { PRIVATE_REPO_COMMITS } from "../data/publications";
 
 const ACCOUNTS = [
   { username: "Tejasdagr8", label: "personal", accent: "iris" },
@@ -171,6 +172,7 @@ export default function GitHubPulse() {
       writeCache(data);
       setStats(data);
       setFetchedLabel(formatFetchedAgo(data.fetchedAt));
+      window.dispatchEvent(new CustomEvent("github-pulse-loaded", { detail: { contributionTotal: data.contributionTotal } }));
     } catch {
       if (!background) setStats((prev) => prev ?? FALLBACK);
     } finally {
@@ -326,6 +328,10 @@ export default function GitHubPulse() {
               {display.pushedAgo && <span className="text-fog/45"> · {display.pushedAgo}</span>}
             </p>
           )}
+
+          <p className="font-mono text-[10px] text-fog/50 text-center sm:text-left">
+            + <span className="text-ember tabular-nums">{PRIVATE_REPO_COMMITS}+</span> commits on private work repos (@tejasm-tatvaops)
+          </p>
         </div>
       </div>
     </section>

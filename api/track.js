@@ -8,7 +8,7 @@ export default async function handler(req, res) {
 
   try {
     const body = typeof req.body === "string" ? JSON.parse(req.body) : req.body;
-    const { event, label, sessionId, visitorId, ref, path, referrer, device, ts } = body || {};
+    const { event, label, sessionId, visitorId, ref, path, referrer, device, timezone, ts } = body || {};
 
     if (!event || !sessionId) {
       return res.status(400).json({ error: "Invalid payload" });
@@ -23,6 +23,7 @@ export default async function handler(req, res) {
       path: path || "/",
       referrer: referrer || "direct",
       device: device || "desktop",
+      timezone: timezone || "Unknown",
       ts: ts || Date.now(),
     });
 

@@ -18,6 +18,7 @@ export const projects = [
       ],
       stack: ["React", "CMS", "Analytics", "AI-assisted content"],
       architecture: ["User", "React SPA", "CMS API", "Analytics", "SEO index"],
+      flowKey: "tatvaops",
     },
   },
   {

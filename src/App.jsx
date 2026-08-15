@@ -1,12 +1,21 @@
 import React, { useCallback, useEffect, useMemo, useState } from "react";
+import { useNavigate, Link } from "react-router-dom";
 import { motion } from "framer-motion";
-import { FaGithub, FaLinkedin, FaEnvelope, FaPhone, FaDownload, FaExternalLinkAlt, FaArrowUp, FaBars, FaTimes, FaTerminal, FaGlobe } from "react-icons/fa";
+import { FaGithub, FaLinkedin, FaEnvelope, FaPhone, FaDownload, FaExternalLinkAlt, FaArrowUp, FaBars, FaTimes, FaTerminal, FaGlobe, FaBriefcase } from "react-icons/fa";
 import ProfileAvatar from "./components/ProfileAvatar";
 import GradientField from "./components/GradientField";
 import SkillsMarquee from "./components/SkillsMarquee";
 import Terminal from "./components/Terminal";
 import GitHubPulse from "./components/GitHubPulse";
 import ProjectSpotlight from "./components/ProjectSpotlight";
+import PaperSpotlight from "./components/PaperSpotlight";
+import RecruiterPacket from "./components/RecruiterPacket";
+import InferencePlayground from "./components/InferencePlayground";
+import InteractiveArchitecture from "./components/InteractiveArchitecture";
+import AchievementBadges from "./components/AchievementBadges";
+import CalendarBooking from "./components/CalendarBooking";
+import PaperModeToggle, { initPaperMode } from "./components/PaperModeToggle";
+import TypingHero from "./components/TypingHero";
 import CustomCursor from "./components/CustomCursor";
 import LegendaryMode from "./components/LegendaryMode";
 import RecruiterSpeedRun from "./components/RecruiterSpeedRun";
@@ -15,8 +24,11 @@ import useAnalytics from "./hooks/useAnalytics";
 import { track, getCampaignRef } from "./lib/analytics";
 import { playSound } from "./lib/sounds";
 import { getCampaignContent, getHeroCtas } from "./lib/campaign";
+import { applyOgMeta } from "./lib/ogCampaign";
+import { unlockAchievement } from "./components/AchievementBadges";
 import { projects } from "./data/projects";
 import { publications, paperLinks } from "./data/publications";
+import { experience } from "./data/experience";
 
 const COMPANY_LINK = {
   label: "TatvaOps",
@@ -75,9 +87,10 @@ const leadership = [
 ];
 
 function App() {
+  const navigate = useNavigate();
   const sectionContainer = "w-full max-w-6xl mx-auto px-4 sm:px-6 lg:px-8";
   const sectionPad = "py-16 md:py-24";
-  const sectionIds = ["about", "experience", "research", "education", "projects", "skills", "contact"];
+  const sectionIds = ["about", "experience", "research", "playground", "education", "projects", "skills", "contact"];
   const [activeSection, setActiveSection] = useState("about");
   const [copiedField, setCopiedField] = useState("");
   const [showBackToTop, setShowBackToTop] = useState(false);
@@ -90,12 +103,26 @@ function App() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [terminalOpen, setTerminalOpen] = useState(false);
   const [spotlightProject, setSpotlightProject] = useState(null);
+  const [spotlightPaper, setSpotlightPaper] = useState(null);
+  const [packetOpen, setPacketOpen] = useState(false);
+  const [contribTotal, setContribTotal] = useState(0);
 
   const campaignRef = useMemo(() => getCampaignRef(), []);
   const campaign = useMemo(() => getCampaignContent(campaignRef), [campaignRef]);
   const heroCtas = useMemo(() => getHeroCtas(campaignRef), [campaignRef]);
 
   useAnalytics();
+
+  useEffect(() => {
+    initPaperMode();
+    applyOgMeta(campaignRef);
+  }, [campaignRef]);
+
+  useEffect(() => {
+    const onPulse = (e) => setContribTotal(e.detail?.contributionTotal || 0);
+    window.addEventListener("github-pulse-loaded", onPulse);
+    return () => window.removeEventListener("github-pulse-loaded", onPulse);
+  }, []);
 
   useEffect(() => {
     const observers = sectionIds
@@ -200,6 +227,7 @@ function App() {
 
   const openTerminal = useCallback(() => {
     playSound("terminalOpen");
+    unlockAchievement("terminal");
     setTerminalOpen(true);
   }, []);
 
@@ -338,6 +366,15 @@ function App() {
               ))}
             </div>
             <SoundToggle />
+            <PaperModeToggle className="hidden sm:flex" />
+            <button
+              type="button"
+              onClick={() => setPacketOpen(true)}
+              className="hidden lg:flex items-center gap-1.5 px-3 py-2 rounded-full border border-ember/30 text-fog text-[10px] font-mono tracking-wider hover:text-ember hover:border-ember/50 transition-colors"
+              title="Recruiter packet"
+            >
+              <FaBriefcase size={10} /> Packet
+            </button>
             <button
               type="button"
               onClick={openTerminal}
@@ -455,6 +492,11 @@ function App() {
                 <span className="hidden sm:inline"><span className="text-mint">●</span> ⌘K terminal · R speed run</span>
               </div>
 
+              <p className="font-mono text-xs sm:text-sm text-fog mt-4 flex flex-wrap justify-center lg:justify-start items-center gap-2">
+                <span className="text-fog/60">currently building</span>
+                <TypingHero />
+              </p>
+
               <div className="flex flex-wrap justify-center lg:justify-start gap-3 sm:gap-4 mt-8 sm:mt-10">
                 <a
                   href={heroCtas.primary.href}
@@ -564,6 +606,7 @@ function App() {
                 </div>
               )
             ))}
+            <AchievementBadges contributionTotal={contribTotal} />
           </div>
         </div>
       </motion.section>
@@ -582,25 +625,7 @@ function App() {
           viewport={{ once: true, margin: "-80px" }}
           variants={stagger}
         >
-          {[
-            {
-              company: "SuperAGI",
-              role: "Software Development Engineer Intern",
-              period: "Jan 2026 – Jun 2026",
-              location: "Bangalore, India",
-              description:
-                "Built marketing campaign features (Email and WhatsApp) in a full-stack production codebase using Go, Ruby on Rails, and Vue.js. Deployed 15+ pull requests via Jenkins and ArgoCD CI/CD, including email-campaign validation and WhatsApp test-send features. Worked with Sidekiq, Redis, and Kafka for background jobs and event streaming; ran database migrations and integrated CRM platform workflows.",
-              tags: ["Go", "Ruby on Rails", "Vue.js", "Jenkins", "ArgoCD", "Sidekiq", "Redis", "Kafka"],
-            },
-            {
-              company: "CirrusLabs Pvt Ltd",
-              role: "AI / ML Intern",
-              period: "May 2025 – Jul 2025",
-              location: "Bengaluru, India",
-              description: "Built LLM chatbots, AI agents, and ML pipelines for internal project tooling. Packaged models behind Streamlit and FastAPI interfaces for team use.",
-              tags: ["LLMs", "AI Agents", "FastAPI", "Streamlit", "Python"],
-            },
-          ].map((exp, i) => (
+          {experience.map((exp, i) => (
             <motion.div
               key={i}
               variants={fadeUp}
@@ -612,8 +637,21 @@ function App() {
               </div>
               <div>
                 <h3 className="font-display font-bold text-lg sm:text-xl md:text-2xl text-paper">{exp.role}</h3>
-                <p className="font-mono text-sm text-fog mt-1">{exp.company}</p>
+                <p className="font-mono text-sm text-fog mt-1">
+                  {exp.link ? (
+                    <a href={exp.link} target="_blank" rel="noreferrer" className="hover:text-mint transition-colors inline-flex items-center gap-1">
+                      {exp.company} <FaExternalLinkAlt size={10} />
+                    </a>
+                  ) : (
+                    exp.company
+                  )}
+                </p>
                 <p className="text-fog text-sm leading-7 mt-4 max-w-2xl">{exp.description}</p>
+                {exp.architectureKey && (
+                  <div className="mt-5">
+                    <InteractiveArchitecture flowKey={exp.architectureKey} />
+                  </div>
+                )}
                 <div className="flex flex-wrap gap-2 mt-5">
                   {exp.tags.map((tag) => (
                     <span key={tag} className="font-mono text-[11px] tracking-wide px-3 py-1 rounded-full border border-white/[0.13] text-fog">
@@ -642,17 +680,19 @@ function App() {
           variants={stagger}
         >
           {publications.map((pub) => (
-            <motion.article
+            <motion.button
               key={pub.title}
+              type="button"
               variants={fadeUp}
-              className="card-glass card-glass-hover p-6 sm:p-8 border-mint/20"
+              onClick={() => setSpotlightPaper(pub)}
+              className="card-glass card-glass-hover p-6 sm:p-8 border-mint/20 w-full text-left cursor-pointer group"
             >
               <div className="flex flex-col lg:flex-row lg:items-start lg:justify-between gap-4 mb-4">
                 <div className="min-w-0">
                   <p className="font-mono text-[10px] sm:text-xs tracking-[0.16em] uppercase text-mint mb-2">
                     {pub.venue}
                   </p>
-                  <h3 className="font-display font-bold text-lg sm:text-xl md:text-2xl text-paper leading-snug">
+                  <h3 className="font-display font-bold text-lg sm:text-xl md:text-2xl text-paper leading-snug group-hover:text-mint transition-colors">
                     {pub.title}
                   </h3>
                 </div>
@@ -671,6 +711,7 @@ function App() {
                       target="_blank"
                       rel="noreferrer"
                       data-track={track}
+                      onClick={(e) => e.stopPropagation()}
                       className="inline-flex items-center gap-1.5 text-xs font-mono text-mint hover:text-paper transition-colors px-3 py-1.5 rounded-full border border-mint/30 hover:border-mint/60 bg-mint/[0.04]"
                     >
                       <FaExternalLinkAlt size={10} /> {label}
@@ -686,10 +727,13 @@ function App() {
                 ))}
               </div>
               <p className="font-mono text-[10px] text-fog/60 mt-5 leading-relaxed">{pub.note}</p>
-            </motion.article>
+              <p className="font-mono text-[10px] text-mint/70 mt-3 group-hover:text-mint">Research spotlight →</p>
+            </motion.button>
           ))}
         </motion.div>
       </section>
+
+      <InferencePlayground />
 
       {/* EDUCATION */}
       <section id="education" className={`${sectionPad} ${sectionContainer}`}>
@@ -932,6 +976,28 @@ function App() {
             </div>
           </motion.div>
 
+          <motion.div variants={fadeUp} className="flex flex-wrap justify-center gap-3 mb-8">
+            <button
+              type="button"
+              onClick={() => setPacketOpen(true)}
+              data-track="contact_packet"
+              className="px-6 py-3 rounded-full bg-gradient-to-r from-iris to-mint text-ink-0 text-sm font-medium hover:opacity-90 inline-flex items-center gap-2"
+            >
+              <FaBriefcase size={12} /> Recruiter packet
+            </button>
+            <Link
+              to="/compare"
+              data-track="contact_compare"
+              className="px-6 py-3 rounded-full border border-white/[0.15] text-fog text-sm hover:text-paper hover:border-mint/40 transition-all"
+            >
+              Compare me vs typical new grad
+            </Link>
+          </motion.div>
+
+          <motion.div variants={fadeUp} className="w-full max-w-2xl mb-8">
+            <CalendarBooking />
+          </motion.div>
+
           <motion.form
             variants={fadeUp}
             onSubmit={submitQuickMessage}
@@ -1049,12 +1115,21 @@ function App() {
         sections={sectionIds}
         projects={projects}
         onNavigate={navigateToSection}
+        onOpenPacket={() => setPacketOpen(true)}
+        onOpenCompare={() => navigate("/compare")}
       />
 
       <ProjectSpotlight
         project={spotlightProject}
         onClose={() => setSpotlightProject(null)}
       />
+
+      <PaperSpotlight
+        publication={spotlightPaper}
+        onClose={() => setSpotlightPaper(null)}
+      />
+
+      <RecruiterPacket open={packetOpen} onClose={() => setPacketOpen(false)} />
 
     </div>
   );

@@ -44,6 +44,7 @@ export function track(event, data = {}) {
     path: window.location.pathname,
     referrer: document.referrer || "direct",
     device: window.innerWidth < 768 ? "mobile" : "desktop",
+    timezone: Intl.DateTimeFormat().resolvedOptions().timeZone || "Unknown",
     ts: Date.now(),
   };
 

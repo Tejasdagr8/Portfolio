@@ -224,3 +224,65 @@ body[data-legendary="true"]::before {
 body[data-legendary="true"] .gradient-text {
   filter: brightness(1.15);
 }
+
+/* Paper mode — light academic layout for research viewers */
+html.paper-mode {
+  color-scheme: light;
+}
+
+html.paper-mode body {
+  background: #fafafa !important;
+  color: #1a1a1a !important;
+}
+
+html.paper-mode .glass-card,
+html.paper-mode .glass-nav {
+  background: rgba(255, 255, 255, 0.92) !important;
+  border-color: rgba(0, 0, 0, 0.08) !important;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06) !important;
+}
+
+html.paper-mode .text-paper,
+html.paper-mode h1,
+html.paper-mode h2,
+html.paper-mode h3 {
+  color: #111 !important;
+}
+
+html.paper-mode .text-fog,
+html.paper-mode .text-ink-2 {
+  color: #444 !important;
+}
+
+html.paper-mode .text-ink-3,
+html.paper-mode .text-ink-4 {
+  color: #666 !important;
+}
+
+html.paper-mode .gradient-text {
+  background: linear-gradient(135deg, #2563eb, #059669) !important;
+  -webkit-background-clip: text !important;
+  background-clip: text !important;
+}
+
+html.paper-mode nav {
+  background: rgba(255, 255, 255, 0.95) !important;
+  border-bottom-color: rgba(0, 0, 0, 0.06) !important;
+}
+
+html.paper-mode .bg-ink-0,
+html.paper-mode .bg-ink-1 {
+  background-color: #fff !important;
+}
+
+html.paper-mode .border-white\/\[0\.06\],
+html.paper-mode .border-white\/\[0\.08\],
+html.paper-mode .border-white\/\[0\.1\],
+html.paper-mode .border-white\/\[0\.15\] {
+  border-color: rgba(0, 0, 0, 0.1) !important;
+}
+
+html.paper-mode .custom-cursor-dot,
+html.paper-mode .custom-cursor-ring {
+  mix-blend-mode: difference;
+}

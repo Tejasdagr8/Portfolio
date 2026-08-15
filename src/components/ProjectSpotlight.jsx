@@ -2,6 +2,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { useEffect } from "react";
 import { FaExternalLinkAlt, FaTimes } from "react-icons/fa";
 import ArchitectureDiagram from "./ArchitectureDiagram";
+import InteractiveArchitecture from "./InteractiveArchitecture";
 import ProjectLivePreview from "./ProjectLivePreview";
 
 export default function ProjectSpotlight({ project, onClose }) {
@@ -89,8 +90,12 @@ export default function ProjectSpotlight({ project, onClose }) {
                 </div>
               )}
 
-              {spotlight?.architecture && (
-                <ArchitectureDiagram steps={spotlight.architecture} />
+              {spotlight?.flowKey ? (
+                <InteractiveArchitecture flowKey={spotlight.flowKey} />
+              ) : (
+                spotlight?.architecture && (
+                  <ArchitectureDiagram steps={spotlight.architecture} />
+                )
               )}
 
               <div className="flex flex-wrap gap-2">

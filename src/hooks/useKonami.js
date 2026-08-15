@@ -9,6 +9,7 @@ export function useKonami(onUnlock) {
   useEffect(() => {
     if (unlocked) {
       document.body.dataset.legendary = "true";
+      document.documentElement.classList.add("legendary-mode");
     }
   }, [unlocked]);
 

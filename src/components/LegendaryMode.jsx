@@ -14,6 +14,8 @@ export default function LegendaryMode() {
     playSound("unlock");
     setConfetti(true);
     setShowToast(true);
+    document.documentElement.classList.add("legendary-mode");
+    window.dispatchEvent(new CustomEvent("achievement-unlock", { detail: "konami" }));
     track("click", { label: "konami_unlock" });
     toastTimer.current = setTimeout(() => setShowToast(false), 4500);
   });

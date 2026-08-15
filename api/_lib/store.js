@@ -61,6 +61,7 @@ export function aggregate(events) {
   const refMap = {};
   const refSessions = {};
   const sessionTimeline = {};
+  const timezoneMap = {};
 
   for (const e of events) {
     if (e.sessionId) sessions.add(e.sessionId);
@@ -105,6 +106,10 @@ export function aggregate(events) {
 
     if (e.device) {
       deviceMap[e.device] = (deviceMap[e.device] || 0) + 1;
+    }
+
+    if (e.timezone) {
+      timezoneMap[e.timezone] = (timezoneMap[e.timezone] || 0) + 1;
     }
 
     hourMap[hourLabel(e.ts)].count += 1;
@@ -196,6 +201,11 @@ export function aggregate(events) {
     count: scrollMap[label] || 0,
   }));
 
+  const topTimezones = Object.entries(timezoneMap)
+    .sort((a, b) => b[1] - a[1])
+    .slice(0, 10)
+    .map(([tz, count]) => ({ label: formatTimezoneLabel(tz), timezone: tz, count }));
+
   const peakHour = hourMap.reduce((best, row) => (row.count > best.count ? row : best), hourMap[0]);
 
   return {
@@ -227,8 +237,24 @@ export function aggregate(events) {
     devices: deviceMap,
     hourlyActivity: hourMap,
     recentSessions,
+    topTimezones,
     lastUpdated: now,
   };
+}
+
+function formatTimezoneLabel(tz) {
+  const map = {
+    "Asia/Kolkata": "Bengaluru / India",
+    "Asia/Calcutta": "Bengaluru / India",
+    "America/Los_Angeles": "San Francisco / US",
+    "America/New_York": "New York / US",
+    "America/Chicago": "Chicago / US",
+    "Europe/London": "London / UK",
+    "Europe/Berlin": "Berlin / EU",
+    "Asia/Singapore": "Singapore",
+    "Australia/Sydney": "Sydney / AU",
+  };
+  return map[tz] || tz.replace(/_/g, " ").split("/").pop();
 }
 
 export function checkPassword(req) {

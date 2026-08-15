@@ -4,7 +4,10 @@ export const projects = [
     description: "AI-powered construction content platform with blogs, forums, CMS, and analytics — built for high-intent SEO traffic and community engagement.",
     tags: ["React", "CMS", "SEO", "AI"],
     link: "https://vantage.withtatva.ai/",
-    // Site sets X-Frame-Options: SAMEORIGIN — no iframe embed
+    livePreview: {
+      screenshot: "/previews/vantage.png",
+      note: "Live site blocks iframe embeds — screenshot preview. Click to open vantage.withtatva.ai.",
+    },
     spotlight: {
       year: "2025",
       role: "Full-stack · AI content platform",

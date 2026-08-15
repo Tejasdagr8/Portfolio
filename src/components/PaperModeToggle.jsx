@@ -3,19 +3,34 @@ import { FaMoon, FaSun } from "react-icons/fa";
 
 const KEY = "portfolio_paper_mode";
 
+/** Dark by default — paper mode only when toggled this session. */
 export function initPaperMode() {
-  if (localStorage.getItem(KEY) === "1") {
-    document.documentElement.classList.add("paper-mode");
+  try {
+    localStorage.removeItem(KEY);
+    const enabled = sessionStorage.getItem(KEY) === "1";
+    document.documentElement.classList.toggle("paper-mode", enabled);
+  } catch {
+    document.documentElement.classList.remove("paper-mode");
   }
 }
 
 export default function PaperModeToggle({ className = "" }) {
-  const [on, setOn] = useState(() => localStorage.getItem(KEY) === "1");
+  const [on, setOn] = useState(() => {
+    try {
+      return sessionStorage.getItem(KEY) === "1";
+    } catch {
+      return false;
+    }
+  });
 
   const toggle = () => {
     const next = !on;
     setOn(next);
-    localStorage.setItem(KEY, next ? "1" : "0");
+    try {
+      sessionStorage.setItem(KEY, next ? "1" : "0");
+    } catch {
+      /* ignore */
+    }
     document.documentElement.classList.toggle("paper-mode", next);
   };
 

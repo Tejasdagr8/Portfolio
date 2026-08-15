@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useMemo, useState } from "react";
 import { motion } from "framer-motion";
-import { FaGithub, FaLinkedin, FaEnvelope, FaPhone, FaDownload, FaExternalLinkAlt, FaArrowUp, FaBars, FaTimes, FaTerminal } from "react-icons/fa";
+import { FaGithub, FaLinkedin, FaEnvelope, FaPhone, FaDownload, FaExternalLinkAlt, FaArrowUp, FaBars, FaTimes, FaTerminal, FaGlobe } from "react-icons/fa";
 import ProfileAvatar from "./components/ProfileAvatar";
 import GradientField from "./components/GradientField";
 import SkillsMarquee from "./components/SkillsMarquee";
@@ -17,6 +17,12 @@ import { playSound } from "./lib/sounds";
 import { getCampaignContent, getHeroCtas } from "./lib/campaign";
 import { projects } from "./data/projects";
 import { publications, paperLinks } from "./data/publications";
+
+const COMPANY_LINK = {
+  label: "TatvaOps",
+  href: "https://vantage.withtatva.ai/",
+  track: "tatvaops",
+};
 
 const CONTACT_EMAILS = {
   primary: "coooltejasdagr@gmail.com",
@@ -988,13 +994,13 @@ function App() {
               <FaGithub size={14} /> GitHub
             </a>
             <a
-              href="https://www.linkedin.com/in/tejas-melkote-390545309/"
+              href={COMPANY_LINK.href}
               target="_blank"
               rel="noreferrer"
-              data-track="linkedin"
+              data-track={COMPANY_LINK.track}
               className="flex items-center gap-2 text-fog hover:text-mint transition-colors"
             >
-              <FaLinkedin size={14} /> LinkedIn
+              <FaGlobe size={14} /> {COMPANY_LINK.label}
             </a>
           </motion.div>
         </motion.div>

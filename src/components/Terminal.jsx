@@ -30,7 +30,7 @@ Packaged models behind Streamlit and FastAPI interfaces.`,
   "contact.txt": `Email:  coooltejasdagr@gmail.com
 Phone:  +91 7019280175
 GitHub:  github.com/Tejasdagr8
-GitHub (work): github.com/tejasm-tatvaops
+Company: vantage.withtatva.ai (TatvaOps)
 LinkedIn: linkedin.com/in/tejas-melkote-390545309`,
 
   "whoami.txt": `Tejas Melkote
@@ -157,6 +157,8 @@ Tip: press ⌘K or Ctrl+K anytime to toggle.`);
             code: paperLinks.code,
             workshop: paperLinks.workshop,
             colm: paperLinks.colm,
+            tatvaops: "https://vantage.withtatva.ai/",
+            company: "https://vantage.withtatva.ai/",
           };
           const project = projects.find((p) => slugify(p.title).includes(arg) || arg.includes(slugify(p.title)));
           if (targets[arg]) {

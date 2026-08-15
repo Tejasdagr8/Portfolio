@@ -4,6 +4,7 @@ export const projects = [
     description: "AI-powered construction content platform with blogs, forums, CMS, and analytics — built for high-intent SEO traffic and community engagement.",
     tags: ["React", "CMS", "SEO", "AI"],
     link: "https://vantage.withtatva.ai/",
+    // Site sets X-Frame-Options: SAMEORIGIN — no iframe embed
     spotlight: {
       year: "2025",
       role: "Full-stack · AI content platform",
@@ -21,6 +22,9 @@ export const projects = [
     description: "Production vendor profile system with verified ratings, pricing insights, and searchable contractor listings for the construction industry.",
     tags: ["Web App", "Full Stack", "Portfolio"],
     link: "https://vendor-profilepage.vercel.app/",
+    livePreview: {
+      embedUrl: "https://vendor-profilepage.vercel.app/",
+    },
     spotlight: {
       year: "2025",
       role: "Full-stack web app",
@@ -53,6 +57,10 @@ export const projects = [
     description: "Multimodal tool for medical image analysis and PDF summarization with user authentication, analytics dashboards, and RAG-powered document Q&A.",
     tags: ["Python", "LLM", "RAG", "Streamlit"],
     link: "https://medimage.streamlit.app/",
+    livePreview: {
+      embedUrl: "https://medimage.streamlit.app/?embed=true",
+      note: "Streamlit embed — interact inside the preview or open full app.",
+    },
     spotlight: {
       year: "2025",
       role: "Multimodal ML · RAG",

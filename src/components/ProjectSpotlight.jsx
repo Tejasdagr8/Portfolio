@@ -2,6 +2,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { useEffect } from "react";
 import { FaExternalLinkAlt, FaTimes } from "react-icons/fa";
 import ArchitectureDiagram from "./ArchitectureDiagram";
+import ProjectLivePreview from "./ProjectLivePreview";
 
 export default function ProjectSpotlight({ project, onClose }) {
   useEffect(() => {
@@ -38,7 +39,7 @@ export default function ProjectSpotlight({ project, onClose }) {
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: 24, scale: 0.98 }}
             transition={{ type: "spring", damping: 28, stiffness: 320 }}
-            className="w-full sm:max-w-2xl max-h-[90dvh] overflow-y-auto rounded-t-2xl sm:rounded-2xl border border-white/[0.12] bg-[#0a0d14] shadow-2xl"
+            className="w-full sm:max-w-2xl lg:max-w-3xl max-h-[90dvh] overflow-y-auto rounded-t-2xl sm:rounded-2xl border border-white/[0.12] bg-[#0a0d14] shadow-2xl"
             onClick={(e) => e.stopPropagation()}
           >
             <div className="sticky top-0 z-10 flex items-start justify-between gap-4 p-5 sm:p-6 border-b border-white/[0.08] bg-[#0a0d14]/95 backdrop-blur-md">
@@ -64,6 +65,14 @@ export default function ProjectSpotlight({ project, onClose }) {
             </div>
 
             <div className="p-5 sm:p-6 space-y-6">
+              {project.livePreview && (
+                <ProjectLivePreview
+                  livePreview={project.livePreview}
+                  projectTitle={project.title}
+                  liveUrl={project.link}
+                />
+              )}
+
               <p className="text-fog text-sm sm:text-base leading-7">{project.description}</p>
 
               {spotlight?.highlights && (

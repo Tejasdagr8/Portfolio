@@ -17,8 +17,8 @@ Built marketing campaign features (Email & WhatsApp) in production.
 Stack: Go, Ruby on Rails, Vue.js, Jenkins, ArgoCD, Sidekiq, Redis, Kafka.
 Deployed 15+ PRs including email-campaign validation and WhatsApp test-send.`,
 
-  "tatvaops.txt": `Full-Stack / AI Engineer · Mar 2025 – Present
-TatvaOps · Bengaluru · Remote
+  "tatvaops.txt": `Full-Stack / AI Engineer · May 2026 – Present
+TatvaOps · Bengaluru · On-site
 
 Building Vantage — AI-powered construction knowledge platform.
 Shipped vendor profiles, CMS SEO content, analytics, Eva AI modules.
@@ -113,7 +113,6 @@ export default function Terminal({ open, onClose, sections, projects, onNavigate
   speedrun          recruiter tour (or press R)
   packet              recruiter links + intro blurb
   compare             Tejas vs typical new grad
-  playground          jump to inference demo
   sound on|off      toggle UI sounds
   clear             clear terminal
   exit              close terminal
@@ -234,12 +233,6 @@ Tip: press ⌘K or Ctrl+K anytime to toggle.`);
           } else {
             window.location.href = "/compare";
           }
-          break;
-
-        case "playground":
-          onNavigate("playground");
-          writeln("→ navigated to #playground");
-          setTimeout(onClose, 400);
           break;
 
         case "sound":

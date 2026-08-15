@@ -8,8 +8,9 @@ const ACCOUNTS = [
   { username: "tejasm-tatvaops", label: "work", accent: "mint" },
 ];
 
-const CACHE_KEY = "github_pulse_cache_v4";
-const REFRESH_MS = 1000 * 60 * 15; // re-fetch every 15 min while page is open
+const CACHE_KEY = "github_pulse_cache_v5";
+const REFRESH_MS = 1000 * 60 * 5; // poll every 5 min while page is open
+const STALE_MS = 1000 * 60 * 3; // treat cache older than 3 min as stale
 const HIGHLIGHT_START = "2026-03-25";
 
 const FALLBACK = {
@@ -43,7 +44,7 @@ function phaseTotal(contributions) {
 
 function readCache() {
   try {
-    const raw = sessionStorage.getItem(CACHE_KEY);
+    const raw = localStorage.getItem(CACHE_KEY);
     if (!raw) return null;
     return JSON.parse(raw);
   } catch {
@@ -52,7 +53,20 @@ function readCache() {
 }
 
 function writeCache(data) {
-  sessionStorage.setItem(CACHE_KEY, JSON.stringify({ ts: Date.now(), data }));
+  try {
+    localStorage.setItem(CACHE_KEY, JSON.stringify({ ts: Date.now(), data }));
+  } catch {
+    /* private browsing / quota — skip persistence */
+  }
+}
+
+function cacheAgeMs(cached) {
+  if (!cached?.ts) return Infinity;
+  return Date.now() - cached.ts;
+}
+
+function withPhase(data) {
+  return { ...data, phaseTotal: phaseTotal(data.contributions || []) };
 }
 
 const CONTRIB_API = "https://github-contributions-api.jogruber.de/v4";
@@ -124,19 +138,20 @@ async function fetchPulseDirect() {
   };
 }
 
-async function fetchPulse() {
+async function fetchPulse({ bustCache = false } = {}) {
+  const query = bustCache ? `?t=${Date.now()}` : "";
   try {
-    const res = await fetch("/api/github-pulse");
+    const res = await fetch(`/api/github-pulse${query}`, { cache: "no-store" });
     if (res.ok) {
       const data = await res.json();
-      return { ...data, phaseTotal: phaseTotal(data.contributions || []) };
+      return withPhase(data);
     }
   } catch {
     /* local dev or API unavailable — fall back to client fetch */
   }
 
   const data = await fetchPulseDirect();
-  return { ...data, phaseTotal: phaseTotal(data.contributions || []) };
+  return withPhase(data);
 }
 
 function StatChip({ icon: Icon, iconClass, children }) {
@@ -160,54 +175,64 @@ function formatFetchedAgo(iso) {
 export default function GitHubPulse() {
   const [stats, setStats] = useState(null);
   const [loading, setLoading] = useState(true);
-  const [refreshing, setRefreshing] = useState(false);
   const [fetchedLabel, setFetchedLabel] = useState(null);
 
-  const load = useCallback(async ({ background = false } = {}) => {
-    if (background) setRefreshing(true);
-    else setLoading(true);
+  const applyStats = useCallback((data) => {
+    setStats(withPhase(data));
+    setFetchedLabel(formatFetchedAgo(data.fetchedAt));
+    window.dispatchEvent(
+      new CustomEvent("github-pulse-loaded", { detail: { contributionTotal: data.contributionTotal } })
+    );
+  }, []);
+
+  const load = useCallback(async ({ background = false, bustCache = false } = {}) => {
+    if (!background) setLoading(true);
 
     try {
-      const data = await fetchPulse();
+      const data = await fetchPulse({ bustCache: background || bustCache });
       writeCache(data);
-      setStats(data);
-      setFetchedLabel(formatFetchedAgo(data.fetchedAt));
-      window.dispatchEvent(new CustomEvent("github-pulse-loaded", { detail: { contributionTotal: data.contributionTotal } }));
+      applyStats(data);
     } catch {
-      if (!background) setStats((prev) => prev ?? FALLBACK);
+      if (!background && !readCache()?.data) applyStats(FALLBACK);
     } finally {
-      setLoading(false);
-      setRefreshing(false);
+      if (!background) setLoading(false);
     }
-  }, []);
+  }, [applyStats]);
 
   useEffect(() => {
     const cached = readCache();
+
     if (cached?.data) {
-      setStats({ ...cached.data, phaseTotal: phaseTotal(cached.data.contributions || []) });
-      setFetchedLabel(formatFetchedAgo(cached.data.fetchedAt));
+      applyStats(cached.data);
       setLoading(false);
-      load({ background: true });
+      if (cacheAgeMs(cached) >= STALE_MS) {
+        load({ background: true, bustCache: true });
+      }
     } else {
-      load();
+      load({ bustCache: true });
     }
 
-    const interval = setInterval(() => load({ background: true }), REFRESH_MS);
+    const interval = setInterval(() => load({ background: true, bustCache: true }), REFRESH_MS);
 
-    const onVisible = () => {
-      if (document.visibilityState === "visible") load({ background: true });
+    const refreshIfStale = () => {
+      if (document.visibilityState === "hidden") return;
+      const age = cacheAgeMs(readCache());
+      if (age >= STALE_MS) load({ background: true, bustCache: true });
     };
-    document.addEventListener("visibilitychange", onVisible);
+
+    document.addEventListener("visibilitychange", refreshIfStale);
+    window.addEventListener("focus", refreshIfStale);
 
     return () => {
       clearInterval(interval);
-      document.removeEventListener("visibilitychange", onVisible);
+      document.removeEventListener("visibilitychange", refreshIfStale);
+      window.removeEventListener("focus", refreshIfStale);
     };
-  }, [load]);
+  }, [applyStats, load]);
 
   useEffect(() => {
     if (!stats?.fetchedAt) return;
-    const tick = setInterval(() => setFetchedLabel(formatFetchedAgo(stats.fetchedAt)), 60000);
+    const tick = setInterval(() => setFetchedLabel(formatFetchedAgo(stats.fetchedAt)), 30000);
     return () => clearInterval(tick);
   }, [stats?.fetchedAt]);
 
@@ -224,13 +249,13 @@ export default function GitHubPulse() {
               {!loading && (
                 <span className="inline-flex items-center gap-1.5 normal-case tracking-normal text-[10px] text-mint/80">
                   <span className="status-pulse w-1.5 h-1.5 rounded-full bg-mint inline-block" />
-                  live
+                  live · auto-sync
                 </span>
               )}
-              {(loading || refreshing) && (
+              {loading && !stats && (
                 <span className="text-fog/50 normal-case tracking-normal text-[10px] inline-flex items-center gap-1">
-                  <FaSync size={9} className={refreshing ? "animate-spin" : ""} />
-                  {loading ? "syncing…" : "refreshing…"}
+                  <FaSync size={9} className="animate-spin" />
+                  syncing…
                 </span>
               )}
               {fetchedLabel && !loading && (

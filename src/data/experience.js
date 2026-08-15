@@ -12,8 +12,8 @@ export const experience = [
   {
     company: "TatvaOps",
     role: "Full-Stack / AI Engineer",
-    period: "Mar 2025 – Present",
-    location: "Bengaluru, India · Remote",
+    period: "May 2026 – Present",
+    location: "Bengaluru, India · On-site",
     link: "https://vantage.withtatva.ai/",
     description:
       "Building Vantage — TatvaOps' AI-powered construction knowledge platform (InSights, Radar, Forums, Studio, Eva AI). Shipped vendor profile system, CMS-driven SEO content, analytics dashboards, and production features on React + Vercel serving real users in the construction vertical.",

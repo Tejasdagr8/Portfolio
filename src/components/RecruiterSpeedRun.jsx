@@ -7,7 +7,6 @@ const STEPS = [
   { id: "about", label: "About", hint: "Model-first engineer" },
   { id: "experience", label: "Experience", hint: "SuperAGI + TatvaOps" },
   { id: "research", label: "Research", hint: "Sci-FM @ COLM 2026" },
-  { id: "playground", label: "Playground", hint: "Mock RAG router" },
   { id: "projects", label: "Projects", hint: "Live demos" },
   { id: "contact", label: "Contact", hint: "Recruiter packet" },
 ];

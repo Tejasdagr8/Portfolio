@@ -10,10 +10,8 @@ import GitHubPulse from "./components/GitHubPulse";
 import ProjectSpotlight from "./components/ProjectSpotlight";
 import PaperSpotlight from "./components/PaperSpotlight";
 import RecruiterPacket from "./components/RecruiterPacket";
-import InferencePlayground from "./components/InferencePlayground";
 import InteractiveArchitecture from "./components/InteractiveArchitecture";
 import AchievementBadges from "./components/AchievementBadges";
-import CalendarBooking from "./components/CalendarBooking";
 import PaperModeToggle, { initPaperMode } from "./components/PaperModeToggle";
 import TypingHero from "./components/TypingHero";
 import CustomCursor from "./components/CustomCursor";
@@ -90,7 +88,7 @@ function App() {
   const navigate = useNavigate();
   const sectionContainer = "w-full max-w-6xl mx-auto px-4 sm:px-6 lg:px-8";
   const sectionPad = "py-16 md:py-24";
-  const sectionIds = ["about", "experience", "research", "playground", "education", "projects", "skills", "contact"];
+  const sectionIds = ["about", "experience", "research", "education", "projects", "skills", "contact"];
   const [activeSection, setActiveSection] = useState("about");
   const [copiedField, setCopiedField] = useState("");
   const [showBackToTop, setShowBackToTop] = useState(false);
@@ -733,8 +731,6 @@ function App() {
         </motion.div>
       </section>
 
-      <InferencePlayground />
-
       {/* EDUCATION */}
       <section id="education" className={`${sectionPad} ${sectionContainer}`}>
         <motion.div initial="hidden" whileInView="visible" viewport={{ once: true, margin: "-80px" }} variants={fadeUp}>
@@ -995,7 +991,17 @@ function App() {
           </motion.div>
 
           <motion.div variants={fadeUp} className="w-full max-w-2xl mb-8">
-            <CalendarBooking />
+            <div className="card-glass p-5 text-center">
+              <p className="font-mono text-[10px] uppercase tracking-wider text-mint mb-2">schedule a chat</p>
+              <p className="text-fog text-sm mb-4">Email me with a few times that work — I&apos;ll confirm quickly.</p>
+              <a
+                href="mailto:coooltejasdagr@gmail.com?subject=Portfolio%20%E2%80%94%20let's%20chat&body=Hi%20Tejas%2C%0A%0AI'd%20like%20to%20chat.%20Here%20are%20some%20times%20that%20work%20for%20me%3A%0A%0A"
+                data-track="contact_schedule_email"
+                className="inline-flex px-5 py-2.5 rounded-full border border-mint/30 text-mint text-sm font-mono hover:bg-mint/[0.06] transition-colors"
+              >
+                Email to schedule
+              </a>
+            </div>
           </motion.div>
 
           <motion.form

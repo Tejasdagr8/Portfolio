@@ -866,7 +866,7 @@ function App() {
           </SectionHeading>
           <p className="text-fog text-sm font-mono -mt-4 mb-4 hidden sm:block">Click any project for the spotlight view</p>
           <div
-            className="flex flex-wrap gap-2 mb-6 -mt-2"
+            className="project-filters use-native-cursor flex flex-wrap gap-2 mb-6 -mt-2"
             role="group"
             aria-label="Filter projects by category"
           >
@@ -876,7 +876,7 @@ function App() {
                 type="button"
                 onClick={() => setProjectFilter(id)}
                 aria-pressed={projectFilter === id}
-                className={`font-mono text-[10px] sm:text-[11px] tracking-wide px-3 py-1.5 rounded-full border transition-colors ${
+                className={`project-filter-chip font-mono text-[10px] sm:text-[11px] tracking-wide px-3 py-1.5 rounded-full border transition-colors ${
                   projectFilter === id
                     ? "border-mint/50 text-paper bg-mint/[0.1]"
                     : "border-white/[0.13] text-fog hover:text-paper hover:border-white/[0.22]"

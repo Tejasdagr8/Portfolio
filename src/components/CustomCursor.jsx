@@ -5,6 +5,7 @@ export default function CustomCursor() {
   const [ring, setRing] = useState({ x: 0, y: 0 });
   const [visible, setVisible] = useState(false);
   const [hovering, setHovering] = useState(false);
+  const [nativeZone, setNativeZone] = useState(false);
   const [enabled, setEnabled] = useState(false);
 
   useEffect(() => {
@@ -25,13 +26,19 @@ export default function CustomCursor() {
     const onMove = (e) => {
       targetX = e.clientX;
       targetY = e.clientY;
-      setVisible(true);
+      const inNativeZone = Boolean(e.target.closest(".use-native-cursor"));
+      setNativeZone(inNativeZone);
+      setVisible(!inNativeZone);
       setPos({ x: targetX, y: targetY });
     };
 
     const onLeave = () => setVisible(false);
 
     const onOver = (e) => {
+      if (e.target.closest(".use-native-cursor")) {
+        setHovering(false);
+        return;
+      }
       const interactive = e.target.closest("a, button, [role='button'], input, textarea, select, label");
       setHovering(Boolean(interactive));
     };
@@ -57,7 +64,7 @@ export default function CustomCursor() {
     };
   }, []);
 
-  if (!enabled) return null;
+  if (!enabled || nativeZone) return null;
 
   return (
     <>

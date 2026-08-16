@@ -189,6 +189,11 @@ body.custom-cursor-active button {
   cursor: none !important;
 }
 
+body.custom-cursor-active .use-native-cursor,
+body.custom-cursor-active .use-native-cursor button {
+  cursor: pointer !important;
+}
+
 .custom-cursor-dot {
   width: 6px;
   height: 6px;

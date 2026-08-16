@@ -1,9 +1,12 @@
 import { compareIntro, compareRows } from "../data/compare";
 import { Link } from "react-router-dom";
+import SeoHead from "../components/SeoHead";
+import { PAGE_SEO } from "../data/seo";
 
 export default function Compare() {
   return (
     <div className="min-h-[100dvh] bg-ink-0 text-paper font-body px-4 py-16 sm:py-24">
+      <SeoHead title={PAGE_SEO.compare.title} description={PAGE_SEO.compare.description} path={PAGE_SEO.compare.path} />
       <div className="max-w-3xl mx-auto">
         <p className="font-mono text-[10px] tracking-[0.2em] uppercase text-mint mb-4">compare mode</p>
         <h1 className="font-display font-extrabold text-3xl sm:text-4xl tracking-tight mb-3">Tejas vs typical new grad</h1>

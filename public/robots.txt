@@ -1,5 +1,7 @@
 User-agent: *
 Allow: /
 Disallow: /views
+Disallow: /api/
 
+# Tejas Melkote — AI/ML engineer portfolio (Bengaluru, India)
 Sitemap: https://tejas-melkote.vercel.app/sitemap.xml

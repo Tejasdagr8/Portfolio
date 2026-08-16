@@ -307,36 +307,47 @@ html.paper-mode .terminal-overlay {
   background: var(--hero-bg);
 }
 
-.hero-open-banner {
-  position: absolute;
-  top: 5.25rem;
-  right: 1rem;
-  z-index: 3;
-  transform: rotate(-5deg);
-  transform-origin: top right;
-  max-width: min(220px, 42vw);
+.hero-aside-column {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.25rem;
+  max-width: 100%;
+  overflow: visible;
 }
 
-@media (min-width: 768px) {
+@media (min-width: 1024px) {
+  .hero-aside-column {
+    align-items: flex-end;
+    justify-content: flex-start;
+    min-width: 17rem;
+    padding-top: 0.5rem;
+    padding-right: 0.5rem;
+  }
+}
+
+.hero-open-banner {
+  position: relative;
+  z-index: 4;
+  width: 100%;
+  max-width: 15.5rem;
+  transform: rotate(-4deg);
+  transform-origin: center right;
+  flex-shrink: 0;
+}
+
+@media (min-width: 640px) {
   .hero-open-banner {
-    top: 5.75rem;
-    right: 1.5rem;
-    max-width: 240px;
+    max-width: 16.5rem;
   }
 }
 
 @media (min-width: 1024px) {
   .hero-open-banner {
-    top: 6.5rem;
-    right: max(2rem, calc((100vw - 72rem) / 2 + 1rem));
-  }
-}
-
-@media (min-width: 1280px) {
-  .hero-open-banner {
-    top: 7rem;
-    right: max(2.5rem, calc((100vw - 72rem) / 2 + 2rem));
-    max-width: 252px;
+    align-self: flex-end;
+    margin-right: 0.25rem;
+    margin-bottom: 0.15rem;
+    transform: rotate(-5deg);
   }
 }
 

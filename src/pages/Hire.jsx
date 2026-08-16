@@ -1,7 +1,9 @@
 import { Link } from "react-router-dom";
 import { FaGithub, FaLinkedin, FaEnvelope, FaDownload, FaExternalLinkAlt } from "react-icons/fa";
 import ProfileAvatar from "../components/ProfileAvatar";
+import SeoHead from "../components/SeoHead";
 import useAnalytics from "../hooks/useAnalytics";
+import { PAGE_SEO } from "../data/seo";
 import { paperLinks } from "../data/publications";
 
 const HIGHLIGHTS = [
@@ -25,6 +27,7 @@ export default function Hire() {
 
   return (
     <div className="min-h-[100dvh] bg-ink-0 text-paper font-body flex flex-col items-center justify-center px-4 py-12 relative overflow-hidden">
+      <SeoHead title={PAGE_SEO.hire.title} description={PAGE_SEO.hire.description} path={PAGE_SEO.hire.path} />
       <div className="absolute inset-0 bg-gradient-to-b from-iris/[0.06] via-transparent to-mint/[0.04] pointer-events-none" />
 
       <div className="relative z-10 w-full max-w-md text-center">

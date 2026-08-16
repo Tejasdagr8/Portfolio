@@ -1,7 +1,7 @@
 export const OG_DEFAULT = {
-  title: "Tejas Melkote | AI/ML Engineer & Full-Stack Developer",
+  title: "Tejas Melkote | AI/ML Engineer & Full-Stack Developer Portfolio",
   description:
-    "Final-year B.Tech CS (AI) student and SDE Intern at SuperAGI. AI/ML engineer and full-stack developer building LLM apps, agents, and production features. Based in Bengaluru, India.",
+    "Tejas Melkote — AI/ML engineer and full-stack developer in Bengaluru, India. 15+ production PRs at SuperAGI, TatvaOps Vantage, LLM agents, RAG, and COLM 2026 research.",
 };
 
 export const OG_BY_REF = [

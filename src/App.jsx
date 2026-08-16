@@ -21,7 +21,9 @@ import HeroStats from "./components/HeroStats";
 import CapabilityMap from "./components/CapabilityMap";
 import ResearchCallout from "./components/ResearchCallout";
 import OpenToWorkBanner from "./components/OpenToWorkBanner";
+import SeoHead from "./components/SeoHead";
 import useAnalytics from "./hooks/useAnalytics";
+import { PAGE_SEO } from "./data/seo";
 import { track, getCampaignRef } from "./lib/analytics";
 import { playSound } from "./lib/sounds";
 import { getCampaignContent } from "./lib/campaign";
@@ -355,6 +357,7 @@ function App() {
 
   return (
     <div className="bg-ink-0 text-paper font-body font-light min-h-screen overflow-x-hidden">
+      <SeoHead title={PAGE_SEO.home.title} description={PAGE_SEO.home.description} path={PAGE_SEO.home.path} />
       <LegendaryMode />
       <RecruiterSpeedRun />
       <div className="fixed top-0 left-0 z-[60] h-[2px] bg-gradient-to-r from-[#8C7BFF] to-[#5EE6D0]" style={{ width: `${scrollProgress}%` }} />
@@ -365,6 +368,7 @@ function App() {
           <a
             href="#"
             data-track="brand_name"
+            aria-label="Tejas Melkote portfolio home"
             className="font-mono text-sm tracking-wide text-paper hover:text-mint transition-colors shrink-0"
           >
             tejas<span className="text-mint">.</span>melkote
@@ -486,10 +490,10 @@ function App() {
         )}
       </nav>
 
+      <main id="main-content">
       {/* HERO */}
-      <section className="hero-section min-h-[100dvh] flex flex-col justify-center relative overflow-hidden pt-20 pb-20 md:pt-24 md:pb-16">
+      <section className="hero-section min-h-[100dvh] flex flex-col justify-center relative overflow-x-hidden pt-20 pb-20 md:pt-24 md:pb-16">
         <GradientField className="gradient-field-canvas absolute inset-0 w-full h-full block pointer-events-none" />
-        <OpenToWorkBanner localTime={localTime} />
 
         <motion.div
           className={`relative z-[2] ${sectionContainer}`}
@@ -497,12 +501,8 @@ function App() {
           animate="visible"
           variants={stagger}
         >
-          <motion.div variants={fadeUp} className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-8 md:gap-12">
-            <motion.div variants={fadeUp}>
-              <ProfileAvatar className="order-first mx-auto lg:order-last lg:mx-0" />
-            </motion.div>
-
-            <div className="flex-1 text-center lg:text-left min-w-0">
+          <motion.div variants={fadeUp} className="flex flex-col lg:flex-row lg:items-start lg:justify-between gap-8 md:gap-12">
+            <div className="flex-1 text-center lg:text-left min-w-0 order-2 lg:order-1">
               <p className="font-mono text-[10px] sm:text-xs md:text-sm text-mint tracking-[0.12em] sm:tracking-[0.14em] uppercase mb-5 sm:mb-6 flex items-center justify-center lg:justify-start gap-2 sm:gap-3 flex-wrap">
                 <span className="w-6 sm:w-8 h-px bg-mint inline-block shrink-0" />
                 <span className="text-left">
@@ -520,6 +520,7 @@ function App() {
                 <span className="hero-name-outline block text-[2.75rem] sm:text-6xl md:text-8xl">
                   Melkote
                 </span>
+                <span className="sr-only"> — AI/ML engineer and full-stack developer portfolio</span>
                 <span className="block text-[2rem] sm:text-5xl md:text-7xl mt-1">
                   builds <span className="gradient-text">minds</span>
                 </span>
@@ -608,6 +609,14 @@ function App() {
                 </a>
               </div>
             </div>
+
+            <motion.div
+              variants={fadeUp}
+              className="hero-aside-column order-1 lg:order-2 w-full lg:w-auto shrink-0 mx-auto lg:mx-0"
+            >
+              <OpenToWorkBanner localTime={localTime} />
+              <ProfileAvatar className="mx-auto lg:ml-auto lg:mr-0" />
+            </motion.div>
           </motion.div>
         </motion.div>
 
@@ -1162,9 +1171,14 @@ function App() {
         </motion.div>
       </section>
 
+      </main>
+
       {/* FOOTER */}
       <footer className="py-6 md:py-8 px-4 border-t border-white/[0.13] flex flex-col sm:flex-row justify-between items-center gap-3 font-mono text-[10px] sm:text-[11px] tracking-widest text-fog uppercase text-center sm:text-left">
         <span className="max-w-xs sm:max-w-none leading-relaxed">© {new Date().getFullYear()} Tejas Melkote — built by hand</span>
+        <p className="sr-only">
+          Tejas Melkote portfolio — AI ML engineer, full-stack developer, Bengaluru India, SuperAGI, TatvaOps, MIT Manipal.
+        </p>
         <div className="flex items-center gap-4 sm:gap-6">
           <a href="/hire" data-track="footer_hire" className="hover:text-mint transition-colors">
             /hire

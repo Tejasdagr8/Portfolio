@@ -20,10 +20,11 @@ import RecruiterSpeedRun from "./components/RecruiterSpeedRun";
 import SoundToggle from "./components/SoundToggle";
 import HeroStats from "./components/HeroStats";
 import CapabilityMap from "./components/CapabilityMap";
+import ResearchCallout from "./components/ResearchCallout";
 import useAnalytics from "./hooks/useAnalytics";
 import { track, getCampaignRef } from "./lib/analytics";
 import { playSound } from "./lib/sounds";
-import { getCampaignContent, getHeroCtas } from "./lib/campaign";
+import { getCampaignContent } from "./lib/campaign";
 import { applyOgMeta } from "./lib/ogCampaign";
 import { unlockAchievement } from "./components/AchievementBadges";
 import { projects, PROJECT_FILTERS, projectMatchesFilter } from "./data/projects";
@@ -116,7 +117,6 @@ function App() {
 
   const campaignRef = useMemo(() => getCampaignRef(), []);
   const campaign = useMemo(() => getCampaignContent(campaignRef), [campaignRef]);
-  const heroCtas = useMemo(() => getHeroCtas(campaignRef), [campaignRef]);
 
   useAnalytics();
 
@@ -530,17 +530,23 @@ function App() {
                   campaign.blurb
                 ) : (
                   <>
-                    <strong className="text-paper font-medium">AI/ML engineer & full-stack developer.</strong>{" "}
-                    Final-year B.Tech CS (AI) at MIT Manipal — shipped 15+ production PRs at SuperAGI (Go, Rails, Vue, CI/CD) and now building LLM agents, RAG pipelines, and full-stack products.
+                    <strong className="text-paper font-medium">AI engineer building production-grade AI systems and full-stack products.</strong>{" "}
+                    Final-year B.Tech CS (AI) at MIT Manipal — 15+ production PRs at SuperAGI · LLMs, agents, RAG · Python, Go, React.
+                    {" "}
+                    <span className="text-paper/90">Open to AI/ML and Software Engineering roles.</span>
                   </>
                 )}
               </p>
+
+              <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-mint/30 bg-mint/[0.08] font-mono text-[11px] sm:text-xs text-paper mt-6 sm:mt-8 justify-center lg:justify-start w-full sm:w-auto">
+                <span className="status-pulse w-2 h-2 rounded-full bg-mint shrink-0" aria-hidden />
+                Open to opportunities · Bengaluru · AI/ML & SDE
+              </div>
 
               <HeroStats contributionTotal={contribTotal} />
 
               <div className="font-mono text-[11px] sm:text-xs text-fog-muted tracking-wide flex flex-wrap justify-center lg:justify-start gap-x-4 sm:gap-x-6 gap-y-2 mt-4 sm:mt-6">
                 <span><span className="text-mint">●</span> Bengaluru, IN</span>
-                <span><span className="status-pulse text-mint">●</span> Open to opportunities</span>
                 <span className="hidden sm:inline"><span className="text-mint">●</span> ⌘K terminal · R speed run</span>
               </div>
 
@@ -551,20 +557,28 @@ function App() {
 
               <div className="flex flex-wrap justify-center lg:justify-start gap-3 sm:gap-4 mt-8 sm:mt-10">
                 <a
-                  href={heroCtas.primary.href}
-                  {...(heroCtas.primary.download ? { download: true } : {})}
-                  data-track={heroCtas.primary.track}
+                  href="#projects"
+                  data-track="cta_projects_hero"
                   className="w-full sm:w-auto text-center px-6 sm:px-7 py-3 rounded-full bg-gradient-to-r from-iris to-mint text-ink-contrast text-sm font-medium hover:opacity-90 transition-opacity"
                 >
-                  {heroCtas.primary.label}
+                  View projects
                 </a>
                 <a
-                  href={heroCtas.secondary.href}
-                  {...(heroCtas.secondary.download ? { download: true } : {})}
-                  data-track={heroCtas.secondary.track}
+                  href="/resume.pdf"
+                  download
+                  data-track="cta_resume_hero"
                   className="btn-ghost w-full sm:w-auto text-center px-6 sm:px-7 py-3 rounded-full text-fog text-sm hover:text-paper transition-all"
                 >
-                  {heroCtas.secondary.label}
+                  Download resume
+                </a>
+                <a
+                  href="https://www.linkedin.com/in/tejas-melkote-390545309/"
+                  target="_blank"
+                  rel="noreferrer"
+                  data-track="cta_linkedin_hero"
+                  className="btn-ghost w-full sm:w-auto text-center px-6 sm:px-7 py-3 rounded-full text-fog text-sm hover:text-paper transition-all"
+                >
+                  LinkedIn
                 </a>
               </div>
 
@@ -610,6 +624,8 @@ function App() {
       <SkillsMarquee />
 
       <GitHubPulse />
+
+      <ResearchCallout />
 
       {/* ABOUT */}
       <motion.section
@@ -889,9 +905,13 @@ function App() {
               type="button"
               variants={fadeUp}
               onClick={() => openSpotlight(project)}
-              className="group relative grid grid-cols-1 md:grid-cols-[80px_1fr_auto] gap-2 md:gap-10 py-6 md:py-10 border-t border-white/[0.13] md:hover:pl-3 transition-all duration-300 w-full text-left cursor-pointer"
+              className={`group relative grid grid-cols-1 md:grid-cols-[80px_1fr_auto] gap-2 md:gap-10 py-6 md:py-10 border-t border-white/[0.13] md:hover:pl-3 transition-all duration-300 w-full text-left cursor-pointer ${
+                project.featured ? "md:mx-0 rounded-xl bg-mint/[0.04] ring-1 ring-mint/15 px-0 md:px-4" : ""
+              }`}
             >
-              <span className="font-mono text-xs sm:text-sm text-fog">P—{String(i + 1).padStart(2, "0")}</span>
+              <span className="font-mono text-xs sm:text-sm text-fog">
+                {project.featured ? "★" : `P—${String(i + 1).padStart(2, "0")}`}
+              </span>
               <div className="min-w-0">
                 <h3 className="font-display font-bold text-lg sm:text-xl md:text-3xl text-paper group-hover:text-mint transition-colors leading-tight">
                   {project.title}

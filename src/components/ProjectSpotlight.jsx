@@ -1,9 +1,28 @@
 import { motion, AnimatePresence } from "framer-motion";
 import { useEffect } from "react";
-import { FaExternalLinkAlt, FaTimes } from "react-icons/fa";
+import { FaExternalLinkAlt, FaGithub, FaTimes } from "react-icons/fa";
 import ArchitectureDiagram from "./ArchitectureDiagram";
 import InteractiveArchitecture from "./InteractiveArchitecture";
 import ProjectLivePreview from "./ProjectLivePreview";
+
+function CaseStudySection({ title, children, items }) {
+  return (
+    <div>
+      <p className="font-mono text-[10px] tracking-[0.18em] uppercase text-ember mb-3">{title}</p>
+      {children && <p className="text-sm text-fog leading-7">{children}</p>}
+      {items?.length > 0 && (
+        <ul className="space-y-2 mt-1">
+          {items.map((item) => (
+            <li key={item} className="flex gap-3 text-sm text-fog leading-relaxed">
+              <span className="text-mint shrink-0 mt-0.5">→</span>
+              <span>{item}</span>
+            </li>
+          ))}
+        </ul>
+      )}
+    </div>
+  );
+}
 
 export default function ProjectSpotlight({ project, onClose }) {
   useEffect(() => {
@@ -20,6 +39,7 @@ export default function ProjectSpotlight({ project, onClose }) {
   }, [project, onClose]);
 
   const spotlight = project?.spotlight;
+  const caseStudy = spotlight?.caseStudy;
 
   return (
     <AnimatePresence>
@@ -77,52 +97,80 @@ export default function ProjectSpotlight({ project, onClose }) {
                 />
               )}
 
-              <p className="text-fog text-sm sm:text-base leading-7">{project.description}</p>
+              {caseStudy?.problem ? (
+                <CaseStudySection title="problem">{caseStudy.problem}</CaseStudySection>
+              ) : (
+                <p className="text-fog text-sm sm:text-base leading-7">{project.description}</p>
+              )}
 
-              {spotlight?.highlights && (
-                <div>
-                  <p className="font-mono text-[10px] tracking-[0.18em] uppercase text-ember mb-3">highlights</p>
-                  <ul className="space-y-2">
-                    {spotlight.highlights.map((item) => (
-                      <li key={item} className="flex gap-3 text-sm text-fog leading-relaxed">
-                        <span className="text-mint shrink-0 mt-0.5">→</span>
-                        <span>{item}</span>
-                      </li>
-                    ))}
-                  </ul>
-                </div>
+              {caseStudy?.contribution && (
+                <CaseStudySection title="my contribution">{caseStudy.contribution}</CaseStudySection>
+              )}
+
+              {!caseStudy?.contribution && spotlight?.highlights && (
+                <CaseStudySection title="highlights" items={spotlight.highlights} />
               )}
 
               {spotlight?.flowKey ? (
-                <InteractiveArchitecture flowKey={spotlight.flowKey} />
+                <div>
+                  <p className="font-mono text-[10px] tracking-[0.18em] uppercase text-ember mb-3">architecture</p>
+                  <InteractiveArchitecture flowKey={spotlight.flowKey} />
+                </div>
               ) : (
                 spotlight?.architecture && (
-                  <ArchitectureDiagram steps={spotlight.architecture} />
+                  <div>
+                    <p className="font-mono text-[10px] tracking-[0.18em] uppercase text-ember mb-3">architecture</p>
+                    <ArchitectureDiagram steps={spotlight.architecture} />
+                  </div>
                 )
               )}
 
-              <div className="flex flex-wrap gap-2">
-                {(spotlight?.stack || project.tags).map((tag) => (
-                  <span
-                    key={tag}
-                    className="font-mono text-[11px] px-3 py-1 rounded-full border border-white/[0.13] text-fog"
-                  >
-                    {tag}
-                  </span>
-                ))}
+              {caseStudy?.challenges?.length > 0 && (
+                <CaseStudySection title="challenges" items={caseStudy.challenges} />
+              )}
+
+              {caseStudy?.result && (
+                <CaseStudySection title="result">{caseStudy.result}</CaseStudySection>
+              )}
+
+              <div>
+                <p className="font-mono text-[10px] tracking-[0.18em] uppercase text-ember mb-3">tech</p>
+                <div className="flex flex-wrap gap-2">
+                  {(spotlight?.stack || project.tags).map((tag) => (
+                    <span
+                      key={tag}
+                      className="font-mono text-[11px] px-3 py-1 rounded-full border border-white/[0.13] text-fog"
+                    >
+                      {tag}
+                    </span>
+                  ))}
+                </div>
               </div>
 
-              {project.link && (
-                <a
-                  href={project.link}
-                  target="_blank"
-                  rel="noreferrer"
-                  data-track={`spotlight:${project.title}`}
-                  className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-gradient-to-r from-iris to-mint text-ink-contrast text-sm font-medium hover:opacity-90 transition-opacity"
-                >
-                  <FaExternalLinkAlt size={11} /> View live
-                </a>
-              )}
+              <div className="flex flex-wrap gap-3 pt-2">
+                {project.link && (
+                  <a
+                    href={project.link}
+                    target="_blank"
+                    rel="noreferrer"
+                    data-track={`spotlight:${project.title}`}
+                    className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-gradient-to-r from-iris to-mint text-ink-contrast text-sm font-medium hover:opacity-90 transition-opacity"
+                  >
+                    <FaExternalLinkAlt size={11} /> View live
+                  </a>
+                )}
+                {project.github && (
+                  <a
+                    href={project.github}
+                    target="_blank"
+                    rel="noreferrer"
+                    data-track={`spotlight_github:${project.title}`}
+                    className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full border border-white/[0.13] text-fog text-sm font-mono hover:text-paper transition-colors"
+                  >
+                    <FaGithub size={13} /> GitHub
+                  </a>
+                )}
+              </div>
             </div>
           </motion.div>
         </motion.div>

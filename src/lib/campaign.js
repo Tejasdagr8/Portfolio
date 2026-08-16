@@ -58,8 +58,8 @@ const CAMPAIGNS = [
 ];
 
 const DEFAULT_CTAS = {
-  primaryCta: { label: "Get in touch", href: "#contact", track: "cta_contact" },
-  secondaryCta: { label: "Download CV", href: "/resume.pdf", download: true, track: "cta_resume" },
+  primaryCta: { label: "Download resume", href: "/resume.pdf", download: true, track: "cta_resume" },
+  secondaryCta: { label: "View projects", href: "#projects", track: "cta_projects" },
 };
 
 function prettifyRef(ref) {
@@ -82,7 +82,7 @@ export function getCampaignContent(ref) {
   return {
     ref,
     eyebrow: `welcome, ${prettifyRef(ref)}`,
-    blurb: "AI/ML engineer & full-stack developer. Final-year B.Tech CS (AI) at MIT Manipal — shipping production features at SuperAGI and building LLM agents, RAG pipelines, and the products around them.",
+    blurb: "AI engineer building production-grade AI systems and full-stack products. Final-year B.Tech CS (AI) at MIT Manipal — 15+ PRs at SuperAGI, LLMs, agents, RAG. Open to AI/ML and Software Engineering roles.",
     ...DEFAULT_CTAS,
     personalized: true,
   };

@@ -8,56 +8,85 @@ export const PROJECT_FILTERS = [
 
 export const projects = [
   {
-    title: "TatvaOps Platform (Vantage)",
-    description: "AI-powered construction content platform with blogs, forums, CMS, and analytics — built for high-intent SEO traffic and community engagement.",
+    title: "TatvaOps — Production AI & Construction Platform",
+    description:
+      "Built and shipped Vantage — a live CMS + community platform with SEO indexing, forums, analytics dashboards, and AI-assisted content for real construction-industry users.",
     tags: ["React", "CMS", "SEO", "AI"],
     categories: ["production", "fullstack"],
-    metric: "SEO CMS · production users",
+    featured: true,
+    metric: "Live production · CMS + forums + analytics",
     link: "https://vantage.withtatva.ai/",
     livePreview: {
       screenshot: "/previews/vantage.png",
       note: "Live site blocks iframe embeds — screenshot preview. Click to open vantage.withtatva.ai.",
     },
     spotlight: {
-      year: "2025",
-      role: "Full-stack · AI content platform",
+      year: "2025–26",
+      role: "Full-stack · AI content platform · TatvaOps",
       highlights: [
         "SEO-first CMS with blogs, forums, and community features",
         "Analytics layer for high-intent construction traffic",
         "Production deployment serving real users in construction vertical",
       ],
-      stack: ["React", "CMS", "Analytics", "AI-assisted content"],
+      stack: ["React", "TypeScript", "CMS", "Analytics", "Vercel", "AI content"],
       architecture: ["User", "React SPA", "CMS API", "Analytics", "SEO index"],
       flowKey: "tatvaops",
+      caseStudy: {
+        problem:
+          "Construction buyers and contractors need a trustworthy, searchable knowledge hub — not static marketing pages. TatvaOps needed Vantage to capture high-intent SEO traffic and host community + AI content at production scale.",
+        contribution:
+          "Owned full-stack features on Vantage: CMS-driven SEO content, forums, vendor profiles, analytics dashboards, and Eva AI modules — shipped iteratively to production on React + Vercel.",
+        challenges: [
+          "Balancing SEO structure with fast editorial workflows in the CMS",
+          "Shipping features to real users while keeping deploy cadence tight",
+          "Integrating AI-assisted content without breaking page performance",
+        ],
+        result:
+          "Live platform at vantage.withtatva.ai serving the construction vertical — blogs, forums, Radar/InSights modules, and production analytics in one stack.",
+      },
     },
   },
   {
     title: "TatvaOps Verified Vendor Profile",
-    description: "Production vendor profile system with verified ratings, pricing insights, and searchable contractor listings for the construction industry.",
+    description:
+      "Shipped a searchable vendor profile system with verified ratings and pricing insights — deployed on Vercel with production-grade UX for contractor discovery.",
     tags: ["Web App", "Full Stack", "Portfolio"],
     categories: ["production", "fullstack"],
-    metric: "Live on Vercel · verified ratings",
+    metric: "Vercel production · verified vendor listings",
     link: "https://vendor-profilepage.vercel.app/",
     livePreview: {
       embedUrl: "https://vendor-profilepage.vercel.app/",
     },
     spotlight: {
       year: "2025",
-      role: "Full-stack web app",
+      role: "Full-stack web app · TatvaOps",
       highlights: [
         "Verified vendor ratings and searchable contractor listings",
         "Pricing insights for construction procurement decisions",
         "Deployed on Vercel with production-grade UX",
       ],
       stack: ["React", "Vercel", "Full Stack"],
+      caseStudy: {
+        problem:
+          "Procurement teams needed a fast way to compare verified contractors with pricing signals — not unstructured PDFs or phone calls.",
+        contribution:
+          "Designed and built the vendor profile UI, search/filter flows, and rating surfaces; deployed as a standalone production app on Vercel.",
+        challenges: [
+          "Presenting dense vendor data without overwhelming mobile users",
+          "Keeping list performance snappy as profile fields grew",
+        ],
+        result:
+          "Live vendor profile app with verified ratings, pricing insights, and embeddable production deployment.",
+      },
     },
   },
   {
     title: "AI Trip Planner",
-    description: "Agentic trip planner orchestrating 7 APIs (Weather, Tavily, Google Places, Groq) via a LangGraph workflow with FastAPI backend and Docker deployment.",
+    description:
+      "Solo-built agentic planner orchestrating 7 external APIs through a LangGraph workflow — FastAPI backend, Dockerized deploy, multi-step itinerary reasoning.",
     tags: ["LangGraph", "FastAPI", "Docker", "Agents"],
     categories: ["agents", "fullstack"],
-    metric: "7 APIs · LangGraph",
+    metric: "7 API integrations · LangGraph agent",
     spotlight: {
       year: "2025",
       role: "Agentic systems · solo build",
@@ -68,14 +97,27 @@ export const projects = [
       ],
       stack: ["LangGraph", "FastAPI", "Groq", "Docker", "Tavily"],
       architecture: ["User", "FastAPI", "LangGraph agent", "7 APIs", "Itinerary"],
+      caseStudy: {
+        problem:
+          "Single-shot LLM prompts fail for trip planning — weather, places, search, and routing need coordinated multi-step tool use with failure recovery.",
+        contribution:
+          "Architected the LangGraph state machine, wired 7 APIs (Weather, Tavily, Google Places, Groq, etc.), and containerized the FastAPI service.",
+        challenges: [
+          "Orchestrating heterogeneous APIs with different latency profiles",
+          "Keeping agent traces debuggable when a tool call fails mid-itinerary",
+        ],
+        result:
+          "End-to-end agentic pipeline from natural-language request → tool calls → structured itinerary, runnable via Docker.",
+      },
     },
   },
   {
     title: "Medical Image Analyzer & PDF Summarizer",
-    description: "Multimodal tool for medical image analysis and PDF summarization with user authentication, analytics dashboards, and RAG-powered document Q&A.",
+    description:
+      "Multimodal app combining medical image analysis, PDF summarization, auth, analytics, and RAG document Q&A — live on Streamlit Cloud.",
     tags: ["Python", "LLM", "RAG", "Streamlit"],
     categories: ["ml", "fullstack"],
-    metric: "Live embed · Streamlit · RAG",
+    metric: "Live Streamlit · RAG + vision pipeline",
     link: "https://medimage.streamlit.app/",
     livePreview: {
       embedUrl: "https://medimage.streamlit.app/?embed=true",
@@ -91,14 +133,27 @@ export const projects = [
       ],
       stack: ["Python", "Streamlit", "LLM", "RAG"],
       architecture: ["User", "Streamlit", "Auth", "RAG pipeline", "LLM + Vision"],
+      caseStudy: {
+        problem:
+          "Clinicians and researchers need one surface for imaging insights and long PDF reports — not separate tools with no shared context.",
+        contribution:
+          "Built the multimodal pipeline: vision analysis path, PDF chunking + RAG Q&A, user auth, and analytics dashboard in Streamlit.",
+        challenges: [
+          "Combining vision and text RAG without ballooning response latency",
+          "Handling upload edge cases and keeping sessions isolated per user",
+        ],
+        result:
+          "Deployed multimodal app on Streamlit Cloud with live embed — image analysis, PDF summary, and document Q&A in one flow.",
+      },
     },
   },
   {
     title: "Crop Yield Prediction",
-    description: "Hybrid CNN-RNN-LSTM model for agricultural yield forecasting across crop types and regions, with end-to-end training and evaluation pipeline.",
+    description:
+      "Hybrid CNN-RNN-LSTM model for agricultural yield forecasting — end-to-end Colab pipeline across crop types and regions with training/eval metrics.",
     tags: ["TensorFlow", "CNN", "LSTM", "Python"],
     categories: ["ml"],
-    metric: "CNN-RNN-LSTM · Colab pipeline",
+    metric: "Hybrid CNN-RNN-LSTM · Colab pipeline",
     link: "https://colab.research.google.com/drive/1c5BOmHjO4dQDWb-YuZ5j42uGF-bvkQKS?usp=sharing",
     spotlight: {
       year: "2024",
@@ -114,7 +169,8 @@ export const projects = [
   },
   {
     title: "Car Price Prediction",
-    description: "End-to-end ML pipeline with feature engineering, model selection, and evaluation for automotive price estimation on real-world listing data.",
+    description:
+      "End-to-end sklearn pipeline on real automotive listings — feature engineering, model selection, and held-out evaluation with regression metrics.",
     tags: ["Scikit-learn", "Python", "ML"],
     categories: ["ml"],
     metric: "sklearn pipeline · feature engineering",
@@ -131,7 +187,8 @@ export const projects = [
   },
   {
     title: "Customer Churn & Segmentation",
-    description: "Churn prediction and customer segmentation using KNN, DBSCAN, and SVM — with clustering analysis to identify at-risk user cohorts.",
+    description:
+      "Combined SVM/KNN churn prediction with DBSCAN cohort segmentation — surfaced at-risk user groups from real customer feature data.",
     tags: ["KNN", "DBSCAN", "SVM", "Python"],
     categories: ["ml"],
     metric: "SVM + DBSCAN · cohort segmentation",
@@ -148,7 +205,8 @@ export const projects = [
   },
   {
     title: "Speech-to-Text System",
-    description: "Accessibility-focused speech recognition system built with NLP pipelines and OpenAI Whisper for real-time transcription.",
+    description:
+      "Accessibility-focused Whisper pipeline for real-time transcription — NLP preprocessing and streaming-friendly inference in Python.",
     tags: ["Python", "NLP", "OpenAI", "Whisper"],
     categories: ["ml"],
     metric: "Whisper · real-time transcription",

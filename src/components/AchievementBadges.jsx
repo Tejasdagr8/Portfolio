@@ -1,6 +1,7 @@
 export default function AchievementBadges({ contributionTotal = 0 }) {
   const points = [
-    { label: "production", value: "15+ PRs @ SuperAGI" },
+    { label: "flagship", value: "15+ PRs @ SuperAGI" },
+    { label: "production", value: "Go · Rails · Vue · CI/CD" },
     { label: "research", value: "Sci-FM @ COLM 2026 poster" },
     { label: "shipped", value: "TatvaOps Vantage + 8 projects" },
   ];

@@ -5,7 +5,7 @@ import { playSound } from "../lib/sounds";
 
 const STEPS = [
   { id: "about", label: "About", hint: "Model-first engineer" },
-  { id: "experience", label: "Experience", hint: "SuperAGI + TatvaOps" },
+  { id: "experience", label: "Experience", hint: "SuperAGI flagship · TatvaOps" },
   { id: "research", label: "Research", hint: "Sci-FM @ COLM 2026" },
   { id: "projects", label: "Projects", hint: "Live demos" },
   { id: "contact", label: "Contact", hint: "Recruiter packet" },

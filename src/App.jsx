@@ -18,13 +18,15 @@ import CustomCursor from "./components/CustomCursor";
 import LegendaryMode from "./components/LegendaryMode";
 import RecruiterSpeedRun from "./components/RecruiterSpeedRun";
 import SoundToggle from "./components/SoundToggle";
+import HeroStats from "./components/HeroStats";
+import CapabilityMap from "./components/CapabilityMap";
 import useAnalytics from "./hooks/useAnalytics";
 import { track, getCampaignRef } from "./lib/analytics";
 import { playSound } from "./lib/sounds";
 import { getCampaignContent, getHeroCtas } from "./lib/campaign";
 import { applyOgMeta } from "./lib/ogCampaign";
 import { unlockAchievement } from "./components/AchievementBadges";
-import { projects } from "./data/projects";
+import { projects, PROJECT_FILTERS, projectMatchesFilter } from "./data/projects";
 import { publications, paperLinks } from "./data/publications";
 import { experience } from "./data/experience";
 
@@ -43,13 +45,23 @@ const stagger = {
   visible: { transition: { staggerChildren: 0.1 } },
 };
 
-function SectionHeading({ eyebrow, children }) {
+function SectionHeading({ eyebrow, index, children, align = "left" }) {
+  const label =
+    eyebrow && index != null
+      ? `(${String(index).padStart(2, "0")}) ${eyebrow}`
+      : eyebrow;
+  const centered = align === "center";
+
   return (
-    <div className="mb-6 md:mb-12">
-      {eyebrow && (
-        <p className="font-mono text-[10px] sm:text-xs tracking-[0.16em] sm:tracking-[0.2em] uppercase text-mint flex items-center gap-2 sm:gap-3 mb-3 sm:mb-4">
-          {eyebrow}
-          <span className="flex-1 h-px bg-white/[0.13]" />
+    <div className={`mb-6 md:mb-12 ${centered ? "text-center max-w-3xl mx-auto" : ""}`}>
+      {label && (
+        <p
+          className={`font-mono text-[10px] sm:text-xs tracking-[0.16em] sm:tracking-[0.2em] uppercase text-mint flex items-center gap-2 sm:gap-3 mb-3 sm:mb-4 ${
+            centered ? "justify-center" : ""
+          }`}
+        >
+          {label}
+          {!centered && <span className="flex-1 h-px bg-white/[0.13]" />}
         </p>
       )}
       <h2 className="font-display text-2xl sm:text-3xl md:text-5xl font-bold tracking-tight leading-tight">{children}</h2>
@@ -57,20 +69,17 @@ function SectionHeading({ eyebrow, children }) {
   );
 }
 
-const skillCategories = [
-  {
-    title: "// machine learning",
-    items: ["PyTorch · scikit-learn", "Transformers · fine-tuning", "Computer Vision · NLP", "RAG & agentic systems", "LLM pipelines"],
-  },
-  {
-    title: "// full stack",
-    items: ["React · Vue.js · TypeScript", "Python · FastAPI · Go", "Ruby on Rails · Streamlit", "PostgreSQL · Redis · Kafka", "REST & streaming APIs"],
-  },
-  {
-    title: "// infrastructure",
-    items: ["Docker · CI/CD", "Jenkins · ArgoCD · Sidekiq", "Vercel · cloud deployment", "Git · Linux · the terminal", "PowerBI · analytics"],
-  },
-];
+const SECTION_INDEX = {
+  about: 1,
+  experience: 2,
+  research: 3,
+  education: 4,
+  projects: 5,
+  skills: 6,
+  contact: 7,
+};
+
+const GITHUB_PULSE_CACHE_KEY = "github_pulse_cache_v5";
 
 const leadership = [
   { role: "Class Representative", org: "AI-C, MIT Manipal" },
@@ -98,6 +107,12 @@ function App() {
   const [spotlightPaper, setSpotlightPaper] = useState(null);
   const [packetOpen, setPacketOpen] = useState(false);
   const [contribTotal, setContribTotal] = useState(0);
+  const [projectFilter, setProjectFilter] = useState("all");
+
+  const filteredProjects = useMemo(
+    () => projects.filter((project) => projectMatchesFilter(project, projectFilter)),
+    [projectFilter]
+  );
 
   const campaignRef = useMemo(() => getCampaignRef(), []);
   const campaign = useMemo(() => getCampaignContent(campaignRef), [campaignRef]);
@@ -111,6 +126,19 @@ function App() {
   }, [campaignRef]);
 
   useEffect(() => {
+    try {
+      const raw = window.localStorage.getItem(GITHUB_PULSE_CACHE_KEY);
+      if (raw) {
+        const cached = JSON.parse(raw);
+        const total = cached?.data?.contributionTotal;
+        if (typeof total === "number" && total > 0) {
+          setContribTotal(total);
+        }
+      }
+    } catch {
+      // Ignore corrupted cache.
+    }
+
     const onPulse = (e) => setContribTotal(e.detail?.contributionTotal || 0);
     window.addEventListener("github-pulse-loaded", onPulse);
     return () => window.removeEventListener("github-pulse-loaded", onPulse);
@@ -354,6 +382,7 @@ function App() {
                     : "text-fog-muted hover:text-paper hover:bg-[var(--muted-surface)]"
                 }`}
               >
+                <span className="text-fog/50 mr-1">{String(SECTION_INDEX[id]).padStart(2, "0")}</span>
                 {id}
                 {activeSection === id && (
                   <span className="absolute bottom-0.5 left-2.5 right-2.5 h-px bg-mint/70 rounded-full" />
@@ -424,6 +453,9 @@ function App() {
                       : "text-fog-muted hover:text-paper hover:bg-[var(--muted-surface)]"
                   }`}
                 >
+                  <span className="font-mono text-xs text-fog/50 mr-2">
+                    ({String(SECTION_INDEX[id]).padStart(2, "0")})
+                  </span>
                   {id}
                 </a>
               ))}
@@ -499,12 +531,14 @@ function App() {
                 ) : (
                   <>
                     <strong className="text-paper font-medium">AI/ML engineer & full-stack developer.</strong>{" "}
-                    Final-year B.Tech CS (AI) at MIT Manipal — shipping production features at SuperAGI and building LLM agents, RAG pipelines, and the products around them.
+                    Final-year B.Tech CS (AI) at MIT Manipal — shipped 15+ production PRs at SuperAGI (Go, Rails, Vue, CI/CD) and now building LLM agents, RAG pipelines, and full-stack products.
                   </>
                 )}
               </p>
 
-              <div className="font-mono text-[11px] sm:text-xs text-fog-muted tracking-wide flex flex-wrap justify-center lg:justify-start gap-x-4 sm:gap-x-6 gap-y-2 mt-6 sm:mt-8">
+              <HeroStats contributionTotal={contribTotal} projectCount={projects.length} />
+
+              <div className="font-mono text-[11px] sm:text-xs text-fog-muted tracking-wide flex flex-wrap justify-center lg:justify-start gap-x-4 sm:gap-x-6 gap-y-2 mt-4 sm:mt-6">
                 <span><span className="text-mint">●</span> Bengaluru, IN</span>
                 <span><span className="status-pulse text-mint">●</span> Open to opportunities</span>
                 <span className="hidden sm:inline"><span className="text-mint">●</span> ⌘K terminal · R speed run</span>
@@ -586,7 +620,7 @@ function App() {
         viewport={{ once: true, margin: "-80px" }}
         variants={fadeUp}
       >
-        <SectionHeading eyebrow="about">
+        <SectionHeading eyebrow="about" index={SECTION_INDEX.about}>
           Full-stack curiosity, <span className="gradient-text">model-first</span> thinking.
         </SectionHeading>
         <div className="grid lg:grid-cols-[1.4fr_1fr] gap-8 lg:gap-12 items-start">
@@ -597,10 +631,10 @@ function App() {
           </p>
           <div className="space-y-3">
             {[
+              { label: "flagship role", value: "SDE @ SuperAGI · 15+ PRs" },
+              { label: "currently", value: "Vantage @ TatvaOps" },
               { label: "focus", value: "ML systems, end to end" },
               { label: "research", value: "Sci-FM @ COLM 2026", href: paperLinks.arxiv },
-              { label: "currently", value: "LLM agents & RAG" },
-              { label: "internship", value: "SDE @ SuperAGI" },
             ].map(({ label, value, href }) => (
               href ? (
                 <a
@@ -632,7 +666,7 @@ function App() {
       {/* EXPERIENCE */}
       <section id="experience" className={`${sectionPad} ${sectionContainer}`}>
         <motion.div initial="hidden" whileInView="visible" viewport={{ once: true, margin: "-80px" }} variants={fadeUp}>
-          <SectionHeading eyebrow="experience">
+          <SectionHeading eyebrow="experience" index={SECTION_INDEX.experience}>
             Where I&apos;ve <span className="gradient-text">trained</span>.
           </SectionHeading>
         </motion.div>
@@ -654,7 +688,14 @@ function App() {
                 <p className="text-fog text-xs mt-1">{exp.location}</p>
               </div>
               <div>
-                <h3 className="font-display font-bold text-lg sm:text-xl md:text-2xl text-paper">{exp.role}</h3>
+                <div className="flex flex-wrap items-center gap-2 sm:gap-3">
+                  <h3 className="font-display font-bold text-lg sm:text-xl md:text-2xl text-paper">{exp.role}</h3>
+                  {exp.featured && (
+                    <span className="font-mono text-[10px] tracking-wider uppercase px-2.5 py-1 rounded-full border border-ember/40 text-ember bg-ember/[0.08]">
+                      {exp.featuredLabel || "Flagship role"}
+                    </span>
+                  )}
+                </div>
                 <p className="font-mono text-sm text-fog mt-1">
                   {exp.link ? (
                     <a href={exp.link} target="_blank" rel="noreferrer" className="hover:text-mint transition-colors inline-flex items-center gap-1">
@@ -686,7 +727,7 @@ function App() {
       {/* RESEARCH */}
       <section id="research" className={`${sectionPad} ${sectionContainer}`}>
         <motion.div initial="hidden" whileInView="visible" viewport={{ once: true, margin: "-80px" }} variants={fadeUp}>
-          <SectionHeading eyebrow="research">
+          <SectionHeading eyebrow="research" index={SECTION_INDEX.research}>
             Peer-reviewed <span className="gradient-text">LLM research</span>.
           </SectionHeading>
         </motion.div>
@@ -754,7 +795,9 @@ function App() {
       {/* EDUCATION */}
       <section id="education" className={`${sectionPad} ${sectionContainer}`}>
         <motion.div initial="hidden" whileInView="visible" viewport={{ once: true, margin: "-80px" }} variants={fadeUp}>
-          <SectionHeading eyebrow="education">Education</SectionHeading>
+          <SectionHeading eyebrow="education" index={SECTION_INDEX.education}>
+            Education
+          </SectionHeading>
         </motion.div>
         <motion.div
           className="space-y-4"
@@ -809,10 +852,31 @@ function App() {
           viewport={{ once: true, margin: "-80px" }}
           variants={fadeUp}
         >
-          <SectionHeading eyebrow="selected work">
+          <SectionHeading eyebrow="selected work" index={SECTION_INDEX.projects}>
             Things I&apos;ve <span className="gradient-text">shipped</span>.
           </SectionHeading>
-          <p className="text-fog text-sm font-mono -mt-4 mb-2 hidden sm:block">Click any project for the spotlight view</p>
+          <p className="text-fog text-sm font-mono -mt-4 mb-4 hidden sm:block">Click any project for the spotlight view</p>
+          <div
+            className="flex flex-wrap gap-2 mb-6 -mt-2"
+            role="group"
+            aria-label="Filter projects by category"
+          >
+            {PROJECT_FILTERS.map(({ id, label }) => (
+              <button
+                key={id}
+                type="button"
+                onClick={() => setProjectFilter(id)}
+                aria-pressed={projectFilter === id}
+                className={`font-mono text-[10px] sm:text-[11px] tracking-wide px-3 py-1.5 rounded-full border transition-colors ${
+                  projectFilter === id
+                    ? "border-mint/50 text-paper bg-mint/[0.1]"
+                    : "border-white/[0.13] text-fog hover:text-paper hover:border-white/[0.22]"
+                }`}
+              >
+                {label}
+              </button>
+            ))}
+          </div>
         </motion.div>
         <motion.div
           className="space-y-0"
@@ -821,9 +885,14 @@ function App() {
           viewport={{ once: true, margin: "-80px" }}
           variants={stagger}
         >
-          {projects.map((project, i) => (
+          {filteredProjects.length === 0 && (
+            <p className="text-fog font-mono text-sm py-10 border-t border-white/[0.13]">
+              No projects in this layer.
+            </p>
+          )}
+          {filteredProjects.map((project, i) => (
             <motion.button
-              key={`${project.title}-${i}`}
+              key={project.title}
               type="button"
               variants={fadeUp}
               onClick={() => openSpotlight(project)}
@@ -834,6 +903,9 @@ function App() {
                 <h3 className="font-display font-bold text-lg sm:text-xl md:text-3xl text-paper group-hover:text-mint transition-colors leading-tight">
                   {project.title}
                 </h3>
+                {project.metric && (
+                  <p className="font-mono text-[11px] sm:text-xs text-mint/85 mt-2">{project.metric}</p>
+                )}
                 <p className="text-fog text-sm md:text-base leading-7 mt-3 max-w-2xl">{project.description}</p>
                 <div className="flex flex-wrap gap-2 mt-4">
                   {project.tags.map((tag) => (
@@ -872,30 +944,11 @@ function App() {
       {/* SKILLS */}
       <section id="skills" className={`${sectionPad} ${sectionContainer}`}>
         <motion.div initial="hidden" whileInView="visible" viewport={{ once: true, margin: "-80px" }} variants={fadeUp}>
-          <SectionHeading eyebrow="stack">
-            Tools of the <span className="gradient-text">trade</span>.
+          <SectionHeading eyebrow="capabilities" index={SECTION_INDEX.skills}>
+            One engineer, <span className="gradient-text">multiple layers</span>.
           </SectionHeading>
         </motion.div>
-        <motion.div
-          className="grid md:grid-cols-3 gap-4"
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true, margin: "-80px" }}
-          variants={stagger}
-        >
-          {skillCategories.map((col) => (
-            <motion.div key={col.title} variants={fadeUp} className="card-glass card-glass-hover p-7">
-              <h3 className="font-mono text-xs tracking-[0.18em] uppercase text-ember mb-5">{col.title}</h3>
-              <ul className="space-y-0">
-                {col.items.map((item) => (
-                  <li key={item} className="text-fog text-sm py-2.5 border-b border-dashed border-white/[0.1] last:border-0">
-                    {item}
-                  </li>
-                ))}
-              </ul>
-            </motion.div>
-          ))}
-        </motion.div>
+        <CapabilityMap />
       </section>
 
       {/* LEADERSHIP & LANGUAGES */}
@@ -941,12 +994,13 @@ function App() {
           viewport={{ once: true, margin: "-80px" }}
           variants={stagger}
         >
-          <motion.div variants={fadeUp} className="flex flex-col items-center mb-10">
-            <p className="font-mono text-xs tracking-[0.2em] uppercase text-mint mb-4">contact</p>
-            <h2 className="font-display text-2xl sm:text-3xl md:text-5xl font-bold text-center leading-tight px-2">
-              Let&apos;s build something<br className="hidden sm:block" />
-              <span className="sm:hidden"> </span>that <span className="gradient-text">learns</span>.
-            </h2>
+          <motion.div variants={fadeUp} className="flex flex-col items-center mb-10 w-full">
+            <SectionHeading eyebrow="contact" index={SECTION_INDEX.contact} align="center">
+              <span className="block text-center">
+                Let&apos;s build something<br className="hidden sm:block" />
+                <span className="sm:hidden"> </span>that <span className="gradient-text">learns</span>.
+              </span>
+            </SectionHeading>
             <p className="text-fog text-sm mt-5 max-w-md">
               Whether it&apos;s a role, a collaboration, or a hard problem — my inbox converges fast.
             </p>

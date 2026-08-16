@@ -8,7 +8,8 @@ const PROMPT = "tejas@portfolio ~ % ";
 const FILES = {
   "about.txt": `Full-stack curiosity, model-first thinking.
 Most engineers pick a layer — I work at the seam where models meet users, latency, and edge cases.
-Focus: ML systems end-to-end | Currently: LLM agents & RAG | Internship: SDE @ SuperAGI`,
+Flagship role: SDE Intern @ SuperAGI — 15+ production PRs (Go, Rails, Vue, CI/CD).
+Currently: Full-stack @ TatvaOps · LLM agents & RAG on the side.`,
 
   "superagi.txt": `Software Development Engineer Intern · Jan 2026 – May 2026
 SuperAGI · Bangalore, India
@@ -44,7 +45,8 @@ LinkedIn: linkedin.com/in/tejas-melkote-390545309`,
   "whoami.txt": `Tejas Melkote
 AI/ML Engineer & Full-Stack Developer
 B.Tech CS (AI) · MIT Manipal · CGPA 8.38
-SDE Intern @ SuperAGI · Bengaluru, IN
+Flagship: SDE Intern @ SuperAGI — 15+ production PRs
+Currently: Full-stack @ TatvaOps · Bengaluru, IN
 Research: Sci-FM 2026 @ COLM (Accepted Poster)
 Open to opportunities`,
 

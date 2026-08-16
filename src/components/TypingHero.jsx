@@ -1,10 +1,11 @@
 import { useEffect, useState } from "react";
 
 const PHRASES = [
+  "SuperAGI production stack",
+  "15+ PRs shipped",
+  "Go / Rails / Vue",
   "LLM agents",
   "RAG pipelines",
-  "Go / Rails / Vue",
-  "causal discovery",
   "production CI/CD",
   "full-stack ML",
 ];

@@ -1,8 +1,18 @@
+export const PROJECT_FILTERS = [
+  { id: "all", label: "All" },
+  { id: "production", label: "Production" },
+  { id: "agents", label: "Agents" },
+  { id: "ml", label: "ML" },
+  { id: "fullstack", label: "Full stack" },
+];
+
 export const projects = [
   {
     title: "TatvaOps Platform (Vantage)",
     description: "AI-powered construction content platform with blogs, forums, CMS, and analytics — built for high-intent SEO traffic and community engagement.",
     tags: ["React", "CMS", "SEO", "AI"],
+    categories: ["production", "fullstack"],
+    metric: "SEO CMS · production users",
     link: "https://vantage.withtatva.ai/",
     livePreview: {
       screenshot: "/previews/vantage.png",
@@ -25,6 +35,8 @@ export const projects = [
     title: "TatvaOps Verified Vendor Profile",
     description: "Production vendor profile system with verified ratings, pricing insights, and searchable contractor listings for the construction industry.",
     tags: ["Web App", "Full Stack", "Portfolio"],
+    categories: ["production", "fullstack"],
+    metric: "Live on Vercel · verified ratings",
     link: "https://vendor-profilepage.vercel.app/",
     livePreview: {
       embedUrl: "https://vendor-profilepage.vercel.app/",
@@ -44,6 +56,8 @@ export const projects = [
     title: "AI Trip Planner",
     description: "Agentic trip planner orchestrating 7 APIs (Weather, Tavily, Google Places, Groq) via a LangGraph workflow with FastAPI backend and Docker deployment.",
     tags: ["LangGraph", "FastAPI", "Docker", "Agents"],
+    categories: ["agents", "fullstack"],
+    metric: "7 APIs · LangGraph",
     spotlight: {
       year: "2025",
       role: "Agentic systems · solo build",
@@ -60,6 +74,8 @@ export const projects = [
     title: "Medical Image Analyzer & PDF Summarizer",
     description: "Multimodal tool for medical image analysis and PDF summarization with user authentication, analytics dashboards, and RAG-powered document Q&A.",
     tags: ["Python", "LLM", "RAG", "Streamlit"],
+    categories: ["ml", "fullstack"],
+    metric: "Live embed · Streamlit · RAG",
     link: "https://medimage.streamlit.app/",
     livePreview: {
       embedUrl: "https://medimage.streamlit.app/?embed=true",
@@ -81,6 +97,8 @@ export const projects = [
     title: "Crop Yield Prediction",
     description: "Hybrid CNN-RNN-LSTM model for agricultural yield forecasting across crop types and regions, with end-to-end training and evaluation pipeline.",
     tags: ["TensorFlow", "CNN", "LSTM", "Python"],
+    categories: ["ml"],
+    metric: "CNN-RNN-LSTM · Colab pipeline",
     link: "https://colab.research.google.com/drive/1c5BOmHjO4dQDWb-YuZ5j42uGF-bvkQKS?usp=sharing",
     spotlight: {
       year: "2024",
@@ -98,6 +116,8 @@ export const projects = [
     title: "Car Price Prediction",
     description: "End-to-end ML pipeline with feature engineering, model selection, and evaluation for automotive price estimation on real-world listing data.",
     tags: ["Scikit-learn", "Python", "ML"],
+    categories: ["ml"],
+    metric: "sklearn pipeline · feature engineering",
     spotlight: {
       year: "2024",
       role: "Classical ML pipeline",
@@ -113,6 +133,8 @@ export const projects = [
     title: "Customer Churn & Segmentation",
     description: "Churn prediction and customer segmentation using KNN, DBSCAN, and SVM — with clustering analysis to identify at-risk user cohorts.",
     tags: ["KNN", "DBSCAN", "SVM", "Python"],
+    categories: ["ml"],
+    metric: "SVM + DBSCAN · cohort segmentation",
     spotlight: {
       year: "2024",
       role: "Unsupervised + supervised ML",
@@ -128,6 +150,8 @@ export const projects = [
     title: "Speech-to-Text System",
     description: "Accessibility-focused speech recognition system built with NLP pipelines and OpenAI Whisper for real-time transcription.",
     tags: ["Python", "NLP", "OpenAI", "Whisper"],
+    categories: ["ml"],
+    metric: "Whisper · real-time transcription",
     spotlight: {
       year: "2024",
       role: "NLP · accessibility",
@@ -140,3 +164,8 @@ export const projects = [
     },
   },
 ];
+
+export function projectMatchesFilter(project, filterId) {
+  if (filterId === "all") return true;
+  return (project.categories || []).includes(filterId);
+}

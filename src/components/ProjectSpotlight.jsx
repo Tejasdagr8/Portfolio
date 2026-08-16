@@ -51,6 +51,9 @@ export default function ProjectSpotlight({ project, onClose }) {
                 <h3 className="font-display font-bold text-xl sm:text-2xl text-paper leading-tight">
                   {project.title}
                 </h3>
+                {project.metric && (
+                  <p className="font-mono text-[11px] text-mint/85 mt-2">{project.metric}</p>
+                )}
                 {spotlight?.role && (
                   <p className="font-mono text-xs text-fog mt-2">{spotlight.role}</p>
                 )}

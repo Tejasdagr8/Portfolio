@@ -31,6 +31,7 @@ import { unlockAchievement } from "./components/AchievementBadges";
 import { projects, PROJECT_FILTERS, projectMatchesFilter } from "./data/projects";
 import { publications, paperLinks } from "./data/publications";
 import { experience } from "./data/experience";
+import { certifications, CERTIFICATIONS_LINK } from "./data/certifications";
 
 const CONTACT_EMAILS = {
   primary: "coooltejasdagr@gmail.com",
@@ -854,6 +855,51 @@ function App() {
               <span className="gradient-text font-display font-bold text-sm sm:ml-4 sm:shrink-0 self-start sm:self-auto">{edu.grade}</span>
             </motion.div>
           ))}
+        </motion.div>
+
+        <motion.div
+          className="mt-12 md:mt-16 pt-10 md:pt-12 border-t border-white/[0.13]"
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, margin: "-80px" }}
+          variants={fadeUp}
+        >
+          <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-3 mb-6 md:mb-8">
+            <div>
+              <p className="font-mono text-[10px] sm:text-xs tracking-[0.16em] uppercase text-mint mb-2">
+                certifications
+              </p>
+              <h3 className="font-display font-bold text-xl sm:text-2xl text-paper">
+                Verified <span className="gradient-text">credentials</span>
+              </h3>
+            </div>
+            <a
+              href={CERTIFICATIONS_LINK}
+              target="_blank"
+              rel="noreferrer"
+              data-track="certifications_linkedin"
+              className="inline-flex items-center gap-1.5 font-mono text-[11px] text-mint hover:text-paper transition-colors shrink-0"
+            >
+              View all on LinkedIn <FaExternalLinkAlt size={10} />
+            </a>
+          </div>
+
+          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4">
+            {certifications.map((cert) => (
+              <div
+                key={cert.title}
+                className="card-glass card-glass-hover p-4 sm:p-5"
+              >
+                <p className="font-mono text-[10px] tracking-[0.12em] uppercase text-mint mb-2">
+                  {cert.issuer}
+                </p>
+                <h4 className="font-display font-bold text-sm sm:text-base text-paper leading-snug">
+                  {cert.title}
+                </h4>
+                <p className="font-mono text-[10px] text-fog-muted mt-2">{cert.year}</p>
+              </div>
+            ))}
+          </div>
         </motion.div>
       </section>
 

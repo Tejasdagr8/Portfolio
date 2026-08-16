@@ -20,6 +20,7 @@ import SoundToggle from "./components/SoundToggle";
 import HeroStats from "./components/HeroStats";
 import CapabilityMap from "./components/CapabilityMap";
 import ResearchCallout from "./components/ResearchCallout";
+import OpenToWorkBanner from "./components/OpenToWorkBanner";
 import useAnalytics from "./hooks/useAnalytics";
 import { track, getCampaignRef } from "./lib/analytics";
 import { playSound } from "./lib/sounds";
@@ -488,6 +489,7 @@ function App() {
       {/* HERO */}
       <section className="hero-section min-h-[100dvh] flex flex-col justify-center relative overflow-hidden pt-20 pb-20 md:pt-24 md:pb-16">
         <GradientField className="gradient-field-canvas absolute inset-0 w-full h-full block pointer-events-none" />
+        <OpenToWorkBanner localTime={localTime} />
 
         <motion.div
           className={`relative z-[2] ${sectionContainer}`}
@@ -536,15 +538,10 @@ function App() {
                 )}
               </p>
 
-              <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-mint/30 bg-mint/[0.08] font-mono text-[11px] sm:text-xs text-paper mt-6 sm:mt-8 justify-center lg:justify-start w-full sm:w-auto">
-                <span className="status-pulse w-2 h-2 rounded-full bg-mint shrink-0" aria-hidden />
-                Open to opportunities · Bengaluru · AI/ML & SDE
-              </div>
-
               <HeroStats contributionTotal={contribTotal} />
 
               <div className="font-mono text-[11px] sm:text-xs text-fog-muted tracking-wide flex flex-wrap justify-center lg:justify-start gap-x-4 sm:gap-x-6 gap-y-2 mt-4 sm:mt-6">
-                <span><span className="text-mint">●</span> Bengaluru, IN</span>
+                <span className="sm:hidden"><span className="status-pulse text-mint">●</span> Open to opportunities · Bengaluru</span>
                 <span className="hidden sm:inline"><span className="text-mint">●</span> ⌘K terminal · R speed run</span>
               </div>
 

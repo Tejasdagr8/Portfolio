@@ -14,7 +14,6 @@ import InteractiveArchitecture from "./components/InteractiveArchitecture";
 import AchievementBadges from "./components/AchievementBadges";
 import PaperModeToggle, { initPaperMode } from "./components/PaperModeToggle";
 import TypingHero from "./components/TypingHero";
-import CustomCursor from "./components/CustomCursor";
 import LegendaryMode from "./components/LegendaryMode";
 import RecruiterSpeedRun from "./components/RecruiterSpeedRun";
 import SoundToggle from "./components/SoundToggle";
@@ -355,7 +354,6 @@ function App() {
 
   return (
     <div className="bg-ink-0 text-paper font-body font-light min-h-screen overflow-x-hidden">
-      <CustomCursor />
       <LegendaryMode />
       <RecruiterSpeedRun />
       <div className="fixed top-0 left-0 z-[60] h-[2px] bg-gradient-to-r from-[#8C7BFF] to-[#5EE6D0]" style={{ width: `${scrollProgress}%` }} />
@@ -866,7 +864,7 @@ function App() {
           </SectionHeading>
           <p className="text-fog text-sm font-mono -mt-4 mb-4 hidden sm:block">Click any project for the spotlight view</p>
           <div
-            className="project-filters use-native-cursor flex flex-wrap gap-2 mb-6 -mt-2"
+            className="project-filters flex flex-wrap gap-2 mb-6 -mt-2"
             role="group"
             aria-label="Filter projects by category"
           >
@@ -888,10 +886,10 @@ function App() {
           </div>
         </motion.div>
         <motion.div
+          key={projectFilter}
           className="space-y-0"
           initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true, margin: "-80px" }}
+          animate="visible"
           variants={stagger}
         >
           {filteredProjects.length === 0 && (

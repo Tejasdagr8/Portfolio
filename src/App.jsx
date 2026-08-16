@@ -20,7 +20,6 @@ import SoundToggle from "./components/SoundToggle";
 import HeroStats from "./components/HeroStats";
 import CapabilityMap from "./components/CapabilityMap";
 import ResearchCallout from "./components/ResearchCallout";
-import OpenToWorkBanner from "./components/OpenToWorkBanner";
 import SeoHead from "./components/SeoHead";
 import useAnalytics from "./hooks/useAnalytics";
 import { PAGE_SEO } from "./data/seo";
@@ -492,7 +491,7 @@ function App() {
 
       <main id="main-content">
       {/* HERO */}
-      <section className="hero-section min-h-[100dvh] flex flex-col justify-center relative overflow-x-hidden pt-20 pb-20 md:pt-24 md:pb-16">
+      <section className="hero-section min-h-[100dvh] flex flex-col justify-center relative overflow-hidden pt-20 pb-20 md:pt-24 md:pb-16">
         <GradientField className="gradient-field-canvas absolute inset-0 w-full h-full block pointer-events-none" />
 
         <motion.div
@@ -501,8 +500,12 @@ function App() {
           animate="visible"
           variants={stagger}
         >
-          <motion.div variants={fadeUp} className="flex flex-col lg:flex-row lg:items-start lg:justify-between gap-8 md:gap-12">
-            <div className="flex-1 text-center lg:text-left min-w-0 order-2 lg:order-1">
+          <motion.div variants={fadeUp} className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-8 md:gap-12">
+            <motion.div variants={fadeUp}>
+              <ProfileAvatar className="order-first mx-auto lg:order-last lg:mx-0" />
+            </motion.div>
+
+            <div className="flex-1 text-center lg:text-left min-w-0">
               <p className="font-mono text-[10px] sm:text-xs md:text-sm text-mint tracking-[0.12em] sm:tracking-[0.14em] uppercase mb-5 sm:mb-6 flex items-center justify-center lg:justify-start gap-2 sm:gap-3 flex-wrap">
                 <span className="w-6 sm:w-8 h-px bg-mint inline-block shrink-0" />
                 <span className="text-left">
@@ -539,10 +542,15 @@ function App() {
                 )}
               </p>
 
+              <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-mint/30 bg-mint/[0.08] font-mono text-[11px] sm:text-xs text-paper mt-6 sm:mt-8 justify-center lg:justify-start w-full sm:w-auto">
+                <span className="status-pulse w-2 h-2 rounded-full bg-mint shrink-0" aria-hidden />
+                Open to opportunities · Bengaluru · AI/ML & SDE
+              </div>
+
               <HeroStats contributionTotal={contribTotal} />
 
               <div className="font-mono text-[11px] sm:text-xs text-fog-muted tracking-wide flex flex-wrap justify-center lg:justify-start gap-x-4 sm:gap-x-6 gap-y-2 mt-4 sm:mt-6">
-                <span className="sm:hidden"><span className="status-pulse text-mint">●</span> Open to opportunities · Bengaluru</span>
+                <span><span className="text-mint">●</span> Bengaluru, IN</span>
                 <span className="hidden sm:inline"><span className="text-mint">●</span> ⌘K terminal · R speed run</span>
               </div>
 
@@ -609,14 +617,6 @@ function App() {
                 </a>
               </div>
             </div>
-
-            <motion.div
-              variants={fadeUp}
-              className="hero-aside-column order-1 lg:order-2 w-full lg:w-auto shrink-0 mx-auto lg:mx-0"
-            >
-              <OpenToWorkBanner localTime={localTime} />
-              <ProfileAvatar className="mx-auto lg:ml-auto lg:mr-0" />
-            </motion.div>
           </motion.div>
         </motion.div>
 

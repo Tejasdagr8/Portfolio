@@ -885,23 +885,16 @@ function App() {
             ))}
           </div>
         </motion.div>
-        <motion.div
-          key={projectFilter}
-          className="space-y-0"
-          initial="hidden"
-          animate="visible"
-          variants={stagger}
-        >
+        <div key={projectFilter} className="space-y-0">
           {filteredProjects.length === 0 && (
             <p className="text-fog font-mono text-sm py-10 border-t border-white/[0.13]">
               No projects in this layer.
             </p>
           )}
           {filteredProjects.map((project, i) => (
-            <motion.button
+            <button
               key={project.title}
               type="button"
-              variants={fadeUp}
               onClick={() => openSpotlight(project)}
               className={`group relative grid grid-cols-1 md:grid-cols-[80px_1fr_auto] gap-2 md:gap-10 py-6 md:py-10 border-t border-white/[0.13] md:hover:pl-3 transition-all duration-300 w-full text-left cursor-pointer ${
                 project.featured ? "md:mx-0 rounded-xl bg-mint/[0.04] ring-1 ring-mint/15 px-0 md:px-4" : ""
@@ -946,10 +939,10 @@ function App() {
               <span className="hidden md:block font-display text-2xl text-fog group-hover:text-mint group-hover:translate-x-1 group-hover:-translate-y-1 transition-all">
                 ↗
               </span>
-            </motion.button>
+            </button>
           ))}
           <div className="border-t border-white/[0.13]" />
-        </motion.div>
+        </div>
       </section>
 
       {/* SKILLS */}

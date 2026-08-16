@@ -536,7 +536,7 @@ function App() {
                 )}
               </p>
 
-              <HeroStats contributionTotal={contribTotal} projectCount={projects.length} />
+              <HeroStats contributionTotal={contribTotal} />
 
               <div className="font-mono text-[11px] sm:text-xs text-fog-muted tracking-wide flex flex-wrap justify-center lg:justify-start gap-x-4 sm:gap-x-6 gap-y-2 mt-4 sm:mt-6">
                 <span><span className="text-mint">●</span> Bengaluru, IN</span>
@@ -688,14 +688,7 @@ function App() {
                 <p className="text-fog text-xs mt-1">{exp.location}</p>
               </div>
               <div>
-                <div className="flex flex-wrap items-center gap-2 sm:gap-3">
-                  <h3 className="font-display font-bold text-lg sm:text-xl md:text-2xl text-paper">{exp.role}</h3>
-                  {exp.featured && (
-                    <span className="font-mono text-[10px] tracking-wider uppercase px-2.5 py-1 rounded-full border border-ember/40 text-ember bg-ember/[0.08]">
-                      {exp.featuredLabel || "Flagship role"}
-                    </span>
-                  )}
-                </div>
+                <h3 className="font-display font-bold text-lg sm:text-xl md:text-2xl text-paper">{exp.role}</h3>
                 <p className="font-mono text-sm text-fog mt-1">
                   {exp.link ? (
                     <a href={exp.link} target="_blank" rel="noreferrer" className="hover:text-mint transition-colors inline-flex items-center gap-1">

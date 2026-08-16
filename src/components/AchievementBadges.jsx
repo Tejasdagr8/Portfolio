@@ -3,7 +3,7 @@ export default function AchievementBadges({ contributionTotal = 0 }) {
     { label: "flagship", value: "15+ PRs @ SuperAGI" },
     { label: "production", value: "Go · Rails · Vue · CI/CD" },
     { label: "research", value: "Sci-FM @ COLM 2026 poster" },
-    { label: "shipped", value: "TatvaOps Vantage + 8 projects" },
+    { label: "shipped", value: "TatvaOps Vantage + 10+ projects" },
   ];
 
   if (contributionTotal >= 1000) {

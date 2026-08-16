@@ -1,19 +1,17 @@
-function buildStats(projectCount) {
-  return [
-    { key: "prs", label: "production PRs", value: "15+", live: false },
-    { key: "paper", label: "COLM 2026 poster", value: "1", live: false },
-    { key: "projects", label: "shipped projects", value: String(projectCount), live: false },
-    { key: "contrib", label: "GitHub contributions", value: null, live: true },
-  ];
-}
+const STATS = [
+  { key: "prs", label: "production PRs", value: "15+", live: false },
+  { key: "paper", label: "COLM 2026 poster", value: "1", live: false },
+  { key: "projects", label: "shipped projects", value: "10+", live: false },
+  { key: "contrib", label: "GitHub contributions", value: null, live: true },
+];
 
 function formatContrib(total) {
   if (!total || total <= 0) return "—";
   return `${total.toLocaleString()}+`;
 }
 
-export default function HeroStats({ contributionTotal = 0, projectCount = 0 }) {
-  const stats = buildStats(projectCount);
+export default function HeroStats({ contributionTotal = 0 }) {
+  const stats = STATS;
 
   return (
     <div

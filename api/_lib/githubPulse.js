@@ -1,6 +1,6 @@
 const ACCOUNTS = [
   { username: "Tejasdagr8", label: "personal", accent: "iris" },
-  { username: "tejasm-tatvaops", label: "work", accent: "mint" },
+  { username: "TejasMelkote", label: "work", accent: "mint" },
 ];
 
 const CONTRIB_API = "https://github-contributions-api.jogruber.de/v4";

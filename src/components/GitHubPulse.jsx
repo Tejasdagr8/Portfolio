@@ -5,7 +5,7 @@ import { PRIVATE_REPO_COMMITS } from "../data/publications";
 
 const ACCOUNTS = [
   { username: "Tejasdagr8", label: "personal", accent: "iris" },
-  { username: "tejasm-tatvaops", label: "work", accent: "mint" },
+  { username: "TejasMelkote", label: "work", accent: "mint" },
 ];
 
 const CACHE_KEY = "github_pulse_cache_v5";
@@ -355,7 +355,7 @@ export default function GitHubPulse() {
           )}
 
           <p className="font-mono text-[10px] text-fog/50 text-center sm:text-left">
-            + <span className="text-ember tabular-nums">{PRIVATE_REPO_COMMITS}+</span> commits on private work repos (@tejasm-tatvaops)
+            + <span className="text-ember tabular-nums">{PRIVATE_REPO_COMMITS}+</span> commits on private work repos (@TejasMelkote)
           </p>
         </div>
       </div>

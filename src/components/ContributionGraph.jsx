@@ -185,7 +185,7 @@ export default function ContributionGraph({ contributions, total, phaseTotal, lo
       </div>
 
       <p className="font-mono text-[9px] text-fog/50">
-        Shipping phase only · combined public activity across @Tejasdagr8 + @tejasm-tatvaops
+        Shipping phase only · combined public activity across @Tejasdagr8 + @TejasMelkote
       </p>
     </div>
   );

@@ -96,8 +96,8 @@ export default function Hire() {
           <a href="https://github.com/Tejasdagr8" target="_blank" rel="noreferrer" data-track="hire_github" className="hover:text-mint transition-colors text-sm font-mono" aria-label="GitHub personal">
             <FaGithub size={18} className="inline mr-1.5" />Tejasdagr8
           </a>
-          <a href="https://github.com/tejasm-tatvaops" target="_blank" rel="noreferrer" data-track="hire_github_work" className="hover:text-mint transition-colors text-sm font-mono" aria-label="GitHub work">
-            <FaGithub size={18} className="inline mr-1.5" />tejasm-tatvaops
+          <a href="https://github.com/TejasMelkote" target="_blank" rel="noreferrer" data-track="hire_github_work" className="hover:text-mint transition-colors text-sm font-mono" aria-label="GitHub work">
+            <FaGithub size={18} className="inline mr-1.5" />TejasMelkote
           </a>
           <a href="https://www.linkedin.com/in/tejas-melkote-390545309/" target="_blank" rel="noreferrer" data-track="hire_linkedin" className="hover:text-mint transition-colors" aria-label="LinkedIn">
             <FaLinkedin size={18} />

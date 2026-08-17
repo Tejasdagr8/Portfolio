@@ -56,8 +56,8 @@ export const projects = [
     metric: "Live · 3 surfaces · swipe-to-DNA engine",
     link: "https://tasteiq.vercel.app/",
     livePreview: {
-      embedUrl: "https://tasteiq.vercel.app/",
-      note: "Interactive preview — swipe Discover, explore Vendor OS, or open the full network.",
+      screenshot: "/previews/tasteiq.png",
+      note: "Live site blocks iframe embeds — screenshot preview. Click to open tasteiq.vercel.app.",
     },
     spotlight: {
       year: "2025–26",

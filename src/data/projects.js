@@ -47,6 +47,46 @@ export const projects = [
     },
   },
   {
+    title: "TasteIQ — Construction Intelligence Network",
+    description:
+      "Swipe-first taste platform for construction — learns Design DNA from real spaces (not forms), powers a living Taste Graph, and matches homeowners to vendors whose craft already fits their aesthetic.",
+    tags: ["React", "AI", "Recommendations", "Vercel"],
+    categories: ["production", "fullstack", "ml"],
+    featured: true,
+    metric: "Live · 3 surfaces · swipe-to-DNA engine",
+    link: "https://tasteiq.vercel.app/",
+    livePreview: {
+      embedUrl: "https://tasteiq.vercel.app/",
+      note: "Interactive preview — swipe Discover, explore Vendor OS, or open the full network.",
+    },
+    spotlight: {
+      year: "2025–26",
+      role: "Full-stack · AI recommendation · construction vertical",
+      highlights: [
+        "Three product surfaces — Discover (consumer), Vendor OS, and Studio ops — on one Taste Graph",
+        "Design DNA engine: taste vectors, luxury index, budget prediction, and real-time profile learning",
+        "Swipe-based preference capture replaces long questionnaires — show, don't ask",
+        "Master hashtag catalog + AI tagging so vendor portfolios match homeowner intent",
+      ],
+      stack: ["React", "TypeScript", "Vercel", "Recommendation engine", "AI tagging", "Taste Graph"],
+      architecture: ["Swipe deck", "Taste Graph", "Design DNA", "Vendor OS", "Studio ops"],
+      flowKey: "tasteiq",
+      caseStudy: {
+        problem:
+          "Construction and interior decisions stall on vague briefs — homeowners say \"modern\" without actionable taste signals, and vendors can't tell who already responds to their material language before the first call.",
+        contribution:
+          "Built TasteIQ end-to-end: consumer swipe deck, Taste Graph that compounds every gesture, Design DNA profiles vendors can act on, Vendor OS for portfolio upload + governed style tags, and Studio for catalog moderation and recommendation experiments.",
+        challenges: [
+          "Learning multidimensional preference from sparse swipe data without cold-start questionnaires",
+          "Keeping taste vectors, budget signals, and luxury index interpretable for vendors — not black-box scores",
+          "Unifying three roles (homeowner, vendor, ops) on one intelligence layer without fragmenting the UX",
+        ],
+        result:
+          "Live construction intelligence network at tasteiq.vercel.app — swipe curated spaces, unlock shareable Design DNA, and connect with taste-matched vendors from the first hello.",
+      },
+    },
+  },
+  {
     title: "TatvaOps Verified Vendor Profile",
     description:
       "Shipped a searchable vendor profile system with verified ratings and pricing insights — deployed on Vercel with production-grade UX for contractor discovery.",

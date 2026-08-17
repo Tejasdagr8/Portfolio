@@ -10,6 +10,17 @@ export const architectureFlows = {
     ],
     edges: ["user", "spa", "cms", "analytics", "seo"],
   },
+  tasteiq: {
+    title: "TasteIQ intelligence pipeline",
+    nodes: [
+      { id: "discover", label: "Discover deck", detail: "Homeowners swipe curated spaces — materials, light, proportion — preference without forms." },
+      { id: "graph", label: "Taste Graph", detail: "Every gesture updates a multidimensional map of style, mood, and construction intent in real time." },
+      { id: "dna", label: "Design DNA", detail: "AI-generated persona: taste vectors, luxury index, budget range, and room-wise signals vendors can use." },
+      { id: "vendor", label: "Vendor OS", detail: "Portfolio upload, master hashtags, and taste-aware reach to aligned homeowners." },
+      { id: "studio", label: "Studio ops", detail: "Catalog governance, AI tagging, moderation, and recommendation experiments." },
+    ],
+    edges: ["discover", "graph", "dna", "vendor", "studio"],
+  },
   superagi: {
     title: "SuperAGI campaign pipeline",
     nodes: [

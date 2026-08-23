@@ -589,7 +589,7 @@ function App() {
 
               <div className="inline-flex items-center gap-1 sm:gap-1.5 mt-6 sm:mt-8 p-1.5 sm:p-2 rounded-2xl border border-white/[0.10] bg-[var(--muted-surface)] backdrop-blur-sm">
                 <a
-                  href="https://github.com/Tejasdagr8"
+                  href="https://github.com/TejasMelkote"
                   target="_blank"
                   rel="noreferrer"
                   data-track="github"
@@ -1196,7 +1196,7 @@ function App() {
 
           <motion.div variants={fadeUp} className="flex gap-8 font-mono text-xs tracking-widest uppercase">
             <a
-              href="https://github.com/Tejasdagr8"
+              href="https://github.com/TejasMelkote"
               target="_blank"
               rel="noreferrer"
               data-track="github"

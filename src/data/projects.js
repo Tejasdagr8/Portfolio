@@ -121,6 +121,44 @@ export const projects = [
     },
   },
   {
+    title: "INUIT — Conversational Luxury Footwear",
+    description:
+      "Luxury footwear storefront with an AI concierge — guides shoppers through fit, style, and pair selection in conversation, then handles ordering without traditional checkout forms.",
+    tags: ["React", "AI", "E-commerce", "Vercel"],
+    categories: ["production", "fullstack", "agents"],
+    metric: "Live · concierge-led commerce · Vercel",
+    link: "https://inuitfootware.vercel.app/",
+    livePreview: {
+      embedUrl: "https://inuitfootware.vercel.app/",
+      note: "Live preview — speak with the concierge or open the full atelier experience.",
+    },
+    spotlight: {
+      year: "2025–26",
+      role: "Full-stack · conversational commerce · solo build",
+      highlights: [
+        "Brand-forward luxury UX — editorial product storytelling with small-batch, hand-lasted positioning",
+        "AI concierge replaces multi-step forms: guided Q&A → curated pairs → order in conversation",
+        "Product catalog with atelier narrative, silhouette detail, and concierge-first purchase flow",
+        "Deployed on Vercel as a production-ready demo storefront",
+      ],
+      stack: ["React", "TypeScript", "Vercel", "Conversational UI", "E-commerce"],
+      architecture: ["Shopper", "Concierge chat", "Style matching", "Catalog", "Order flow"],
+      caseStudy: {
+        problem:
+          "Luxury D2C often buries craft storytelling under generic e-commerce grids — and long checkout forms kill the high-touch buying experience premium footwear expects.",
+        contribution:
+          "Built INUIT end-to-end: editorial brand site, product pages, and a conversational concierge that walks users from taste discovery to order without fighting a traditional form funnel.",
+        challenges: [
+          "Balancing premium brand aesthetics with a chat-led flow that still feels fast on mobile",
+          "Designing concierge prompts that narrow style/fit without feeling like a support bot",
+          "Keeping the experience shoppable while preserving the slow-craft, small-run brand story",
+        ],
+        result:
+          "Live storefront at inuitfootware.vercel.app — handcrafted luxury positioning with concierge-led personal shopping and production deployment on Vercel.",
+      },
+    },
+  },
+  {
     title: "AI Trip Planner",
     description:
       "Solo-built agentic planner orchestrating 7 external APIs through a LangGraph workflow — FastAPI backend, Dockerized deploy, multi-step itinerary reasoning.",

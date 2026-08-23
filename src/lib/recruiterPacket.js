@@ -3,7 +3,7 @@ export const RECRUITER_LINKS = {
   hire: "/hire",
   linkedin: "https://www.linkedin.com/in/tejas-melkote-390545309/",
   email: "coooltejasdagr@gmail.com",
-  github: "https://github.com/Tejasdagr8",
+  github: "https://github.com/TejasMelkote",
   portfolio: "https://tejas-melkote.vercel.app/",
   paper: "https://arxiv.org/abs/2602.21947",
   paperCode: "https://github.com/sohv/algorithmic-blindness",

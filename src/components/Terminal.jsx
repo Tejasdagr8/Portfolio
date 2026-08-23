@@ -38,7 +38,7 @@ Packaged models behind Streamlit and FastAPI interfaces.`,
 
   "contact.txt": `Email:  coooltejasdagr@gmail.com
 Phone:  +91 7019280175
-GitHub:  github.com/Tejasdagr8
+GitHub:  github.com/TejasMelkote
 Company: vantage.withtatva.ai (TatvaOps)
 LinkedIn: linkedin.com/in/tejas-melkote-390545309`,
 
@@ -162,7 +162,7 @@ Tip: press ⌘K or Ctrl+K anytime to toggle.`);
         case "open": {
           const targets = {
             resume: "/resume.pdf",
-            github: "https://github.com/Tejasdagr8",
+            github: "https://github.com/TejasMelkote",
             linkedin: "https://www.linkedin.com/in/tejas-melkote-390545309/",
             email: "mailto:coooltejasdagr@gmail.com",
             paper: paperLinks.arxiv,

@@ -15,6 +15,7 @@ export const PERSON = {
   email: "coooltejasdagr@gmail.com",
   image: `${SITE_URL}/profile.jpeg`,
   sameAs: [
+    "https://github.com/TejasMelkote",
     "https://github.com/Tejasdagr8",
     "https://www.linkedin.com/in/tejas-melkote-390545309/",
     "https://arxiv.org/abs/2602.21947",

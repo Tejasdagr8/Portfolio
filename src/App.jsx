@@ -82,7 +82,7 @@ const SECTION_INDEX = {
   contact: 7,
 };
 
-const GITHUB_PULSE_CACHE_KEY = "github_pulse_cache_v5";
+const GITHUB_PULSE_CACHE_KEY = "github_pulse_cache_v6";
 
 const leadership = [
   { role: "Class Representative", org: "AI-C, MIT Manipal" },
@@ -536,7 +536,7 @@ function App() {
                 ) : (
                   <>
                     <strong className="text-paper font-medium">AI engineer building production-grade AI systems and full-stack products.</strong>{" "}
-                    Final-year B.Tech CS (AI) at MIT Manipal — 15+ production PRs at SuperAGI · LLMs, agents, RAG · Python, Go, React.
+                    2026 new grad · B.Tech CS (AI) at MIT Manipal — 15+ production PRs at SuperAGI · LLMs, agents, RAG · Python, Go, React.
                     {" "}
                     <span className="text-paper/90">Open to AI/ML and Software Engineering roles.</span>
                   </>

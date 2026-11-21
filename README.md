@@ -1,18 +1,41 @@
-# React + Vite
+# Tejas Melkote — Portfolio
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Personal engineering portfolio for **Tejas Melkote** (2026 new grad · AI/ML + full-stack).
 
-Currently, two official plugins are available:
+**Live site:** [https://tejas-melkote.vercel.app/](https://tejas-melkote.vercel.app/)
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+## What’s inside
 
-## React Compiler
+- Case studies for production work (Vantage, TasteIQ) and independent builds (INUIT, AI Trip Planner, MedTruth AI)
+- Recruiter packet + resume PDF
+- Live **GitHub contribution pulse** via GraphQL (`/api/github-pulse`)
+- Ask-Tejas chat (Groq) and optional `/views` analytics
 
-The React Compiler is enabled on this template. See [this documentation](https://react.dev/learn/react-compiler) for more information.
+## Stack
 
-Note: This will impact Vite dev & build performances.
+React · Vite · Vercel serverless API routes
 
-## Expanding the ESLint configuration
+## Local development
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+```bash
+npm install
+cp .env.example .env.local
+npm run dev
+```
+
+## Vercel environment variables
+
+| Variable | Purpose |
+| --- | --- |
+| `GITHUB_TOKEN` | Classic PAT with `read:user` (or fine-grained Contributions) so pulse totals include private activity on `@TejasMelkote`. Without it, public calendars only. |
+| `GROQ_API_KEY` | Ask Tejas chat |
+| `VIEWS_PASSWORD` | Password gate for `/views` analytics (set in Vercel; never commit a real value) |
+
+## GitHub accounts
+
+- Work: [@TejasMelkote](https://github.com/TejasMelkote)
+- Personal: [@Tejasdagr8](https://github.com/Tejasdagr8)
+
+## License
+
+Private portfolio source — all rights reserved unless noted otherwise.

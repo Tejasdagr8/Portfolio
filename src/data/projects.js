@@ -165,6 +165,7 @@ export const projects = [
     tags: ["LangGraph", "FastAPI", "Docker", "Agents"],
     categories: ["agents", "fullstack"],
     metric: "7 API integrations · LangGraph agent",
+    link: "https://github.com/TejasMelkote/AI_Trip_Planner",
     spotlight: {
       year: "2025",
       role: "Agentic systems · solo build",
@@ -186,6 +187,41 @@ export const projects = [
         ],
         result:
           "End-to-end agentic pipeline from natural-language request → tool calls → structured itinerary, runnable via Docker.",
+      },
+    },
+  },
+  {
+    title: "MedTruth AI — Evidence-Grounded Medical Q&A",
+    description:
+      "Medical RAG system that retrieves only from trusted peer-reviewed sources, scores evidence with MEDEVA, and returns citation-anchored answers with explicit degraded paths.",
+    tags: ["RAG", "FastAPI", "LangGraph", "Medical AI"],
+    categories: ["agents", "ml", "fullstack"],
+    featured: true,
+    metric: "Trusted-source RAG · MEDEVA scoring · tests included",
+    link: "https://github.com/Tejasdagr8/MedTruth_AI",
+    spotlight: {
+      year: "2025–26",
+      role: "Medical AI · RAG · solo build",
+      highlights: [
+        "Evidence retrieval restricted to trusted journal/source families",
+        "Custom MEDEVA evidence-quality scoring before generation",
+        "Citation-anchored answers with explicit degraded-path handling",
+        "Pytest suite covering retrieval filters, validators, and scorers",
+      ],
+      stack: ["Python", "FastAPI", "LangGraph", "ChromaDB", "Anthropic", "pytest"],
+      architecture: ["Query", "Trusted retrieval", "MEDEVA score", "Grounded RAG", "Cited answer"],
+      caseStudy: {
+        problem:
+          "Typical medical chatbots answer confidently from the open web — mixing peer-reviewed evidence with blogs and unverified pages.",
+        contribution:
+          "Designed and built MedTruth end-to-end: trusted-source retrieval, MEDEVA ranking, citation anchoring, risk flagging, and a FastAPI service with automated tests.",
+        challenges: [
+          "Keeping retrieval strict enough for clinical-adjacent trust without empty result sets",
+          "Making degraded paths (insufficient evidence) explicit instead of hallucinating",
+          "Stabilizing a heavy NLP dependency stack for reproducible local and CI runs",
+        ],
+        result:
+          "Open-source medical Q&A pipeline with evidence integrity as the product constraint — not an afterthought.",
       },
     },
   },

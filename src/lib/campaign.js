@@ -37,7 +37,7 @@ const CAMPAIGNS = [
   {
     match: /recruiter|hr|talent|hiring/i,
     eyebrow: "thanks for stopping by",
-    blurb: "Final-year B.Tech CS (AI), CGPA 8.38, SDE Intern @ SuperAGI. Open to full-time roles in AI/ML and full-stack engineering. Resume one click away.",
+    blurb: "2026 new grad · B.Tech CS (AI), CGPA 8.38, SDE Intern @ SuperAGI. Open to full-time roles in AI/ML and full-stack engineering. Resume one click away.",
     primaryCta: { label: "Download resume", href: "/resume.pdf", download: true, track: "cta_resume" },
     secondaryCta: { label: "Quick hire page", href: "/hire", track: "cta_hire" },
   },
@@ -82,7 +82,7 @@ export function getCampaignContent(ref) {
   return {
     ref,
     eyebrow: `welcome, ${prettifyRef(ref)}`,
-    blurb: "AI engineer building production-grade AI systems and full-stack products. Final-year B.Tech CS (AI) at MIT Manipal — 15+ PRs at SuperAGI, LLMs, agents, RAG. Open to AI/ML and Software Engineering roles.",
+    blurb: "AI engineer building production-grade AI systems and full-stack products. 2026 new grad · B.Tech CS (AI) at MIT Manipal — 15+ PRs at SuperAGI, LLMs, agents, RAG. Open to AI/ML and Software Engineering roles.",
     ...DEFAULT_CTAS,
     personalized: true,
   };

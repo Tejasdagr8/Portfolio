@@ -4,6 +4,11 @@ const ACCOUNTS = [
 ];
 
 const CONTRIB_API = "https://github-contributions-api.jogruber.de/v4";
+const GITHUB_GRAPHQL = "https://api.github.com/graphql";
+
+function githubToken() {
+  return process.env.GITHUB_TOKEN || process.env.GH_TOKEN || process.env.GITHUB_PAT || "";
+}
 
 function countToLevel(count) {
   if (count <= 0) return 0;
@@ -52,23 +57,103 @@ export function mergeContributions(sources) {
   return { contributions, total };
 }
 
-async function fetchContributions(username) {
+const CALENDAR_QUERY = `
+  query($login: String!) {
+    user(login: $login) {
+      contributionsCollection {
+        contributionCalendar {
+          totalContributions
+          weeks {
+            contributionDays {
+              date
+              contributionCount
+            }
+          }
+        }
+      }
+    }
+  }
+`;
+
+async function fetchContributionsGraphql(username, token) {
+  const res = await fetch(GITHUB_GRAPHQL, {
+    method: "POST",
+    headers: {
+      Accept: "application/json",
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
+      "User-Agent": "tejas-portfolio-pulse",
+    },
+    body: JSON.stringify({ query: CALENDAR_QUERY, variables: { login: username } }),
+  });
+
+  if (!res.ok) throw new Error(`graphql ${username}: ${res.status}`);
+  const json = await res.json();
+  if (json.errors?.length) throw new Error(json.errors[0].message);
+
+  const calendar = json.data?.user?.contributionsCollection?.contributionCalendar;
+  if (!calendar) throw new Error(`no calendar for ${username}`);
+
+  const contributions = calendar.weeks.flatMap((week) =>
+    week.contributionDays.map((day) => ({
+      date: day.date,
+      count: day.contributionCount,
+      level: countToLevel(day.contributionCount),
+    }))
+  );
+
+  return {
+    contributions,
+    total: calendar.totalContributions,
+    source: "github-graphql",
+  };
+}
+
+async function fetchContributionsPublic(username) {
   const res = await fetch(`${CONTRIB_API}/${username}?y=last`, {
     headers: { Accept: "application/json" },
   });
   if (!res.ok) throw new Error(`contributions: ${username}`);
-  return res.json();
+  const data = await res.json();
+  const contributions = (data.contributions || []).map((day) => ({
+    date: day.date,
+    count: day.count,
+    level: countToLevel(day.count),
+  }));
+  const total = contributions.reduce((sum, d) => sum + d.count, 0);
+  return { contributions, total, source: "public-api" };
 }
 
-async function fetchAccount({ username, label, accent }) {
+async function fetchContributions(username, token) {
+  if (token) {
+    try {
+      return await fetchContributionsGraphql(username, token);
+    } catch {
+      /* fall through to public calendar */
+    }
+  }
+  return fetchContributionsPublic(username);
+}
+
+function restHeaders(token) {
+  const headers = {
+    Accept: "application/vnd.github+json",
+    "User-Agent": "tejas-portfolio",
+  };
+  if (token) headers.Authorization = `Bearer ${token}`;
+  return headers;
+}
+
+async function fetchAccount({ username, label, accent }, token) {
+  const headers = restHeaders(token);
   const [userRes, reposRes, contribData] = await Promise.all([
-    fetch(`https://api.github.com/users/${username}`, {
-      headers: { Accept: "application/vnd.github+json", "User-Agent": "tejas-portfolio" },
-    }),
-    fetch(`https://api.github.com/users/${username}/repos?sort=pushed&per_page=8`, {
-      headers: { Accept: "application/vnd.github+json", "User-Agent": "tejas-portfolio" },
-    }),
-    fetchContributions(username).catch(() => ({ contributions: [] })),
+    fetch(`https://api.github.com/users/${username}`, { headers }),
+    fetch(`https://api.github.com/users/${username}/repos?sort=pushed&per_page=8`, { headers }),
+    fetchContributions(username, token).catch(() => ({
+      contributions: [],
+      total: 0,
+      source: "none",
+    })),
   ]);
 
   if (!userRes.ok) throw new Error(`user: ${username}`);
@@ -89,20 +174,26 @@ async function fetchAccount({ username, label, accent }) {
     pushedAgo: formatPushedAgo(latest?.pushed_at),
     repos,
     contributions: contribData.contributions || [],
+    contributionTotal: contribData.total || 0,
+    contributionSource: contribData.source || "none",
   };
 }
 
 export async function buildGitHubPulse() {
-  const rawAccounts = await Promise.all(ACCOUNTS.map(fetchAccount));
+  const token = githubToken();
+  const rawAccounts = await Promise.all(ACCOUNTS.map((account) => fetchAccount(account, token)));
   const allRepos = rawAccounts.flatMap((a) => a.repos || []);
   const latest = rawAccounts
     .filter((a) => a.pushedAt)
     .sort((a, b) => new Date(b.pushedAt) - new Date(a.pushedAt))[0];
 
   const { contributions, total } = mergeContributions(rawAccounts);
+  const usesGraphql = rawAccounts.some((a) => a.contributionSource === "github-graphql");
 
   return {
-    accounts: rawAccounts.map(({ repos: _r, pushedAt: _p, contributions: _c, ...rest }) => rest),
+    accounts: rawAccounts.map(
+      ({ repos: _r, pushedAt: _p, contributions: _c, ...rest }) => rest
+    ),
     totalRepos: rawAccounts.reduce((sum, a) => sum + (a.publicRepos || 0), 0),
     totalFollowers: rawAccounts.reduce((sum, a) => sum + (a.followers || 0), 0),
     topLang: topLanguage(allRepos),
@@ -111,6 +202,8 @@ export async function buildGitHubPulse() {
     pushedAgo: latest ? formatPushedAgo(latest.pushedAt) : null,
     contributions,
     contributionTotal: total,
+    contributionSource: usesGraphql ? "github-graphql" : "public-api",
+    includesPrivate: usesGraphql,
     fetchedAt: new Date().toISOString(),
   };
 }

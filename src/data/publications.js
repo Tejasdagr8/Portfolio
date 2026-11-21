@@ -6,8 +6,6 @@ export const paperLinks = {
   colm: "https://colmweb.org/",
 };
 
-export const PRIVATE_REPO_COMMITS = 500;
-
 export const publications = [
   {
     venue: "Sci-FM 2026 @ COLM",

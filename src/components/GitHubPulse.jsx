@@ -1,14 +1,12 @@
 import { useCallback, useEffect, useState } from "react";
 import { FaGithub, FaStar, FaCodeBranch, FaClock, FaSync } from "react-icons/fa";
 import ContributionGraph from "./ContributionGraph";
-import { PRIVATE_REPO_COMMITS } from "../data/publications";
-
 const ACCOUNTS = [
   { username: "Tejasdagr8", label: "personal", accent: "iris" },
   { username: "TejasMelkote", label: "work", accent: "mint" },
 ];
 
-const CACHE_KEY = "github_pulse_cache_v5";
+const CACHE_KEY = "github_pulse_cache_v6";
 const REFRESH_MS = 1000 * 60 * 5; // poll every 5 min while page is open
 const STALE_MS = 1000 * 60 * 3; // treat cache older than 3 min as stale
 const HIGHLIGHT_START = "2026-03-25";
@@ -33,6 +31,8 @@ const FALLBACK = {
   contributions: [],
   contributionTotal: 0,
   phaseTotal: 0,
+  includesPrivate: false,
+  contributionSource: "none",
   fetchedAt: null,
 };
 
@@ -134,6 +134,8 @@ async function fetchPulseDirect() {
     pushedAgo: latest?.pushedAgo || null,
     contributions,
     contributionTotal: contributions.reduce((s, d) => s + d.count, 0),
+    includesPrivate: false,
+    contributionSource: "public-api",
     fetchedAt: new Date().toISOString(),
   };
 }
@@ -329,6 +331,12 @@ export default function GitHubPulse() {
                   </p>
                   <p className="font-mono text-[10px] text-fog/70 mt-0.5">
                     <span className="text-paper tabular-nums">{account.publicRepos}</span> public repos
+                    {typeof account.contributionTotal === "number" && account.contributionTotal > 0 && (
+                      <>
+                        {" "}
+                        · <span className="text-paper tabular-nums">{account.contributionTotal.toLocaleString()}</span> contrib
+                      </>
+                    )}
                     {account.recentRepo && (
                       <>
                         {" "}
@@ -355,7 +363,29 @@ export default function GitHubPulse() {
           )}
 
           <p className="font-mono text-[10px] text-fog/50 text-center sm:text-left">
-            + <span className="text-ember tabular-nums">{PRIVATE_REPO_COMMITS}+</span> commits on private work repos (@TejasMelkote)
+            {display.includesPrivate ? (
+              <>
+                Totals from GitHub GraphQL · includes private activity on authenticated accounts ·{" "}
+                <a href="https://github.com/Tejasdagr8" className="text-fog hover:text-iris transition-colors" target="_blank" rel="noreferrer">
+                  @Tejasdagr8
+                </a>
+                {" · "}
+                <a href="https://github.com/TejasMelkote" className="text-fog hover:text-mint transition-colors" target="_blank" rel="noreferrer">
+                  @TejasMelkote
+                </a>
+              </>
+            ) : (
+              <>
+                Live public calendars · set <code className="text-fog/70">GITHUB_TOKEN</code> on Vercel for private work totals ·{" "}
+                <a href="https://github.com/Tejasdagr8" className="text-fog hover:text-iris transition-colors" target="_blank" rel="noreferrer">
+                  @Tejasdagr8
+                </a>
+                {" · "}
+                <a href="https://github.com/TejasMelkote" className="text-fog hover:text-mint transition-colors" target="_blank" rel="noreferrer">
+                  @TejasMelkote
+                </a>
+              </>
+            )}
           </p>
         </div>
       </div>

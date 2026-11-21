@@ -9,7 +9,7 @@ export const RECRUITER_LINKS = {
   paperCode: "https://github.com/sohv/algorithmic-blindness",
 };
 
-export const INTRO_BLURB = `Hi — I'm Tejas Melkote, final-year B.Tech CS (AI) at MIT Manipal (CGPA 8.38).
+export const INTRO_BLURB = `Hi — I'm Tejas Melkote, 2026 new grad · B.Tech CS (AI) at MIT Manipal (CGPA 8.38).
 
 I'm an AI/ML engineer & full-stack developer currently interning at SuperAGI (Go, Rails, Vue — 15+ production PRs) and building TatvaOps Vantage in production. I also have an accepted poster at Sci-FM @ COLM 2026 on LLM calibration (arXiv:2602.21947).
 

@@ -6,7 +6,7 @@ export const SITE_NAME = "Tejas Melkote";
 export const DEFAULT_TITLE = "Tejas Melkote | AI/ML Engineer & Full-Stack Developer Portfolio";
 
 export const DEFAULT_DESCRIPTION =
-  "Tejas Melkote — AI/ML engineer and full-stack developer in Bengaluru, India. Final-year B.Tech CS (AI) at MIT Manipal. 15+ production PRs at SuperAGI, TatvaOps Vantage, LLM agents, RAG, and COLM 2026 research.";
+  "Tejas Melkote — AI/ML engineer and full-stack developer in Bengaluru, India. 2026 new grad · B.Tech CS (AI) at MIT Manipal. 15+ production PRs at SuperAGI, TatvaOps Vantage, LLM agents, RAG, and COLM 2026 research.";
 
 export const PERSON = {
   givenName: "Tejas",

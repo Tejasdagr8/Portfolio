@@ -185,7 +185,17 @@ export default function ContributionGraph({ contributions, total, phaseTotal, lo
       </div>
 
       <p className="font-mono text-[9px] text-fog/50">
-        Shipping phase only · combined public activity across @Tejasdagr8 + @TejasMelkote
+        Live combined activity ·{" "}
+        <a href="https://github.com/Tejasdagr8" className="hover:text-iris transition-colors" target="_blank" rel="noreferrer">
+          @Tejasdagr8
+        </a>
+        {" + "}
+        <a href="https://github.com/TejasMelkote" className="hover:text-mint transition-colors" target="_blank" rel="noreferrer">
+          @TejasMelkote
+        </a>
+        {typeof total === "number" && total > 0 && (
+          <> · <span className="text-paper/80 tabular-nums">{total.toLocaleString()}</span> in last 12 months</>
+        )}
       </p>
     </div>
   );
